@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import CodeReviewCard from "./components/CodeReviewCard";
+import CodeReviewCard from "./CodeReviewCard";
 
 const exampleCode = `
 (function someDemo() {
