@@ -1,8 +1,8 @@
-import React, {FunctionComponent} from "react";
-import { Pre, Line, LineNo, LineContent } from "./styles"
-import Highlight, { defaultProps } from "prism-react-renderer";
-import theme from "prism-react-renderer/themes/nightOwl";
-import "./CodeReview.less";
+import React from "react";
+import {Card} from "antd";
+import Highlight, {defaultProps} from "prism-react-renderer";
+import theme from "prism-react-renderer/themes/github";
+import {Line, LineContent, LineNo, Pre} from "./styles";
 
 type Language =
     | "markup"
@@ -38,30 +38,32 @@ type Language =
     | "wasm"
     | "yaml";
 
-type CodeReviewProps = {
-    code: string
-    language: Language
+export interface CodeReviewProps  {
+    code: string;
+    language: Language;
+    width: number;
 }
-
-export const CodeReview: FunctionComponent<CodeReviewProps> = ({ code, language }) => {
+export const CodeReview: React.FC<CodeReviewProps> = ({ code, language, width }) => {
     return (
-        <Highlight {...defaultProps} theme={theme} code={code} language={language}>
-            {({ className, style, tokens, getLineProps, getTokenProps }) => (
-                <Pre className={className} style={style}>
-                    {tokens.map((line, i) => (
-                        <Line key={i} {...getLineProps({ line, key: i })}>
-                            <LineNo>{i + 1}</LineNo>
-                            <LineContent>
-                                {line.map((token, key) => (
-                                    <span key={key} {...getTokenProps({ token, key })} />
-                                ))}
-                            </LineContent>
-                        </Line>
-                    ))}
-                </Pre>
-            )}
-        </Highlight>
-    )
+            <Card style={{ width: width }}>
+                <Highlight {...defaultProps} theme={theme} code={code} language={language}>
+                    {({ className, style, tokens, getLineProps, getTokenProps }) => (
+                        <Pre className={className} style={style}>
+                            {tokens.map((line, i) => (
+                                <Line key={i} {...getLineProps({ line, key: i })}>
+                                    <LineNo>{i + 1}</LineNo>
+                                    <LineContent>
+                                        {line.map((token, key) => (
+                                            <span key={key} {...getTokenProps({ token, key })} />
+                                        ))}
+                                    </LineContent>
+                                </Line>
+                            ))}
+                        </Pre>
+                    )}
+                </Highlight>
+            </Card>
+        )
 }
 
 export default CodeReview;

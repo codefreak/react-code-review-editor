@@ -1,14 +1,14 @@
 import React from 'react';
-import {CodeReviewCard, CodeReviewCardProps} from "../components/CodeReviewCard";
+import {CodeReview, CodeReviewProps} from "../components/CodeReview";
 import { Story, Meta } from '@storybook/react/types-6-0';
 
 
 export default {
-    componenet: CodeReviewCard,
+    component: CodeReview,
     title: 'CodeReviewCard'
 } as Meta;
 
-const Template: Story<CodeReviewCardProps> = (args) => <CodeReviewCard {...args} />;
+const Template: Story<CodeReviewProps> = (args) => <CodeReview {...args} />;
 
 const jsxCode = `
 (function someDemo() {
@@ -22,5 +22,6 @@ return () => <App />;
 export const Default = Template.bind({});
 Default.args = {
     code: jsxCode,
-    language: "jsx"
+    language: "jsx",
+    width: 500
 }
