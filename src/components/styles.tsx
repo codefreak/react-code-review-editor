@@ -25,7 +25,7 @@ export const LineNo = styled.span`
   display: table-cell;
   text-align: right;
   padding-right: 1em;
-  padding-left: 5em;
+  padding-left: 2em;
   user-select: none;
   opacity: 0.5;
 `;
