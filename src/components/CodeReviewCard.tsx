@@ -27,6 +27,7 @@ export const CodeReviewCard: React.FC<CodeReviewCardProps> = ({
                   title={title} className={"codeReview"}
                   bodyStyle={cardBodyStyle}
                   type={"inner"}
+                  bordered={true}
             >
                 <Highlight {...defaultProps} theme={theme} code={code} language={language}>
                     {({ className, style, tokens, getLineProps, getTokenProps }) => (
