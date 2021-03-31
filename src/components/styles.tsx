@@ -1,10 +1,5 @@
 import styled from "styled-components";
 
-export const Wrapper = styled.div`
-  font-family: sans-serif;
-  text-align: center;
-`;
-
 export const Pre = styled.pre`
   text-align: left;
   margin: 1em 0;
