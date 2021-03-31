@@ -1,7 +1,7 @@
 import React from "react";
 import {Card} from "antd";
 import Highlight, {defaultProps, Language} from "prism-react-renderer";
-import theme from "prism-react-renderer/themes/vsLight";
+import theme from "prism-react-renderer/themes/github";
 import {Line, LineContent, LineNo, Pre} from "./styles";
 import "antd/dist/antd.css";
 
@@ -26,7 +26,6 @@ export const CodeReviewCard: React.FC<CodeReviewCardProps> = ({
             <Card style={{ width: width }}
                   title={title} className={"codeReview"}
                   bodyStyle={cardBodyStyle}
-                  type={"inner"}
                   bordered={true}
             >
                 <Highlight {...defaultProps} theme={theme} code={code} language={language}>
