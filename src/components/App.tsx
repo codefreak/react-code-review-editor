@@ -1,6 +1,6 @@
 import React from 'react';
-import './App.css';
-import CodeReview from "./CodeReview";
+import './App.less';
+import CodeReviewCard from "./CodeReviewCard";
 
 const exampleCode = `
 (function someDemo() {
@@ -14,7 +14,11 @@ return () => <App />;
 function App() {
   return (
       <div className={"code"}>
-        <CodeReview code={exampleCode} language={"jsx"} width={500}/>
+        <CodeReviewCard code={exampleCode}
+                        language={"jsx"}
+                        width={500}
+                        title={"testReview.jsx"}
+        />
       </div>
   );
 }

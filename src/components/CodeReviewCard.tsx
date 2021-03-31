@@ -1,51 +1,30 @@
 import React from "react";
-import {Card} from "antd";
-import Highlight, {defaultProps} from "prism-react-renderer";
+import { Card} from "antd";
+import Highlight, {defaultProps, Language} from "prism-react-renderer";
 import theme from "prism-react-renderer/themes/github";
 import {Line, LineContent, LineNo, Pre} from "./styles";
+import "antd/dist/antd.css";
 
-type Language =
-    | "markup"
-    | "bash"
-    | "clike"
-    | "c"
-    | "cpp"
-    | "css"
-    | "javascript"
-    | "jsx"
-    | "coffeescript"
-    | "actionscript"
-    | "css-extr"
-    | "diff"
-    | "git"
-    | "go"
-    | "graphql"
-    | "handlebars"
-    | "json"
-    | "less"
-    | "makefile"
-    | "markdown"
-    | "objectivec"
-    | "ocaml"
-    | "python"
-    | "reason"
-    | "sass"
-    | "scss"
-    | "sql"
-    | "stylus"
-    | "tsx"
-    | "typescript"
-    | "wasm"
-    | "yaml";
-
-export interface CodeReviewProps  {
+export interface CodeReviewCardProps  {
     code: string;
     language: Language;
     width: number;
+    title: string;
 }
-export const CodeReview: React.FC<CodeReviewProps> = ({ code, language, width }) => {
+
+const cardBodyStyle = {
+    padding: 0,
+    backgroundColor: '#f6f8fa'
+}
+
+export const CodeReviewCard: React.FC<CodeReviewCardProps> = ({
+                                                          code,
+                                                          language,
+                                                          width ,
+                                                          title
+}) => {
     return (
-            <Card style={{ width: width }}>
+            <Card style={{ width: width }} title={title} className={"codeReview"} bodyStyle={cardBodyStyle}>
                 <Highlight {...defaultProps} theme={theme} code={code} language={language}>
                     {({ className, style, tokens, getLineProps, getTokenProps }) => (
                         <Pre className={className} style={style}>
@@ -66,4 +45,4 @@ export const CodeReview: React.FC<CodeReviewProps> = ({ code, language, width })
         )
 }
 
-export default CodeReview;
+export default CodeReviewCard;
