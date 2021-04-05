@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.less';
 import CodeReviewCard from "./CodeReviewCard";
+import CommentEditor from "./CommentEditor";
 
 const exampleCode = `
 (function someDemo() {
@@ -19,6 +20,7 @@ function App() {
                         width={500}
                         title={"testReview.jsx"}
         />
+        <CommentEditor onSubmit={() => {}} />
       </div>
   );
 }
