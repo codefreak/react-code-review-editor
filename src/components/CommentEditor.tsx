@@ -5,7 +5,7 @@ import { Input, Form, Button } from 'antd';
 const { TextArea } = Input;
 
 export interface CommentEditorProps {
-    onSubmit: EventHandler<any>
+    onSubmit: (value: string | undefined) => void
 }
 
 export function extractTargetValue<V, T>(fn: (value: V) => T) {
@@ -15,6 +15,9 @@ export function extractTargetValue<V, T>(fn: (value: V) => T) {
 export const CommentEditor: React.FC<CommentEditorProps> = ({ onSubmit }) => {
    const [value, setValue] = useState<string>();
 
+   const handleSubmit = () => {
+       onSubmit(value);
+   }
     return (
         <>
             <Form.Item>
@@ -25,7 +28,7 @@ export const CommentEditor: React.FC<CommentEditorProps> = ({ onSubmit }) => {
                 />
             </Form.Item>
             <Form.Item>
-                <Button htmlType={"submit"} onClick={(e) => {console.log(value)}} type={"primary"}>Add Comment</Button>
+                <Button htmlType={"submit"} onClick={handleSubmit} type={"primary"}>Add Comment</Button>
             </Form.Item>
         </>
 

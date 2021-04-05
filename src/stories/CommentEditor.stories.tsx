@@ -12,5 +12,5 @@ const Template: Story<CommentEditorProps> = (args) => <CommentEditor {...args} /
 
 export const Editor = Template.bind({});
 Editor.args = {
-    onSubmit: action("submitted")
+    onSubmit: (value) => {console.log(value)}
 }

@@ -20,7 +20,7 @@ function App() {
                         width={500}
                         title={"testReview.jsx"}
         />
-        <CommentEditor onSubmit={() => {}} />
+        <CommentEditor onSubmit={(value) => {console.log(value)}} />
       </div>
   );
 }
