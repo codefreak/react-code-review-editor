@@ -1,5 +1,5 @@
 import React from 'react';
-import './App.less';
+import './App.css';
 import CodeReviewCard from "./CodeReviewCard";
 import CommentEditor from "./CommentEditor";
 

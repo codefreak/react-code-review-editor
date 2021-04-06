@@ -1,4 +1,4 @@
-import React, {EventHandler, useState} from "react";
+import React, {useState} from "react";
 import "antd/dist/antd.css";
 import { Input, Form, Button } from 'antd';
 
@@ -18,6 +18,7 @@ export const CommentEditor: React.FC<CommentEditorProps> = ({ onSubmit }) => {
    const handleSubmit = () => {
        onSubmit(value);
    }
+
     return (
         <>
             <Form.Item>

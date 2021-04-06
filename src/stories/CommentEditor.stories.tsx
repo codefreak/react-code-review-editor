@@ -1,7 +1,6 @@
 import React from "react";
 import {CommentEditor, CommentEditorProps} from "../components/CommentEditor"
 import { Story, Meta } from '@storybook/react/types-6-0';
-import {action} from "@storybook/addon-actions";
 
 export default {
     component: CommentEditor,
