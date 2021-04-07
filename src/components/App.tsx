@@ -19,6 +19,7 @@ function App() {
                         language={"jsx"}
                         width={500}
                         title={"testReview.jsx"}
+                        onAdd={ (lineNo) => alert(lineNo)}
         />
         <CommentEditor onSubmit={(value) => {console.log(value)}} />
       </div>

@@ -1,7 +1,8 @@
-import React, {useState} from "react";
+import React, {useRef, useState} from "react";
 import {Line, LineContent, LineNo} from "./styles";
-import {Button} from "antd";
-import {PlusOutlined} from "@ant-design/icons";
+import {Button, Space} from "antd";
+import { PlusOutlined } from '@ant-design/icons';
+
 
 // types needed for react-prism-renderer props
 type Token = {
@@ -61,21 +62,41 @@ export const CodeLine: React.FC<CodeLineProps> = ({line,
 
     // isShown manages visibility of addButton
     const [isShown, setIsShown] = useState(false);
+    const lineNoRef = useRef<HTMLSpanElement>(null);
+
+    const paddingEnter = "2em";
+    const paddingLeave = "4em";
+
+    const handleMouseEnter = () => {
+        // @ts-ignore
+        lineNoRef.current.style.paddingLeft= paddingEnter;
+        setIsShown(true);
+    }
+
+    const handleMouseLeave = () => {
+        // @ts-ignore
+        lineNoRef.current.style.paddingLeft = paddingLeave;
+        setIsShown(false)
+    }
 
     return (
         <Line key={lineNo}
               {...getLineProps({ line, key: lineNo })}
-              onMouseEnter={() => setIsShown(true)}
-              onMouseLeave={() => setIsShown(false)}
+              onMouseEnter={() => handleMouseEnter()}
+              onMouseLeave={() => handleMouseLeave()}
         >
-            <div className={"lineLeft"}>
+            <div className={"lineLeft"} >
                 {isShown && (
-                    <Button icon={<PlusOutlined />}
-                            size={"small"}
-                            onClick={() => onAdd(lineNo)}
-                    />
+                    <>
+                        <Space size={"small"}></Space>
+                        <Button icon={<PlusOutlined />}
+                                size={"small"}
+                                onClick={() => onAdd(lineNo)}
+                                style={{width: "1.5em", height: "1.5em", marginLeft: "0.5em"}}
+                        />
+                    </>
                 )}
-                <LineNo>{lineNo + 1}</LineNo>
+                <LineNo style={{paddingLeft: "4em"}} ref={lineNoRef}>{lineNo + 1}</LineNo>
             </div>
 
             <LineContent>

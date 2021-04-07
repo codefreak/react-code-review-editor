@@ -1,7 +1,7 @@
 import React from "react";
 import {Card} from "antd";
 import Highlight, {defaultProps, Language} from "prism-react-renderer";
-import theme from "prism-react-renderer/themes/github";
+import theme from "prism-react-renderer/themes/vsLight";
 import {Pre} from "./styles";
 import "antd/dist/antd.css";
 import "./CodeReview.css";
@@ -12,6 +12,7 @@ export interface CodeReviewCardProps  {
     language: Language;
     width: number;
     title: string;
+    onAdd: (lineNo: number) => void;
 }
 
 const cardBodyStyle = {
@@ -19,10 +20,11 @@ const cardBodyStyle = {
 }
 
 export const CodeReviewCard: React.FC<CodeReviewCardProps> = ({
+                                                                  onAdd,
                                                           code,
                                                           language,
                                                           width ,
-                                                          title
+                                                          title,
 }) => {
     return (
             <Card style={{ width: width }}
@@ -38,7 +40,7 @@ export const CodeReviewCard: React.FC<CodeReviewCardProps> = ({
                                           line={line}
                                           getLineProps={getLineProps}
                                           getTokenProps={getTokenProps}
-                                          onAdd={(lineNo) => console.log(lineNo)}
+                                          onAdd={(lineNo) => onAdd(lineNo)}
                                 />
                             ))}
                         </Pre>

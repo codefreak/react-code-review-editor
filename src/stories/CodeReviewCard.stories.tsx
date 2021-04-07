@@ -88,7 +88,8 @@ jsx.args = {
     code: jsxCode,
     language: "jsx",
     width: 500,
-    title: "testReview.jsx"
+    title: "testReview.jsx",
+    onAdd: (lineNo) => alert(lineNo + 1)
 }
 
 export const css = Template.bind({});
@@ -96,7 +97,8 @@ css.args = {
     code: cssCode,
     language: "css",
     width: 600,
-    title: "layout.css"
+    title: "layout.css",
+    onAdd: (lineNo) => alert(lineNo + 1)
 }
 
 export const cpp = Template.bind({});
@@ -104,5 +106,6 @@ cpp.args = {
     code: cppCode,
     language: "cpp",
     width: 500,
-    title: "matrix.cpp"
+    title: "matrix.cpp",
+    onAdd: (lineNo) => alert(lineNo + 1)
 }
