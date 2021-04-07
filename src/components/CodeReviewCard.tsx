@@ -1,28 +1,21 @@
 import React from "react";
 import {Card} from "antd";
-import Highlight, {defaultProps, Language} from "prism-react-renderer";
-import theme from "prism-react-renderer/themes/vsLight";
-import {Pre} from "./styles";
 import "antd/dist/antd.css";
 import "./CodeReview.css";
-import CodeLine from "./CodeLine";
-
-export interface CodeReviewCardProps  {
-    code: string;
-    language: Language;
-    width: number;
-    title: string;
-    onAdd: (lineNo: number) => void;
-}
+import CodeReview, {CodeReviewProps} from "./CodeReview";
 
 const cardBodyStyle = {
     padding: 0
 }
 
+export interface CodeReviewCardProps {
+    width: number,
+    title: string,
+    getCodeReviewProps: CodeReviewProps
+}
+
 export const CodeReviewCard: React.FC<CodeReviewCardProps> = ({
-                                                                  onAdd,
-                                                          code,
-                                                          language,
+                                                          getCodeReviewProps,
                                                           width ,
                                                           title,
 }) => {
@@ -32,20 +25,10 @@ export const CodeReviewCard: React.FC<CodeReviewCardProps> = ({
                   bodyStyle={cardBodyStyle}
                   bordered={true}
             >
-                <Highlight {...defaultProps} theme={theme} code={code} language={language}>
-                    {({ className, style, tokens, getLineProps, getTokenProps }) => (
-                        <Pre className={className} style={style}>
-                            {tokens.map((line, i) => (
-                                <CodeLine lineNo={i}
-                                          line={line}
-                                          getLineProps={getLineProps}
-                                          getTokenProps={getTokenProps}
-                                          onAdd={(lineNo) => onAdd(lineNo)}
-                                />
-                            ))}
-                        </Pre>
-                    )}
-                </Highlight>
+                <CodeReview code={getCodeReviewProps.code}
+                            language={getCodeReviewProps.language}
+                            onAdd={(lineNo) => getCodeReviewProps.onAdd(lineNo)}
+                />
             </Card>
         )
 }

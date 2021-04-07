@@ -3,7 +3,6 @@ import {Line, LineContent, LineNo} from "./styles";
 import {Button, Space} from "antd";
 import { PlusOutlined } from '@ant-design/icons';
 
-
 // types needed for react-prism-renderer props
 type Token = {
     types: string[];
@@ -67,12 +66,14 @@ export const CodeLine: React.FC<CodeLineProps> = ({line,
     const paddingEnter = "2em";
     const paddingLeave = "4em";
 
+    //TODO ohne @ts-ignore implementieren
     const handleMouseEnter = () => {
         // @ts-ignore
         lineNoRef.current.style.paddingLeft= paddingEnter;
         setIsShown(true);
     }
 
+    //TODO ohne @ts-ignore implementieren
     const handleMouseLeave = () => {
         // @ts-ignore
         lineNoRef.current.style.paddingLeft = paddingLeave;

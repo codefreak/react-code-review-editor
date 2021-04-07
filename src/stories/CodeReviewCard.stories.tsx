@@ -8,6 +8,7 @@ export default {
     title: 'CodeReviewCard'
 } as Meta;
 
+
 const Template: Story<CodeReviewCardProps> = (args) => <CodeReviewCard {...args} />;
 
 const jsxCode = `
@@ -85,27 +86,34 @@ Matrix::Matrix(int z, int s, int wert) {
 
 export const jsx = Template.bind({});
 jsx.args = {
-    code: jsxCode,
-    language: "jsx",
+    getCodeReviewProps: {
+        code: jsxCode,
+        language: "jsx",
+        onAdd: (lineNo) => alert(lineNo + 1)
+    },
     width: 500,
     title: "testReview.jsx",
-    onAdd: (lineNo) => alert(lineNo + 1)
+
 }
 
 export const css = Template.bind({});
 css.args = {
-    code: cssCode,
-    language: "css",
+    getCodeReviewProps: {
+        code: cssCode,
+        language: "css",
+        onAdd: (lineNo) => alert(lineNo + 1)
+    },
     width: 600,
     title: "layout.css",
-    onAdd: (lineNo) => alert(lineNo + 1)
 }
 
 export const cpp = Template.bind({});
 cpp.args = {
-    code: cppCode,
-    language: "cpp",
+    getCodeReviewProps: {
+        code: cppCode,
+        language: "cpp",
+        onAdd: (lineNo) => alert(lineNo + 1)
+    },
     width: 500,
     title: "matrix.cpp",
-    onAdd: (lineNo) => alert(lineNo + 1)
 }

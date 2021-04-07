@@ -2,7 +2,6 @@ import React from 'react';
 import {CodeReviewCollapsable, CodeReviewCollapsableProps} from "../components/CodeReviewCollapsable";
 import { Story, Meta } from '@storybook/react/types-6-0';
 
-
 export default {
     component: CodeReviewCollapsable,
     title: 'CodeReviewCollapsable'
@@ -21,8 +20,11 @@ return () => <App />;
 
 export const Collapsable = Template.bind({});
 Collapsable.args = {
-    code: jsxCode,
-    language: "jsx",
+    getCodeReviewProps: {
+        code: jsxCode,
+        language: "jsx",
+        onAdd: (lineNo) => alert(lineNo + 1)
+    },
     width: 500,
     title: "testReview.jsx"
 }
