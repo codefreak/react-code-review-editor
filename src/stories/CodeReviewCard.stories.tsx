@@ -89,7 +89,6 @@ jsx.args = {
     getCodeReviewProps: {
         code: jsxCode,
         language: "jsx",
-        onAdd: (lineNo) => alert(lineNo + 1)
     },
     width: 500,
     title: "testReview.jsx",
@@ -101,7 +100,6 @@ css.args = {
     getCodeReviewProps: {
         code: cssCode,
         language: "css",
-        onAdd: (lineNo) => alert(lineNo + 1)
     },
     width: 600,
     title: "layout.css",
@@ -112,7 +110,6 @@ cpp.args = {
     getCodeReviewProps: {
         code: cppCode,
         language: "cpp",
-        onAdd: (lineNo) => alert(lineNo + 1)
     },
     width: 500,
     title: "matrix.cpp",

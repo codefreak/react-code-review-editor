@@ -1,7 +1,8 @@
 import React, {useRef, useState} from "react";
 import {Line, LineContent, LineNo} from "./styles";
-import {Button, Space} from "antd";
+import {Button} from "antd";
 import { PlusOutlined } from '@ant-design/icons';
+import CommentEditor from "./CommentEditor";
 
 // types needed for react-prism-renderer props
 type Token = {
@@ -47,21 +48,25 @@ type StyleObj = {
 
 export interface CodeLineProps {
     line: Token[],
-    lineNo: number
-    getLineProps: (input: LineInputProps) => LineOutputProps;
-    getTokenProps: (input: TokenInputProps) => TokenOutputProps;
-    onAdd: (lineNo: number) => void;
+    lineNo: number,
+    getLineProps: (input: LineInputProps) => LineOutputProps,
+    getTokenProps: (input: TokenInputProps) => TokenOutputProps,
+    onAdd: (lineNo: number) => void,
+    onSubmit: (value: string | undefined) => void,
 }
 
 export const CodeLine: React.FC<CodeLineProps> = ({line,
                                                       lineNo,
                                                       getLineProps,
                                                       getTokenProps,
-                                                      onAdd}) => {
+                                                      onAdd,
+                                                      onSubmit}) => {
 
     // isShown manages visibility of addButton
     const [isShown, setIsShown] = useState(false);
     const lineNoRef = useRef<HTMLSpanElement>(null);
+    const [isEditorShown, setIsEditorShown] = useState(false);
+
 
     const paddingEnter = "2em";
     const paddingLeave = "4em";
@@ -80,32 +85,47 @@ export const CodeLine: React.FC<CodeLineProps> = ({line,
         setIsShown(false)
     }
 
-    return (
-        <Line key={lineNo}
-              {...getLineProps({ line, key: lineNo })}
-              onMouseEnter={() => handleMouseEnter()}
-              onMouseLeave={() => handleMouseLeave()}
-        >
-            <div className={"lineLeft"} >
-                {isShown && (
-                    <>
-                        <Space size={"small"}></Space>
-                        <Button icon={<PlusOutlined />}
-                                size={"small"}
-                                onClick={() => onAdd(lineNo)}
-                                style={{width: "1.5em", height: "1.5em", marginLeft: "0.5em"}}
-                        />
-                    </>
-                )}
-                <LineNo style={{paddingLeft: "4em"}} ref={lineNoRef}>{lineNo + 1}</LineNo>
-            </div>
+    const handleAdd = (lineNo: number) => {
+        setIsEditorShown(true);
+        onAdd(lineNo);
+    }
 
-            <LineContent>
-                {line.map((token, key) => (
-                    <span key={key} {...getTokenProps({ token, key })} />
-                ))}
-            </LineContent>
-        </Line>
+    return (
+        <>
+            <Line key={lineNo}
+                  {...getLineProps({ line, key: lineNo })}
+                  onMouseEnter={() => handleMouseEnter()}
+                  onMouseLeave={() => handleMouseLeave()}
+            >
+                <div className={"lineLeft"} >
+                    {isShown && (
+                        <>
+                            <Button icon={<PlusOutlined />}
+                                    size={"small"}
+                                    onClick={() => handleAdd(lineNo)}
+                                    style={{width: "1.5em", height: "1.5em", marginLeft: "0.5em"}}
+                            />
+                        </>
+                    )}
+                    <LineNo style={{paddingLeft: "4em"}} ref={lineNoRef}>{lineNo + 1}</LineNo>
+                </div>
+
+                <LineContent>
+                    {line.map((token, key) => (
+                        <span key={key} {...getTokenProps({ token, key })} />
+                    ))}
+                </LineContent>
+            </Line>
+
+            {isEditorShown && (
+                <CommentEditor onSubmit={(value) => {
+                    onSubmit(value);
+                    setIsEditorShown(false);
+                }}/>
+            )}
+        </>
+
+
     )
 }
 

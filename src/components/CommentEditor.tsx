@@ -5,7 +5,7 @@ import { Input, Form, Button } from 'antd';
 const { TextArea } = Input;
 
 export interface CommentEditorProps {
-    onSubmit: (value: string | undefined) => void
+    onSubmit: (value: string | undefined ) => void
 }
 
 export function extractTargetValue<V, T>(fn: (value: V) => T) {

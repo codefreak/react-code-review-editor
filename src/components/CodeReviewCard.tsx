@@ -27,7 +27,6 @@ export const CodeReviewCard: React.FC<CodeReviewCardProps> = ({
             >
                 <CodeReview code={getCodeReviewProps.code}
                             language={getCodeReviewProps.language}
-                            onAdd={(lineNo) => getCodeReviewProps.onAdd(lineNo)}
                 />
             </Card>
         )
