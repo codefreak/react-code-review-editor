@@ -4,17 +4,60 @@ import theme from "prism-react-renderer/themes/vsLight";
 import {Pre} from "./styles";
 import "./CodeReview.css";
 import CodeLine from "./CodeLine";
+import CommentViewer, {CustomComment} from "./CommentViewer";
 
 export interface CodeReviewProps {
     code: string;
     language: Language;
 }
 
+
 export const CodeReview: React.FC<CodeReviewProps> = ({
                                                           code,
                                                           language,
 }) => {
-    const [currentLine, setCurrentLine] = useState<number>();
+    const [currentLine, setCurrentLine] = useState<number>(0);
+    const [commentContainer, setCommentContainer] = useState<CustomComment[]>();
+    const [commentLines, setCommentLines] = useState<number[]>(new Array<number>());
+
+    const addComment = (line: number, content: string, author?: string) => {
+        const newComment: CustomComment = {
+            line: line,
+            content: content,
+            author : "placeholder"
+        }
+
+        if(!commentContainer) {
+            const newCommentContainer = new Array<CustomComment>(newComment);
+            setCommentContainer(newCommentContainer)
+        } else {
+            const copyCommentContainer = commentContainer;
+
+            copyCommentContainer.push(newComment);
+            setCommentContainer(copyCommentContainer);
+        }
+
+        addCommentLine(line);
+    }
+
+    const addCommentLine = (line: number) => {
+        if(!commentLines.includes(line)) {
+           const commentLineCopy = commentLines;
+           commentLineCopy.push(line);
+           setCommentLines(commentLineCopy);
+        }
+    }
+
+    const getCommentsOfLine = (line: number) => {
+        const CommentsOfLine = new Array<CustomComment>();
+        commentContainer?.forEach(element => {
+            if(element.line === line) {
+                CommentsOfLine.push(element);
+            }
+        })
+        return CommentsOfLine;
+    }
+
 
     return (
         <Highlight {...defaultProps} theme={theme} code={code} language={language}>
@@ -27,8 +70,11 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
                                               getLineProps={getLineProps}
                                               getTokenProps={getTokenProps}
                                               onAdd={(lineNo) => setCurrentLine(lineNo)}
-                                              onSubmit={(value) => alert(value)}
+                                              onSubmit={(value) => addComment(currentLine, value)}
                                     />
+                                    {commentLines.includes(i) && (
+                                        <CommentViewer comments={getCommentsOfLine(i)} />
+                                    )}
                                 </>
                             ))}
                         </Pre>

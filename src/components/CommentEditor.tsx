@@ -1,12 +1,12 @@
 import React, {useState} from "react";
 import "antd/dist/antd.css";
 import "./CommentEditor.css";
-import {Input, Form, Button, Space} from 'antd';
+import {Input, Button, Space} from 'antd';
 
 const { TextArea } = Input;
 
 export interface CommentEditorProps {
-    onSubmit: (value: string | undefined ) => void
+    onSubmit: (value: string) => void
     onCancel: () => void
 }
 
@@ -15,7 +15,7 @@ export function extractTargetValue<V, T>(fn: (value: V) => T) {
 }
 
 export const CommentEditor: React.FC<CommentEditorProps> = ({ onSubmit, onCancel }) => {
-   const [value, setValue] = useState<string>();
+   const [value, setValue] = useState<string>("");
 
    const handleSubmit = () => {
        onSubmit(value);

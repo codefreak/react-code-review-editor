@@ -52,7 +52,7 @@ export interface CodeLineProps {
     getLineProps: (input: LineInputProps) => LineOutputProps,
     getTokenProps: (input: TokenInputProps) => TokenOutputProps,
     onAdd: (lineNo: number) => void,
-    onSubmit: (value: string | undefined) => void,
+    onSubmit: (value: string) => void,
 }
 
 export const CodeLine: React.FC<CodeLineProps> = ({line,
