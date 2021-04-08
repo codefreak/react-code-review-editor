@@ -1,0 +1,12 @@
+.commentEditor {
+    display: flex;
+    flex-direction: column;
+    padding-top: 0.5em;
+}
+
+.controlElements {
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    display: flex;
+    flex-direction: row-reverse;
+}

@@ -98,6 +98,7 @@ export const CodeLine: React.FC<CodeLineProps> = ({line,
                   onMouseLeave={() => handleMouseLeave()}
             >
                 <div className={"lineLeft"} >
+
                     {isShown && (
                         <>
                             <Button icon={<PlusOutlined />}
@@ -118,7 +119,8 @@ export const CodeLine: React.FC<CodeLineProps> = ({line,
             </Line>
 
             {isEditorShown && (
-                <CommentEditor onSubmit={(value) => {
+                <CommentEditor onCancel={() => setIsEditorShown(false)}
+                               onSubmit={(value) => {
                     onSubmit(value);
                     setIsEditorShown(false);
                 }}/>

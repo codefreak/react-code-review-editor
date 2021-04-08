@@ -16,14 +16,12 @@ return () => <App />;
 const getCodeReviewProps: CodeReviewProps = {
     code: exampleCode,
     language: "jsx",
-    onAdd: (lineNo) => alert(lineNo + 1)
 }
 
 function App() {
   return (
       <div className={"code"}>
         <CodeReviewCard width={500} title={"testReview.jsx"} getCodeReviewProps={getCodeReviewProps}/>
-        <CommentEditor onSubmit={(value) => {console.log(value)}} />
       </div>
   );
 }

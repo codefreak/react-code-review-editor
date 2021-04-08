@@ -1,18 +1,20 @@
 import React, {useState} from "react";
 import "antd/dist/antd.css";
-import { Input, Form, Button } from 'antd';
+import "./CommentEditor.css";
+import {Input, Form, Button, Space} from 'antd';
 
 const { TextArea } = Input;
 
 export interface CommentEditorProps {
     onSubmit: (value: string | undefined ) => void
+    onCancel: () => void
 }
 
 export function extractTargetValue<V, T>(fn: (value: V) => T) {
     return (e: { target: { value: V } }) => fn(e.target.value)
 }
 
-export const CommentEditor: React.FC<CommentEditorProps> = ({ onSubmit }) => {
+export const CommentEditor: React.FC<CommentEditorProps> = ({ onSubmit, onCancel }) => {
    const [value, setValue] = useState<string>();
 
    const handleSubmit = () => {
@@ -20,19 +22,44 @@ export const CommentEditor: React.FC<CommentEditorProps> = ({ onSubmit }) => {
    }
 
     return (
-        <>
-            <Form.Item>
-                <TextArea rows={4}
-                          placeholder={"Add a comment..."}
-                          onChange={extractTargetValue(setValue)}
-                          value={value}
-                />
-            </Form.Item>
-            <Form.Item>
-                <Button htmlType={"submit"} onClick={handleSubmit} type={"primary"}>Add Comment</Button>
-            </Form.Item>
-        </>
+        <div className={"commentEditor"}>
+            <TextArea rows={4}
+                      placeholder={"Add a comment..."}
+                      onChange={extractTargetValue(setValue)}
+                      value={value}
+            />
 
+            <div className={"controlElements"}>
+                <Space>
+                    <Button htmlType={"submit"}
+                            onClick={onCancel}
+                            type={"default"}
+                            danger
+                    >
+                        Cancel
+                    </Button>
+
+                    {value && (
+                        <Button htmlType={"submit"}
+                                onClick={handleSubmit}
+                                type={"primary"}
+                        >
+                            Add Comment
+                        </Button>
+                    )}
+
+                    {!value && (
+                        <Button htmlType={"button"}
+                                onClick={onCancel}
+                                type={"primary"}
+                                disabled
+                        >
+                            Add Comment
+                        </Button>
+                    )}
+                </Space>
+            </div>
+        </div>
     )
 }
 

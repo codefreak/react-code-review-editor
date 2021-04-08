@@ -23,7 +23,6 @@ Collapsable.args = {
     getCodeReviewProps: {
         code: jsxCode,
         language: "jsx",
-        onAdd: (lineNo) => alert(lineNo + 1)
     },
     width: 500,
     title: "testReview.jsx"
