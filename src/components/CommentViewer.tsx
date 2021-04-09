@@ -32,14 +32,16 @@ export const CommentViewer: React.FC<CodeViewerProps> = ({comments}) => {
     }
 
     return(
-        <Collapse defaultActiveKey={1}>
-            <Panel key={1} header={getHeader()} className={"customPanel"}>
-                {comments.map(((comment) =>
-                        <Comment content={comment.content} author={comment.author}/>
-                ))}
-                <ReplyEditor onSubmit={(value) => alert(value)} />
-            </Panel>
-        </Collapse>
+        <div className={"commentViewer"}>
+            <Collapse defaultActiveKey={1}>
+                <Panel key={1} header={getHeader()} className={"customPanel"}>
+                    {comments.map(((comment) =>
+                            <Comment content={comment.content} author={comment.author}/>
+                    ))}
+                    <ReplyEditor onSubmit={(value) => alert(value)} />
+                </Panel>
+            </Collapse>
+        </div>
     )
 }
 

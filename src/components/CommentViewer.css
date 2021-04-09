@@ -2,7 +2,20 @@
     padding-top: 0.5em;
     padding-bottom: 0.5em;
 }
+.ant-collapse > .ant-collapse-item > .ant-collapse-header {
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    background-color: white;
+}
 
+.ant-collapse > .ant-collapse-item > .ant-collapse-header .ant-collapse-arrow {
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+}
 .ant-comment-inner {
     padding-top: 0;
+}
+
+.commentViewer {
+    padding-bottom: 0.5em;
 }
