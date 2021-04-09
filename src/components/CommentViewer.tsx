@@ -1,6 +1,7 @@
 import React from "react";
 import {Collapse, Comment} from "antd";
 import "./CommentViewer.css";
+import ReplyEditor from "./ReplyEditor";
 
 const { Panel } = Collapse;
 
@@ -14,14 +15,14 @@ export type CustomComment = {
     line: number;
 }
 
+export interface ReplyEditorProps {
+    onSubmit: (value: string) => void
+}
+
+
 
 export const CommentViewer: React.FC<CodeViewerProps> = ({comments}) => {
-    const getLineNumber = () => {
-        const lineNumber = comments[0].line + 1;
-        return "line " + lineNumber;
-    }
-
-    const getHeader = () => {
+        const getHeader = () => {
         const commentNumber = comments.length;
         if(commentNumber === 1) {
             return commentNumber + " comment";
@@ -31,11 +32,12 @@ export const CommentViewer: React.FC<CodeViewerProps> = ({comments}) => {
     }
 
     return(
-        <Collapse defaultActiveKey={1} style={{padding: 0}} ghost>
-            <Panel key={1} header={getHeader()} extra={getLineNumber()} className={"customPanel"}>
+        <Collapse defaultActiveKey={1}>
+            <Panel key={1} header={getHeader()} className={"customPanel"}>
                 {comments.map(((comment) =>
-                        <Comment content={comment.content} author={comment.author} style={{ paddingLeft: "2em" }}/>
+                        <Comment content={comment.content} author={comment.author}/>
                 ))}
+                <ReplyEditor onSubmit={(value) => alert(value)} />
             </Panel>
         </Collapse>
     )

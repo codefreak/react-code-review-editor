@@ -50,7 +50,7 @@ export const CommentEditor: React.FC<CommentEditorProps> = ({ onSubmit, onCancel
 
                     {!value && (
                         <Button htmlType={"button"}
-                                onClick={onCancel}
+                                onClick={() => onSubmit(value)}
                                 type={"primary"}
                                 disabled
                         >

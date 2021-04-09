@@ -1,0 +1,13 @@
+.replyEditor > .ant-input {
+    width: available;
+}
+
+.replyEditor {
+    width: available;
+}
+
+.controlElementsReply {
+    display: flex;
+    flex-direction: row-reverse;
+    padding-top: 0.5em;
+}
