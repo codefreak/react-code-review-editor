@@ -11,7 +11,6 @@ export interface CodeReviewProps {
     language: Language;
 }
 
-
 export const CodeReview: React.FC<CodeReviewProps> = ({
                                                           code,
                                                           language,
@@ -19,6 +18,9 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
     const [currentLine, setCurrentLine] = useState<number>(0);
     const [commentContainer, setCommentContainer] = useState<CustomComment[]>();
     const [linesWithComment, setLinesWithComment] = useState<number[]>(new Array<number>());
+
+    // needed to force re rendering on update
+    const [count, setCount] = useState(0)
 
     const addComment = (line: number, content: string, author?: string) => {
         const newComment: CustomComment = {
@@ -46,6 +48,7 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
            commentLineCopy.push(line);
            setLinesWithComment(commentLineCopy);
         }
+
     }
 
     const getCommentsOfLine = (line: number) => {
@@ -70,8 +73,11 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
                                               getLineProps={getLineProps}
                                               getTokenProps={getTokenProps}
                                               onAdd={(lineNo) => setCurrentLine(lineNo)}
-                                              onSubmit={(value) => addComment(currentLine, value)}
+                                              onSubmit={(value) => {
+                                                  addComment(currentLine, value);
+                                              }}
                                               allowAdd={!linesWithComment.includes(i)}
+                                              onUpdate={() => setCount(count + 1)}
                                     />
                                     {linesWithComment.includes(i) && (
                                         <CommentViewer comments={getCommentsOfLine(i)} />
