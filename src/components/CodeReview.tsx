@@ -18,7 +18,7 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
 }) => {
     const [currentLine, setCurrentLine] = useState<number>(0);
     const [commentContainer, setCommentContainer] = useState<CustomComment[]>();
-    const [commentLines, setCommentLines] = useState<number[]>(new Array<number>());
+    const [linesWithComment, setLinesWithComment] = useState<number[]>(new Array<number>());
 
     const addComment = (line: number, content: string, author?: string) => {
         const newComment: CustomComment = {
@@ -41,10 +41,10 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
     }
 
     const addCommentLine = (line: number) => {
-        if(!commentLines.includes(line)) {
-           const commentLineCopy = commentLines;
+        if(!linesWithComment.includes(line)) {
+           const commentLineCopy = linesWithComment;
            commentLineCopy.push(line);
-           setCommentLines(commentLineCopy);
+           setLinesWithComment(commentLineCopy);
         }
     }
 
@@ -71,8 +71,9 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
                                               getTokenProps={getTokenProps}
                                               onAdd={(lineNo) => setCurrentLine(lineNo)}
                                               onSubmit={(value) => addComment(currentLine, value)}
+                                              allowAdd={!linesWithComment.includes(i)}
                                     />
-                                    {commentLines.includes(i) && (
+                                    {linesWithComment.includes(i) && (
                                         <CommentViewer comments={getCommentsOfLine(i)} />
                                     )}
                                 </>

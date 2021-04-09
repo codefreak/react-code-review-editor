@@ -53,6 +53,7 @@ export interface CodeLineProps {
     getTokenProps: (input: TokenInputProps) => TokenOutputProps,
     onAdd: (lineNo: number) => void,
     onSubmit: (value: string) => void,
+    allowAdd: boolean
 }
 
 export const CodeLine: React.FC<CodeLineProps> = ({line,
@@ -60,7 +61,8 @@ export const CodeLine: React.FC<CodeLineProps> = ({line,
                                                       getLineProps,
                                                       getTokenProps,
                                                       onAdd,
-                                                      onSubmit}) => {
+                                                      onSubmit,
+                                                      allowAdd}) => {
 
     // isShown manages visibility of addButton
     const [isShown, setIsShown] = useState(false);
@@ -73,9 +75,11 @@ export const CodeLine: React.FC<CodeLineProps> = ({line,
 
     //TODO ohne @ts-ignore implementieren
     const handleMouseEnter = () => {
-        // @ts-ignore
-        lineNoRef.current.style.paddingLeft= paddingEnter;
-        setIsShown(true);
+        if(allowAdd) {
+            // @ts-ignore
+            lineNoRef.current.style.paddingLeft= paddingEnter;
+            setIsShown(true);
+        }
     }
 
     //TODO ohne @ts-ignore implementieren
