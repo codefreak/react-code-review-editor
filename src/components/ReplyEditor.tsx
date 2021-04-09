@@ -16,7 +16,7 @@ const ReplyEditor: React.FC<ReplyEditorProps> = ({onSubmit}) => {
             setFocused(false);
             setValue("");
         } else {
-            setRows(2);
+            setRows(4);
             setFocused(true);
         }
     }
