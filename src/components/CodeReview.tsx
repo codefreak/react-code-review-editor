@@ -16,11 +16,8 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
                                                           language,
 }) => {
     const [currentLine, setCurrentLine] = useState<number>(0);
-    const [commentContainer, setCommentContainer] = useState<CustomComment[]>();
+    const [commentContainer, setCommentContainer] = useState<CustomComment[]>([]);
     const [linesWithComment, setLinesWithComment] = useState<number[]>(new Array<number>());
-
-    // needed to force re rendering on update
-    const [count, setCount] = useState(0)
 
     const addComment = (line: number, content: string, author?: string) => {
         const newComment: CustomComment = {
@@ -28,16 +25,7 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
             content: content,
             author : "placeholder"
         }
-
-        if(!commentContainer) {
-            const newCommentContainer = new Array<CustomComment>(newComment);
-            setCommentContainer(newCommentContainer)
-        } else {
-            const copyCommentContainer = commentContainer;
-
-            copyCommentContainer.push(newComment);
-            setCommentContainer(copyCommentContainer);
-        }
+        setCommentContainer([...commentContainer, newComment]);
 
         addCommentLine(line);
     }
@@ -48,7 +36,6 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
            commentLineCopy.push(line);
            setLinesWithComment(commentLineCopy);
         }
-
     }
 
     const getCommentsOfLine = (line: number) => {
@@ -67,22 +54,21 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
                     {({ className, style, tokens, getLineProps, getTokenProps }) => (
                         <Pre className={className} style={style}>
                             {tokens.map((line, i) => (
-                                <>
+                                <div key={i}>
                                     <CodeLine lineNo={i}
                                               line={line}
                                               getLineProps={getLineProps}
                                               getTokenProps={getTokenProps}
-                                              onAdd={(lineNo) => setCurrentLine(lineNo)}
+                                              onAdd={setCurrentLine}
                                               onSubmit={(value) => {
                                                   addComment(currentLine, value);
                                               }}
                                               allowAdd={!linesWithComment.includes(i)}
-                                              onUpdate={() => setCount(count + 1)}
                                     />
                                     {linesWithComment.includes(i) && (
                                         <CommentViewer comments={getCommentsOfLine(i)} />
                                     )}
-                                </>
+                                </div>
                             ))}
                         </Pre>
                     )}

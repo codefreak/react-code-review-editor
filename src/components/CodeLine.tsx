@@ -54,7 +54,6 @@ export interface CodeLineProps {
     onAdd: (lineNo: number) => void,
     onSubmit: (value: string) => void,
     allowAdd: boolean,
-    onUpdate: () => void
 }
 
 export const CodeLine: React.FC<CodeLineProps> = ({line,
@@ -64,7 +63,7 @@ export const CodeLine: React.FC<CodeLineProps> = ({line,
                                                       onAdd,
                                                       onSubmit,
                                                       allowAdd,
-                                                      onUpdate}) => {
+                                                      }) => {
 
     // isShown manages visibility of addButton
     const [isShown, setIsShown] = useState(false);
@@ -129,7 +128,6 @@ export const CodeLine: React.FC<CodeLineProps> = ({line,
                                onSubmit={(value) => {
                     onSubmit(value);
                     setIsEditorShown(false);
-                    onUpdate();
                 }}/>
             )}
         </>
