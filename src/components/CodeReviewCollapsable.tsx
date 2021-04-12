@@ -17,7 +17,7 @@ export const CodeReviewCollapsable: React.FC<CodeReviewCollapsableProps> = ({
                                                                                 getCodeReviewProps
 }) => {
     return (
-        <Collapse style={{ width: width }}>
+        <Collapse style={{ width: width }} defaultActiveKey={1}>
             <Panel key={1} header={title}>
                 <CodeReview language={getCodeReviewProps.language}
                             code={getCodeReviewProps.code}

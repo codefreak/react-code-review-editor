@@ -36,6 +36,7 @@ const ReplyEditor: React.FC<ReplyEditorProps> = ({onSubmit}) => {
                       onChange={extractTargetValue(setValue)}
                       value={value}
                       onFocus={() => handleFocus()}
+                      style={{resize: "none"}}
             />
             {focused && (
                 <div className={"controlElementsReply"}>

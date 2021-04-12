@@ -33,6 +33,7 @@ export const CommentEditor: React.FC<CommentEditorProps> = ({ onSubmit, onCancel
                       onChange={extractTargetValue(setValue)}
                       value={value}
                       className="textArea"
+                      style={{resize: "none"}}
             />
 
             <div className="controlElements">
