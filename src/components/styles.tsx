@@ -27,5 +27,5 @@ export const LineNo = styled.span`
 export const LineContent = styled.span`
   display: table-cell;
   padding-left: 2em;
-  border-left: 0.1px solid;
+  border-left: 1px solid #d9d9d9;
 `;
