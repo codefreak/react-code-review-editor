@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {CodeReviewCard, CodeReviewCardProps} from "../components/CodeReviewCard";
 import { Story, Meta } from '@storybook/react/types-6-0';
 import {CustomComment} from "../components/CommentViewer";
