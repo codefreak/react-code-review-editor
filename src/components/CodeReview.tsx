@@ -29,7 +29,7 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
                 addCommentLine(comment.line);
             })
         }
-
+        console.log(linesWithComment);
     })
 
     const createComment = (line: number, content: string, author?: string) => {

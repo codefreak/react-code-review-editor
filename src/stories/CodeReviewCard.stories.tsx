@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {CodeReviewCard, CodeReviewCardProps} from "../components/CodeReviewCard";
 import { Story, Meta } from '@storybook/react/types-6-0';
 import {CustomComment} from "../components/CommentViewer";
+import {forceReRender} from "@storybook/react";
 
 
 export default {
@@ -10,7 +11,11 @@ export default {
 } as Meta;
 
 
-const Template: Story<CodeReviewCardProps> = (args) => <CodeReviewCard {...args} />;
+const Template: Story<CodeReviewCardProps> = (args) => {
+    return (
+        <CodeReviewCard {...args} />
+    )
+}
 
 const jsxCode = `
 (function someDemo() {
@@ -97,20 +102,30 @@ const customComment2: CustomComment = {
     content: "Live long and prosper."
 }
 
-const customCommentContainer = [customComment1, customComment2];
+let customCommentContainer = [customComment1, customComment2];
 
-const handleCommentCreated = (comment: CustomComment) => {
-    console.log(comment);
-    alert(comment.content);
+const handleCommentCreatedJsx = (comment: CustomComment) => {
+    jsx.args!.getCodeReviewProps!.commentContainer = [...jsx.args!.getCodeReviewProps!.commentContainer, comment]
+    forceReRender();
 }
 
-export const jsx = Template.bind({});
+const handleCommentCreatedCss = (comment: CustomComment) => {
+    css.args!.getCodeReviewProps!.commentContainer = [...css.args!.getCodeReviewProps!.commentContainer, comment]
+    forceReRender();
+}
+
+const handleCommentCreatedCpp = (comment: CustomComment) => {
+    cpp.args!.getCodeReviewProps!.commentContainer = [...cpp.args!.getCodeReviewProps!.commentContainer, comment]
+    forceReRender();
+}
+
+export let jsx = Template.bind({});
 jsx.args = {
     getCodeReviewProps: {
         code: jsxCode,
         language: "jsx",
         commentContainer:  customCommentContainer,
-        onCommentCreated: handleCommentCreated
+        onCommentCreated: handleCommentCreatedJsx
     },
     width: 500,
     title: "testReview.jsx",
@@ -123,7 +138,7 @@ css.args = {
         code: cssCode,
         language: "css",
         commentContainer:  customCommentContainer,
-        onCommentCreated: handleCommentCreated
+        onCommentCreated: handleCommentCreatedCss
     },
     width: 600,
     title: "layout.css",
@@ -135,7 +150,7 @@ cpp.args = {
         code: cppCode,
         language: "cpp",
         commentContainer:  customCommentContainer,
-        onCommentCreated: handleCommentCreated
+        onCommentCreated: handleCommentCreatedCpp
     },
     width: 500,
     title: "matrix.cpp",
