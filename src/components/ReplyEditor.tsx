@@ -36,6 +36,9 @@ const ReplyEditor: React.FC<ReplyEditorProps> = ({onSubmit}) => {
                       onChange={extractTargetValue(setValue)}
                       value={value}
                       onFocus={() => handleFocus()}
+                      onBlur={() => {
+                          if(value === ""){resetReplyEditor();}
+                      }}
                       style={{resize: "none"}}
             />
             {focused && (
