@@ -1,7 +1,6 @@
 import React from 'react';
 import './App.css';
 import CodeReviewCard from "./CodeReviewCard";
-import CommentEditor from "./CommentEditor";
 import {CodeReviewProps} from "./CodeReview";
 
 const exampleCode = `
@@ -20,8 +19,8 @@ const getCodeReviewProps: CodeReviewProps = {
 
 function App() {
   return (
-      <div className={"code"}>
-        <CodeReviewCard width={500} title={"testReview.jsx"} getCodeReviewProps={getCodeReviewProps}/>
+      <div className="code">
+        <CodeReviewCard width={500} title="testReview.jsx" getCodeReviewProps={getCodeReviewProps}/>
       </div>
   );
 }

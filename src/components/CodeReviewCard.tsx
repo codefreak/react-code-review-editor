@@ -21,7 +21,7 @@ export const CodeReviewCard: React.FC<CodeReviewCardProps> = ({
 }) => {
     return (
             <Card style={{ width: width }}
-                  title={title} className={"codeReview"}
+                  title={title} className="codeReview"
                   bodyStyle={cardBodyStyle}
                   bordered={true}
             >

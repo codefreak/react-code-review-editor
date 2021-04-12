@@ -22,36 +22,36 @@ export const CommentEditor: React.FC<CommentEditorProps> = ({ onSubmit, onCancel
    }
 
     return (
-        <div className={"commentEditor"}>
+        <div className="commentEditor">
             <TextArea rows={4}
-                      placeholder={"Add a comment..."}
+                      placeholder="Add a comment..."
                       onChange={extractTargetValue(setValue)}
                       value={value}
             />
 
-            <div className={"controlElements"}>
+            <div className="controlElements">
                 <Space>
-                    <Button htmlType={"submit"}
+                    <Button htmlType="submit"
                             onClick={onCancel}
-                            type={"default"}
+                            type="default"
                             danger
                     >
                         Cancel
                     </Button>
 
                     {value && (
-                        <Button htmlType={"submit"}
+                        <Button htmlType="submit"
                                 onClick={handleSubmit}
-                                type={"primary"}
+                                type="primary"
                         >
                             Add Comment
                         </Button>
                     )}
 
                     {!value && (
-                        <Button htmlType={"button"}
+                        <Button htmlType="button"
                                 onClick={() => onSubmit(value)}
-                                type={"primary"}
+                                type="primary"
                                 disabled
                         >
                             Add Comment

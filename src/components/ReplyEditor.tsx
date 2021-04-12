@@ -40,27 +40,27 @@ const ReplyEditor: React.FC<ReplyEditorProps> = ({onSubmit}) => {
             {focused && (
                 <div className={"controlElementsReply"}>
                     <Space>
-                        <Button htmlType={"submit"}
+                        <Button htmlType="submit"
                                 onClick={() => resetReplyEditor()}
-                                type={"default"}
+                                type="default"
                                 danger
                         >
                             Cancel
                         </Button>
 
                         {value && (
-                            <Button htmlType={"submit"}
+                            <Button htmlType="submit"
                                     onClick={() => handleSubmit()}
-                                    type={"primary"}
+                                    type="primary"
                             >
                                 Add Reply
                             </Button>
                         )}
 
                         {!value && (
-                            <Button htmlType={"button"}
+                            <Button htmlType="button"
                                     onClick={() => handleSubmit()}
-                                    type={"primary"}
+                                    type="primary"
                                     disabled
                             >
                                 Add Reply

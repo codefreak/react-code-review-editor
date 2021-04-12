@@ -102,12 +102,12 @@ export const CodeLine: React.FC<CodeLineProps> = ({line,
                   onMouseEnter={() => handleMouseEnter()}
                   onMouseLeave={() => handleMouseLeave()}
             >
-                <div className={"lineLeft"} >
+                <div className="lineLeft">
 
                     {isShown && (
                         <>
                             <Button icon={<PlusOutlined />}
-                                    size={"small"}
+                                    size="small"
                                     onClick={() => handleAdd(lineNo)}
                                     style={{width: "1.5em", height: "1.5em", marginLeft: "0.5em"}}
                             />
