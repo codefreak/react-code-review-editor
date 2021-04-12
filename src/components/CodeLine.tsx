@@ -127,6 +127,7 @@ export const CodeLine: React.FC<CodeLineProps> = ({line,
 
             {isEditorShown && (
                 <CommentEditor onCancel={() => setIsEditorShown(false)}
+                               line={lineNo}
                                onSubmit={(value) => {
                     onSubmit(value);
                     setIsEditorShown(false);

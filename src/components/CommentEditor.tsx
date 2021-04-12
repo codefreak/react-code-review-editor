@@ -8,23 +8,28 @@ const { TextArea } = Input;
 export interface CommentEditorProps {
     onSubmit: (value: string) => void
     onCancel: () => void
+    line: number
 }
 
 export function extractTargetValue<V, T>(fn: (value: V) => T) {
     return (e: { target: { value: V } }) => fn(e.target.value)
 }
 
-export const CommentEditor: React.FC<CommentEditorProps> = ({ onSubmit, onCancel }) => {
+export const CommentEditor: React.FC<CommentEditorProps> = ({ onSubmit, onCancel, line }) => {
    const [value, setValue] = useState<string>("");
 
    const handleSubmit = () => {
        onSubmit(value);
    }
 
+   const getPlaceholder = () => {
+       return "Add a comment to line " + (line + 1) + "..."
+   }
+
     return (
         <div className="commentEditor">
             <TextArea rows={4}
-                      placeholder="Add a comment..."
+                      placeholder={getPlaceholder()}
                       onChange={extractTargetValue(setValue)}
                       value={value}
                       className="textArea"
