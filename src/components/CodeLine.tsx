@@ -1,4 +1,4 @@
-import React, {useRef, useState} from "react";
+import React, {useState} from "react";
 import {Line, LineContent, LineNo} from "./styles";
 import {Button} from "antd";
 import { PlusOutlined } from '@ant-design/icons';
@@ -51,7 +51,6 @@ export interface CodeLineProps {
     lineNo: number,
     getLineProps: (input: LineInputProps) => LineOutputProps,
     getTokenProps: (input: TokenInputProps) => TokenOutputProps,
-    onAdd: (lineNo: number) => void,
     onSubmit: (value: string) => void,
     allowAdd: boolean,
 }
@@ -60,7 +59,6 @@ export const CodeLine: React.FC<CodeLineProps> = ({line,
                                                       lineNo,
                                                       getLineProps,
                                                       getTokenProps,
-                                                      onAdd,
                                                       onSubmit,
                                                       allowAdd,
                                                       }) => {
@@ -88,7 +86,6 @@ export const CodeLine: React.FC<CodeLineProps> = ({line,
 
     const handleAdd = (lineNo: number) => {
         setIsEditorShown(true);
-        onAdd(lineNo);
     }
 
     return (

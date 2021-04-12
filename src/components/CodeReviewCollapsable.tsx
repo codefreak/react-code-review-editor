@@ -20,6 +20,8 @@ export const CodeReviewCollapsable: React.FC<CodeReviewCollapsableProps> = ({
             <Panel key={1} header={title}>
                 <CodeReview language={getCodeReviewProps.language}
                             code={getCodeReviewProps.code}
+                            commentContainer={getCodeReviewProps.commentContainer}
+                            onCommentCreated={getCodeReviewProps.onCommentCreated}
                 />
             </Panel>
         </Collapse>

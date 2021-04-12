@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Highlight, {defaultProps, Language} from "prism-react-renderer";
 import theme from "prism-react-renderer/themes/vsLight";
 import {Pre} from "./styles";
@@ -9,32 +9,42 @@ import CommentViewer, {CustomComment} from "./CommentViewer";
 export interface CodeReviewProps {
     code: string;
     language: Language;
+    commentContainer: CustomComment[];
+    onCommentCreated: (comment: CustomComment) => void;
 }
+
 
 export const CodeReview: React.FC<CodeReviewProps> = ({
                                                           code,
                                                           language,
+                                                          commentContainer,
+                                                          onCommentCreated
 }) => {
-    const [currentLine, setCurrentLine] = useState<number>(0);
-    const [commentContainer, setCommentContainer] = useState<CustomComment[]>([]);
     const [linesWithComment, setLinesWithComment] = useState<number[]>(new Array<number>());
 
-    const addComment = (line: number, content: string, author?: string) => {
+    // "constructor"
+    useEffect(() => {
+        if(commentContainer) {
+            commentContainer.forEach(comment => {
+                addCommentLine(comment.line);
+            })
+        }
+
+    })
+
+    const createComment = (line: number, content: string, author?: string) => {
         const newComment: CustomComment = {
             line: line,
             content: content,
             author : "placeholder"
         }
-        setCommentContainer([...commentContainer, newComment]);
 
-        addCommentLine(line);
+        return newComment;
     }
 
     const addCommentLine = (line: number) => {
         if(!linesWithComment.includes(line)) {
-           const commentLineCopy = linesWithComment;
-           commentLineCopy.push(line);
-           setLinesWithComment(commentLineCopy);
+            setLinesWithComment([...linesWithComment, line]);
         }
     }
 
@@ -48,7 +58,6 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
         return CommentsOfLine;
     }
 
-
     return (
         <Highlight {...defaultProps} theme={theme} code={code} language={language}>
                     {({ className, style, tokens, getLineProps, getTokenProps }) => (
@@ -59,12 +68,10 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
                                               line={line}
                                               getLineProps={getLineProps}
                                               getTokenProps={getTokenProps}
-                                              onAdd={setCurrentLine}
-                                              onSubmit={(value) => {
-                                                  addComment(currentLine, value);
-                                              }}
+                                              onSubmit={(value) => {onCommentCreated(createComment(i, value))}}
                                               allowAdd={!linesWithComment.includes(i)}
                                     />
+
                                     {linesWithComment.includes(i) && (
                                         <CommentViewer comments={getCommentsOfLine(i)} />
                                     )}

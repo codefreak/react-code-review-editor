@@ -27,6 +27,8 @@ export const CodeReviewCard: React.FC<CodeReviewCardProps> = ({
             >
                 <CodeReview code={getCodeReviewProps.code}
                             language={getCodeReviewProps.language}
+                            commentContainer={getCodeReviewProps.commentContainer}
+                            onCommentCreated={getCodeReviewProps.onCommentCreated}
                 />
             </Card>
         )

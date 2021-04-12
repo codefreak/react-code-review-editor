@@ -1,6 +1,7 @@
 import React from 'react';
 import {CodeReviewCard, CodeReviewCardProps} from "../components/CodeReviewCard";
 import { Story, Meta } from '@storybook/react/types-6-0';
+import {CustomComment} from "../components/CommentViewer";
 
 
 export default {
@@ -84,11 +85,32 @@ Matrix::Matrix(int z, int s, int wert) {
 
 /* TODO: Kopierkonstruktor */`.trim();
 
+const customComment1: CustomComment = {
+    line: 0,
+    author: "Captain Falcon",
+    content: "Falcoooon PUNCH!!"
+}
+
+const customComment2: CustomComment = {
+    line: 3,
+    author: "Spock",
+    content: "Live long and prosper."
+}
+
+const customCommentContainer = [customComment1, customComment2];
+
+const handleCommentCreated = (comment: CustomComment) => {
+    console.log(comment);
+    alert(comment.content);
+}
+
 export const jsx = Template.bind({});
 jsx.args = {
     getCodeReviewProps: {
         code: jsxCode,
         language: "jsx",
+        commentContainer:  customCommentContainer,
+        onCommentCreated: handleCommentCreated
     },
     width: 500,
     title: "testReview.jsx",
@@ -100,6 +122,8 @@ css.args = {
     getCodeReviewProps: {
         code: cssCode,
         language: "css",
+        commentContainer:  customCommentContainer,
+        onCommentCreated: handleCommentCreated
     },
     width: 600,
     title: "layout.css",
@@ -110,6 +134,8 @@ cpp.args = {
     getCodeReviewProps: {
         code: cppCode,
         language: "cpp",
+        commentContainer:  customCommentContainer,
+        onCommentCreated: handleCommentCreated
     },
     width: 500,
     title: "matrix.cpp",
