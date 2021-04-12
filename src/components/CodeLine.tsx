@@ -67,26 +67,22 @@ export const CodeLine: React.FC<CodeLineProps> = ({line,
 
     // isShown manages visibility of addButton
     const [isShown, setIsShown] = useState(false);
-    const lineNoRef = useRef<HTMLSpanElement>(null);
+    const lineNoRef = React.createRef<HTMLSpanElement>();
     const [isEditorShown, setIsEditorShown] = useState(false);
 
 
     const paddingEnter = "2em";
     const paddingLeave = "4em";
 
-    //TODO ohne @ts-ignore implementieren
     const handleMouseEnter = () => {
         if(allowAdd) {
-            // @ts-ignore
-            lineNoRef.current.style.paddingLeft= paddingEnter;
+            lineNoRef.current!.style.paddingLeft = paddingEnter;
             setIsShown(true);
         }
     }
 
-    //TODO ohne @ts-ignore implementieren
     const handleMouseLeave = () => {
-        // @ts-ignore
-        lineNoRef.current.style.paddingLeft = paddingLeave;
+        lineNoRef.current!.style.paddingLeft = paddingLeave;
         setIsShown(false)
     }
 
