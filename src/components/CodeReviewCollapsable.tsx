@@ -2,6 +2,7 @@ import React from "react";
 import {Collapse} from "antd";
 import "antd/dist/antd.css";
 import CodeReview, {CodeReviewProps} from "./CodeReview";
+import "./CodeReviewCollapsable.css";
 
 const { Panel } = Collapse; 
 

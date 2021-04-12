@@ -5,7 +5,8 @@ import "./CodeReview.css";
 import CodeReview, {CodeReviewProps} from "./CodeReview";
 
 const cardBodyStyle = {
-    padding: 0
+    paddingTop: "0.5em",
+    paddingBottom: "0em"
 }
 
 export interface CodeReviewCardProps {
@@ -24,6 +25,7 @@ export const CodeReviewCard: React.FC<CodeReviewCardProps> = ({
                   title={title} className="codeReview"
                   bodyStyle={cardBodyStyle}
                   bordered={true}
+                  size={"small"}
             >
                 <CodeReview code={getCodeReviewProps.code}
                             language={getCodeReviewProps.language}

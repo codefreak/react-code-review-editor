@@ -69,8 +69,8 @@ export const CodeLine: React.FC<CodeLineProps> = ({line,
     const [isEditorShown, setIsEditorShown] = useState(false);
 
 
-    const paddingEnter = 2;
-    const paddingLeave = 4;
+    const paddingEnter = 0.5;
+    const paddingLeave = 2;
 
     const handleMouseEnter = () => {
         if(allowAdd) {
@@ -109,11 +109,11 @@ export const CodeLine: React.FC<CodeLineProps> = ({line,
                             <Button icon={<PlusOutlined />}
                                     size="small"
                                     onClick={() => handleAdd(lineNo)}
-                                    style={{width: "1.5em", height: "1.5em", marginLeft: "0.5em"}}
+                                    style={{width: "1.5em", height: "1.5em"}}
                             />
                         </>
                     )}
-                    <LineNo style={{paddingLeft: 4 + getPaddingLeftOffset() + "em"}} ref={lineNoRef}>
+                    <LineNo style={{paddingLeft: 2 + getPaddingLeftOffset() + "em"}} ref={lineNoRef}>
                         {lineNo + 1}
                     </LineNo>
                 </div>
