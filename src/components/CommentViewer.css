@@ -2,6 +2,7 @@
     padding-top: 0.5em;
     padding-bottom: 0.5em;
 }
+
 .ant-collapse > .ant-collapse-item > .ant-collapse-header {
     padding-top: 0.5em;
     padding-bottom: 0.5em;
@@ -18,4 +19,6 @@
 
 .commentViewer {
     padding-left: 1.8em;
+    padding-bottom: 0.5em;
+    padding-top: 0.5em;
 }

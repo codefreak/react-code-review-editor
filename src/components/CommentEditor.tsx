@@ -27,6 +27,7 @@ export const CommentEditor: React.FC<CommentEditorProps> = ({ onSubmit, onCancel
                       placeholder="Add a comment..."
                       onChange={extractTargetValue(setValue)}
                       value={value}
+                      className="textArea"
             />
 
             <div className="controlElements">

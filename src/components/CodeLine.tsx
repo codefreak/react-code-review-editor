@@ -106,7 +106,7 @@ export const CodeLine: React.FC<CodeLineProps> = ({line,
                 <div className="lineLeft">
                     {isShown && (
                         <>
-                            <Button icon={<PlusOutlined />}
+                            <Button icon={<PlusOutlined style={{paddingLeft: "0.1em"}}/>}
                                     size="small"
                                     onClick={() => handleAdd(lineNo)}
                                     style={{width: "1.5em", height: "1.5em"}}
