@@ -5,8 +5,9 @@ import ReplyEditor from "./ReplyEditor";
 
 const { Panel } = Collapse;
 
-export interface CodeViewerProps {
+export interface CommentViewerProps {
     comments: CustomComment[];
+    onReplyCreated: (value: string) => void
 }
 
 export type CustomComment = {
@@ -15,7 +16,7 @@ export type CustomComment = {
     line: number;
 }
 
-export const CommentViewer: React.FC<CodeViewerProps> = ({comments}) => {
+export const CommentViewer: React.FC<CommentViewerProps> = ({comments, onReplyCreated}) => {
     const getHeader = () => {
         const commentNumber = comments.length;
         if(commentNumber === 1) {
@@ -32,7 +33,7 @@ export const CommentViewer: React.FC<CodeViewerProps> = ({comments}) => {
                     {comments.map(((comment, key) =>
                             <Comment key={key} content={comment.content} author={comment.author}/>
                     ))}
-                    <ReplyEditor onSubmit={(value) => alert(value)} />
+                    <ReplyEditor onSubmit={onReplyCreated} />
                 </Panel>
             </Collapse>
         </div>
