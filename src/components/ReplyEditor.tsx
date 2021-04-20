@@ -30,7 +30,7 @@ const ReplyEditor: React.FC<ReplyEditorProps> = ({onSubmit}) => {
     }
 
     return (
-        <div className={"replyEditor"}>
+        <div className={"replyEditor"} data-testid="replyEditor">
             <TextArea rows={rows}
                       placeholder={"Reply ..."}
                       onChange={extractTargetValue(setValue)}
@@ -44,7 +44,7 @@ const ReplyEditor: React.FC<ReplyEditorProps> = ({onSubmit}) => {
             {focused && (
                 <div className={"controlElementsReply"}>
                     <Space>
-                        <Button htmlType="submit"
+                        <Button htmlType="reset"
                                 onClick={() => resetReplyEditor()}
                                 type="default"
                                 danger
@@ -56,15 +56,17 @@ const ReplyEditor: React.FC<ReplyEditorProps> = ({onSubmit}) => {
                             <Button htmlType="submit"
                                     onClick={() => handleSubmit()}
                                     type="primary"
+                                    data-testid="replyButton"
                             >
                                 Add Reply
                             </Button>
                         )}
 
                         {!value && (
-                            <Button htmlType="button"
+                            <Button htmlType="submit"
                                     onClick={() => handleSubmit()}
                                     type="primary"
+                                    data-testid="replyButton"
                                     disabled
                             >
                                 Add Reply
