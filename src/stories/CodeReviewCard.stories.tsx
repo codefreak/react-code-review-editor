@@ -105,17 +105,17 @@ const customComment2: CustomComment = {
 let customCommentContainer = [customComment1, customComment2];
 
 const handleCommentCreatedJsx = (comment: CustomComment) => {
-    jsx.args!.getCodeReviewProps!.commentContainer = [...jsx.args!.getCodeReviewProps!.commentContainer, comment]
+    jsx.args!.getCodeReviewProps!.commentContainer = [...jsx.args!.getCodeReviewProps!.commentContainer!, comment]
     forceReRender();
 }
 
 const handleCommentCreatedCss = (comment: CustomComment) => {
-    css.args!.getCodeReviewProps!.commentContainer = [...css.args!.getCodeReviewProps!.commentContainer, comment]
+    css.args!.getCodeReviewProps!.commentContainer = [...css.args!.getCodeReviewProps!.commentContainer!, comment]
     forceReRender();
 }
 
 const handleCommentCreatedCpp = (comment: CustomComment) => {
-    cpp.args!.getCodeReviewProps!.commentContainer = [...cpp.args!.getCodeReviewProps!.commentContainer, comment]
+    cpp.args!.getCodeReviewProps!.commentContainer = [...cpp.args!.getCodeReviewProps!.commentContainer!, comment]
     forceReRender();
 }
 

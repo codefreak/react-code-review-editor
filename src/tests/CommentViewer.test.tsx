@@ -28,7 +28,7 @@ test("title displays comment count", () => {
     expect(screen.getByTestId('commentViewer')).toHaveTextContent('2 comments')
 })
 
-test("comments get displayed", () => {
+test("comments get displayed correctly", () => {
     render(<CommentViewer comments={commentContainer} onReplyCreated={(value => console.log(value))}/>)
 
     fireEvent.click(screen.getByText('2 comments'))

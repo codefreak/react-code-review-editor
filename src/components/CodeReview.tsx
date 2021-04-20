@@ -9,7 +9,7 @@ import CommentViewer, {CustomComment} from "./CommentViewer";
 export interface CodeReviewProps {
     code: string;
     language: Language;
-    commentContainer: CustomComment[];
+    commentContainer?: CustomComment[];
     onCommentCreated: (comment: CustomComment) => void;
 }
 
@@ -32,11 +32,11 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
         console.log(linesWithComment);
     })
 
-    const createComment = (line: number, content: string, author?: string) => {
+    const createComment = (line: number, content: string, author: string) => {
         const newComment: CustomComment = {
             line: line,
             content: content,
-            author : "placeholder"
+            author : author
         }
 
         return newComment;
@@ -59,22 +59,22 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
     }
 
     return (
-        <Highlight {...defaultProps} theme={theme} code={code} language={language}>
+        <Highlight {...defaultProps} theme={theme} code={code} language={language} >
                     {({ className, style, tokens, getLineProps, getTokenProps }) => (
-                        <Pre className={className} style={style}>
+                        <Pre className={className} style={style} data-testid="highlight">
                             {tokens.map((line, i) => (
                                 <div key={i}>
                                     <CodeLine lineNo={i}
                                               line={line}
                                               getLineProps={getLineProps}
                                               getTokenProps={getTokenProps}
-                                              onSubmit={(value) => {onCommentCreated(createComment(i, value))}}
+                                              onSubmit={(value) => {onCommentCreated(createComment(i, value, "placeholder"))}}
                                               allowAdd={!linesWithComment.includes(i)}
                                     />
 
                                     {linesWithComment.includes(i) && (
                                         <CommentViewer comments={getCommentsOfLine(i)}
-                                                       onReplyCreated={(value) => onCommentCreated(createComment(i, value))}
+                                                       onReplyCreated={(value) => onCommentCreated(createComment(i, value, "placeholder"))}
                                         />
                                     )}
                                 </div>

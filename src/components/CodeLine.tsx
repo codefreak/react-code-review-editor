@@ -84,7 +84,7 @@ export const CodeLine: React.FC<CodeLineProps> = ({line,
         setIsShown(false)
     }
 
-    const handleAdd = (lineNo: number) => {
+    const handleAdd = () => {
         setIsEditorShown(true);
     }
 
@@ -102,14 +102,16 @@ export const CodeLine: React.FC<CodeLineProps> = ({line,
                   {...getLineProps({ line, key: lineNo })}
                   onMouseEnter={() => handleMouseEnter()}
                   onMouseLeave={() => handleMouseLeave()}
+                  data-testid={"line" + lineNo}
             >
                 <div className="lineLeft">
                     {isShown && (
                         <>
                             <Button icon={<PlusOutlined style={{paddingLeft: "0.1em"}}/>}
                                     size="small"
-                                    onClick={() => handleAdd(lineNo)}
+                                    onClick={() => handleAdd()}
                                     style={{width: "1.5em", height: "1.5em"}}
+                                    data-testid="addButton"
                             />
                         </>
                     )}

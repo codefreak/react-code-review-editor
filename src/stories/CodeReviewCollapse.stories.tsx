@@ -35,7 +35,7 @@ const customComment2: CustomComment = {
 let customCommentContainer = [customComment1, customComment2];
 
 const handleCommentCreatedJsx = (comment: CustomComment) => {
-    jsx.args!.getCodeReviewProps!.commentContainer = [...jsx.args!.getCodeReviewProps!.commentContainer, comment]
+    jsx.args!.getCodeReviewProps!.commentContainer = [...jsx.args!.getCodeReviewProps!.commentContainer!, comment]
     forceReRender();
 }
 
