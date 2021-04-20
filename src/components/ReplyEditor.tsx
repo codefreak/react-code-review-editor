@@ -40,6 +40,7 @@ const ReplyEditor: React.FC<ReplyEditorProps> = ({onSubmit}) => {
                           if(value === ""){resetReplyEditor();}
                       }}
                       style={{resize: "none"}}
+                      data-testid="textArea"
             />
             {focused && (
                 <div className={"controlElementsReply"}>
@@ -47,6 +48,7 @@ const ReplyEditor: React.FC<ReplyEditorProps> = ({onSubmit}) => {
                         <Button htmlType="reset"
                                 onClick={() => resetReplyEditor()}
                                 type="default"
+                                data-testid="cancelButton"
                                 danger
                         >
                             Cancel
