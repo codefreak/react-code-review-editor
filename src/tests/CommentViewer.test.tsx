@@ -1,5 +1,5 @@
 import React from 'react';
-import {cleanup, screen, render} from '@testing-library/react';
+import {cleanup, screen, render, fireEvent} from '@testing-library/react';
 import CommentViewer, {CustomComment} from "../components/CommentViewer";
 
 afterEach(cleanup);
@@ -18,7 +18,7 @@ const comment2: CustomComment = {
 
 let commentContainer = [comment1];
 
-test('title displays comment count', () => {
+test("title displays comment count", () => {
     render(<CommentViewer comments={commentContainer} onReplyCreated={(value => console.log(value))}/>)
     expect(screen.getByTestId('commentViewer')).toHaveTextContent('1 comment')
     cleanup()
@@ -26,4 +26,14 @@ test('title displays comment count', () => {
     commentContainer.push(comment2)
     render(<CommentViewer comments={commentContainer} onReplyCreated={(value => console.log(value))}/>)
     expect(screen.getByTestId('commentViewer')).toHaveTextContent('2 comments')
+})
+
+test("comments get displayed", () => {
+    render(<CommentViewer comments={commentContainer} onReplyCreated={(value => console.log(value))}/>)
+
+    fireEvent.click(screen.getByText('2 comments'))
+    expect(screen.getByTestId('comments')).toHaveTextContent('Captain Falcon')
+    expect(screen.getByTestId('comments')).toHaveTextContent('Falcoooon PUNCH!!')
+    expect(screen.getByTestId('comments')).toHaveTextContent('Spock')
+    expect(screen.getByTestId('comments')).toHaveTextContent('Live long and prosper.')
 })

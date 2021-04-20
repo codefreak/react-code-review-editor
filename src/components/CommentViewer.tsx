@@ -30,9 +30,11 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({comments, onReplyCr
         <div className="commentViewer" data-testid="commentViewer">
             <Collapse className="commentViewerCollapse">
                 <Panel  key={1} header={getHeader()} className="customPanel" >
-                    {comments.map(((comment, key) =>
-                            <Comment key={key} content={comment.content} author={comment.author}/>
-                    ))}
+                    <div data-testid="comments">
+                        {comments.map(((comment, key) =>
+                                <Comment key={key} content={comment.content} author={comment.author}/>
+                        ))}
+                    </div>
                     <ReplyEditor onSubmit={onReplyCreated} />
                 </Panel>
             </Collapse>
