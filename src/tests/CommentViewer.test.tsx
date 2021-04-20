@@ -4,22 +4,26 @@ import CommentViewer, {CustomComment} from "../components/CommentViewer";
 
 afterEach(cleanup);
 
-const customComment1: CustomComment = {
+const comment1: CustomComment = {
     line: 0,
     author: "Captain Falcon",
     content: "Falcoooon PUNCH!!"
 }
 
-const customComment2: CustomComment = {
+const comment2: CustomComment = {
     line: 3,
     author: "Spock",
     content: "Live long and prosper."
 }
 
-let customCommentContainer = [customComment1];
+let commentContainer = [comment1];
 
 test('title displays comment count', () => {
-    render(<CommentViewer comments={customCommentContainer} onReplyCreated={(value => console.log(value))}/>)
+    render(<CommentViewer comments={commentContainer} onReplyCreated={(value => console.log(value))}/>)
+    expect(screen.getByTestId('commentViewer')).toHaveTextContent('1 comment')
+    cleanup()
 
-    expect(screen.getByRole('header')).toHaveTextContent('1 comment')
+    commentContainer.push(comment2)
+    render(<CommentViewer comments={commentContainer} onReplyCreated={(value => console.log(value))}/>)
+    expect(screen.getByTestId('commentViewer')).toHaveTextContent('2 comments')
 })
