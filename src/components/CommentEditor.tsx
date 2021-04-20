@@ -23,7 +23,7 @@ export const CommentEditor: React.FC<CommentEditorProps> = ({ onSubmit, onCancel
    }
 
    const getPlaceholder = () => {
-       return "Add a comment to line " + (line + 1) + "..."
+       return "Add a comment to line " + (line + 1) + " ..."
    }
 
     return (
@@ -34,6 +34,7 @@ export const CommentEditor: React.FC<CommentEditorProps> = ({ onSubmit, onCancel
                       value={value}
                       className="textArea"
                       style={{resize: "none"}}
+                      data-testid={"textArea"}
             />
 
             <div className="controlElements">
@@ -41,6 +42,7 @@ export const CommentEditor: React.FC<CommentEditorProps> = ({ onSubmit, onCancel
                     <Button htmlType="submit"
                             onClick={onCancel}
                             type="default"
+                            data-testid="cancelButton"
                             danger
                     >
                         Cancel
@@ -50,6 +52,7 @@ export const CommentEditor: React.FC<CommentEditorProps> = ({ onSubmit, onCancel
                         <Button htmlType="submit"
                                 onClick={handleSubmit}
                                 type="primary"
+                                data-testid="addButton"
                         >
                             Add Comment
                         </Button>
@@ -59,6 +62,7 @@ export const CommentEditor: React.FC<CommentEditorProps> = ({ onSubmit, onCancel
                         <Button htmlType="button"
                                 onClick={() => onSubmit(value)}
                                 type="primary"
+                                data-testid="addButton"
                                 disabled
                         >
                             Add Comment

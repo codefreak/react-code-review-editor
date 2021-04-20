@@ -1,5 +1,5 @@
 import React from 'react';
-import {cleanup, screen, render, fireEvent, getByTestId} from '@testing-library/react';
+import {cleanup, screen, render, fireEvent} from '@testing-library/react';
 import ReplyEditor from "../components/ReplyEditor";
 
 afterEach(cleanup);
@@ -49,5 +49,21 @@ test("clicking cancel resets component", () => {
 
     const cancelButton = screen.queryByTestId("cancelButton")
     expect(cancelButton).toBeNull()
+})
 
+test("clicking add reply resets component", () => {
+    render(<ReplyEditor onSubmit={value => console.log(value)}/>)
+
+    fireEvent.focus(screen.getByPlaceholderText("Reply ..."))
+    fireEvent.change(screen.getByPlaceholderText("Reply ..."), {target: { value: "an input"} })
+    fireEvent.click(screen.getByTestId("replyButton"))
+
+    expect(screen.getByTestId("textArea")).toHaveTextContent("")
+    expect(screen.getByTestId("textArea")).toHaveProperty("rows", 1)
+
+    const replyButton = screen.queryByTestId("replyButton")
+    expect(replyButton).toBeNull()
+
+    const cancelButton = screen.queryByTestId("cancelButton")
+    expect(cancelButton).toBeNull()
 })
