@@ -1,8 +1,8 @@
 import React, {useState} from "react";
-import TextArea from "antd/es/input/TextArea";
 import {extractTargetValue} from "./CommentEditor";
 import {Button, Space} from "antd";
 import "./ReplyEditor.css";
+import TextArea from "antd/lib/input/TextArea";
 
 export interface ReplyEditorProps {
     onSubmit: (value: string) => void
