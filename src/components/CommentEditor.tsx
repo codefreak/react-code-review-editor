@@ -52,7 +52,7 @@ export const CommentEditor: React.FC<CommentEditorProps> = ({ onSubmit, onCancel
                         <Button htmlType="submit"
                                 onClick={handleSubmit}
                                 type="primary"
-                                data-testid="addButton"
+                                data-testid="addCommentButton"
                         >
                             Add Comment
                         </Button>
@@ -62,7 +62,7 @@ export const CommentEditor: React.FC<CommentEditorProps> = ({ onSubmit, onCancel
                         <Button htmlType="button"
                                 onClick={() => onSubmit(value)}
                                 type="primary"
-                                data-testid="addButton"
+                                data-testid="addCommentButton"
                                 disabled
                         >
                             Add Comment

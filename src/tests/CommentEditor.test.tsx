@@ -13,16 +13,16 @@ test("placeholder signals line number", () => {
     expect(screen.queryByTestId("textArea")).toHaveProperty("placeholder", "Add a comment to line 155 ...")
 })
 
-test("add button is enabled when text is present", () => {
+test("add comment button is enabled when text is present", () => {
     render(<CommentEditor onSubmit={() => {}} onCancel={() => {}} line={1}/>)
 
     fireEvent.change(screen.getByTestId("textArea"), {target: { value: "an input"} })
-    expect(screen.getByTestId("addButton")).not.toHaveAttribute("disabled")
+    expect(screen.getByTestId("addCommentButton")).not.toHaveAttribute("disabled")
 })
 
-test("add button is disabled when no text is present", () => {
+test("add comment button is disabled when no text is present", () => {
     render(<CommentEditor onSubmit={() => {}} onCancel={() => {}} line={1}/>)
-    expect(screen.getByTestId("addButton")).toHaveAttribute("disabled")
+    expect(screen.getByTestId("addCommentButton")).toHaveAttribute("disabled")
 })
 
 test("cancel button calls onCancel prop", () => {
@@ -33,11 +33,11 @@ test("cancel button calls onCancel prop", () => {
     expect(handleCancel).toHaveBeenCalledTimes(1)
 })
 
-test("add button calls onSubmit prop", () => {
+test("add comment button calls onSubmit prop", () => {
     const handleSubmit = jest.fn()
     render(<CommentEditor onSubmit={handleSubmit} onCancel={() => {}} line={1}/>)
 
     fireEvent.change(screen.getByTestId("textArea"), {target: { value: "an input"} })
-    fireEvent.click(screen.getByTestId("addButton"))
+    fireEvent.click(screen.getByTestId("addCommentButton"))
     expect(handleSubmit).toHaveBeenCalledTimes(1)
 })

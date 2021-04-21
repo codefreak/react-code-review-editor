@@ -73,9 +73,11 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
                                     />
 
                                     {linesWithComment.includes(i) && (
-                                        <CommentViewer comments={getCommentsOfLine(i)}
-                                                       onReplyCreated={(value) => onCommentCreated(createComment(i, value, "placeholder"))}
-                                        />
+                                        <div data-testid={"commentViewer" + i}>
+                                            <CommentViewer comments={getCommentsOfLine(i)}
+                                                           onReplyCreated={(value) => onCommentCreated(createComment(i, value, "placeholder"))}
+                                            />
+                                        </div>
                                     )}
                                 </div>
                             ))}
