@@ -4,6 +4,9 @@
   "main": "lib/index.js",
   "module": "lib/index.esm.js",
   "types": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
   "private": true,
   "peerDependencies": {
     "react": "^17.0.2",
@@ -17,7 +20,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "rollup -c",
+    "build": "rollup -c && yarn pack",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 6006 -s public",
