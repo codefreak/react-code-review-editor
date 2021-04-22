@@ -5,7 +5,10 @@
   "module": "lib/index.esm.js",
   "types": "lib/index.d.ts",
   "files": [
-    "lib"
+    "lib/components",
+    "lib/index.d.ts",
+    "lib/index.esm.js",
+    "lib/index.js"
   ],
   "private": true,
   "peerDependencies": {

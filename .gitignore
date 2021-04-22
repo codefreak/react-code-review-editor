@@ -19,6 +19,10 @@
 .env.development.local
 .env.test.local
 .env.production.local
+/lib/index.esm.js
+/lib/index.js
+/lib/index.esm.js.map
+/lib/index.js.map
 
 npm-debug.log*
 yarn-debug.log*
