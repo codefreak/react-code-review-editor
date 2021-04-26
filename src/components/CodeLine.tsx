@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {Line, LineContent, LineNo} from "./styles";
 import {Button} from "antd";
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined, ExclamationCircleTwoTone, InfoCircleTwoTone, MessageTwoTone } from '@ant-design/icons';
 import CommentEditor from "./CommentEditor";
 
 // types needed for react-prism-renderer props
@@ -52,7 +52,11 @@ export interface CodeLineProps {
     getLineProps: (input: LineInputProps) => LineOutputProps,
     getTokenProps: (input: TokenInputProps) => TokenOutputProps,
     onSubmit: (value: string) => void,
-    allowAdd: boolean,
+    mildInfo: boolean,
+    severeInfo: boolean,
+    commentThread: boolean,
+    onAnnotationClick: (line: number) => void
+    onCommentThreadClick: (line: number) => void
 }
 
 export const CodeLine: React.FC<CodeLineProps> = ({line,
@@ -60,7 +64,11 @@ export const CodeLine: React.FC<CodeLineProps> = ({line,
                                                       getLineProps,
                                                       getTokenProps,
                                                       onSubmit,
-                                                      allowAdd,
+                                                      mildInfo,
+                                                      severeInfo,
+                                                      onAnnotationClick,
+                                                      commentThread,
+                                                      onCommentThreadClick
                                                       }) => {
 
     // isShown manages visibility of addButton
@@ -69,18 +77,32 @@ export const CodeLine: React.FC<CodeLineProps> = ({line,
     const [isEditorShown, setIsEditorShown] = useState(false);
 
 
-    const paddingEnter = 0.5;
-    const paddingLeave = 2;
+    const getPaddingLeft = () => {
+        if((commentThread && !(mildInfo || severeInfo))
+            || (mildInfo && !(commentThread ||severeInfo))
+            || (severeInfo && !(commentThread || mildInfo))) {
+            return 2.95;
+        }
+        if((commentThread && mildInfo && !severeInfo)
+            || (mildInfo && severeInfo && !commentThread)
+            || (commentThread && severeInfo && !mildInfo)) {
+            return 1.65
+        }
+        if(commentThread && mildInfo && severeInfo) {
+            return 0.35
+        }
+        return 4.3;
+    }
 
     const handleMouseEnter = () => {
-        if(allowAdd) {
-            lineNoRef.current!.style.paddingLeft = paddingEnter + getPaddingLeftOffset() + "em";
+        if(!commentThread) {
+            lineNoRef.current!.style.paddingLeft = (getPaddingLeft() - 1.5) + getPaddingLeftOffset() + "em";
             setIsShown(true);
         }
     }
 
     const handleMouseLeave = () => {
-        lineNoRef.current!.style.paddingLeft = paddingLeave + getPaddingLeftOffset() + "em";
+        lineNoRef.current!.style.paddingLeft = getPaddingLeft() + getPaddingLeftOffset() + "em";
         setIsShown(false)
     }
 
@@ -115,7 +137,30 @@ export const CodeLine: React.FC<CodeLineProps> = ({line,
                             />
                         </>
                     )}
-                    <LineNo style={{paddingLeft: 2 + getPaddingLeftOffset() + "em"}} ref={lineNoRef}>
+
+                    {severeInfo && (
+                        <ExclamationCircleTwoTone style={{ paddingLeft: "0.15em",paddingRight: "0.15em"}}
+                                                  onClick={() => onAnnotationClick(lineNo)}
+                                                  twoToneColor="#F00E3B"
+                        />
+
+                    )}
+
+                    {mildInfo && (
+                        <InfoCircleTwoTone style={{paddingLeft: "0.15em", paddingRight: "0.15em"}}
+                                           twoToneColor="#FAC302"
+                                           onClick={() => onAnnotationClick(lineNo)}
+                        />
+
+                    )}
+
+                    {commentThread && (
+                        <MessageTwoTone style={{paddingLeft: "0.15em", paddingRight: "0.15em"}}
+                                        onClick={() => onCommentThreadClick(lineNo)}
+                        />
+                    )}
+
+                    <LineNo style={{paddingLeft: getPaddingLeft() + getPaddingLeftOffset() + "em"}} ref={lineNoRef}>
                         {lineNo + 1}
                     </LineNo>
                 </div>

@@ -58,6 +58,18 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
         return CommentsOfLine;
     }
 
+    const mockOne = (line: number) => {
+        if(line === 4) return true
+        return line === 3;
+
+    }
+
+    const mockTwo = (line: number) => {
+        if(line === (4)) return true
+        if(line === 3) return true
+        return line === 7;
+    }
+
     return (
         <Highlight {...defaultProps} theme={theme} code={code} language={language} >
                     {({ className, style, tokens, getLineProps, getTokenProps }) => (
@@ -69,7 +81,11 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
                                               getLineProps={getLineProps}
                                               getTokenProps={getTokenProps}
                                               onSubmit={(value) => {onCommentCreated(createComment(i, value, "placeholder"))}}
-                                              allowAdd={!linesWithComment.includes(i)}
+                                              mildInfo={mockOne(i)}
+                                              severeInfo={mockTwo(i)}
+                                              commentThread={linesWithComment.includes(i)}
+                                              onAnnotationClick={() => console.log("annotation")}
+                                              onCommentThreadClick={() => console.log("commentThread")}
                                     />
 
                                     {linesWithComment.includes(i) && (
