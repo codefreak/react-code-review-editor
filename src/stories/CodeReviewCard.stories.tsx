@@ -91,9 +91,8 @@ Matrix::Matrix(int z, int s, int wert) {
 /* TODO: Kopierkonstruktor */`.trim();
 
 const customComment1: CustomComment = {
-    line: 1,
-    author: "Captain Falcon",
-    content: "Falcoooon PUNCH!!",
+    author: "Teacher",
+    content: "Das war ja wohl nichts.",
     type: "comment"
 }
 
@@ -111,7 +110,16 @@ const customComment3: CustomComment = {
     type: "mildInfo"
 }
 
-let customCommentContainer = [customComment1, customComment2, customComment3];
+const customComment4: CustomComment = {
+    author: "Test1",
+    content: `
+    Expected: 10
+    But was: 0
+    `.trim(),
+    type: "severeInfo"
+}
+
+let customCommentContainer = [customComment1, customComment2, customComment3, customComment4];
 
 const handleCommentCreatedJsx = (comment: CustomComment) => {
     jsx.args!.getCodeReviewProps!.commentContainer = [...jsx.args!.getCodeReviewProps!.commentContainer!, comment]
@@ -131,6 +139,7 @@ const handleCommentCreatedCpp = (comment: CustomComment) => {
 export let jsx = Template.bind({});
 jsx.args = {
     getCodeReviewProps: {
+        author: "Storybook Tester",
         code: jsxCode,
         language: "jsx",
         commentContainer:  customCommentContainer,
@@ -144,6 +153,7 @@ jsx.args = {
 export const css = Template.bind({});
 css.args = {
     getCodeReviewProps: {
+        author: "Storybook Tester",
         code: cssCode,
         language: "css",
         commentContainer:  customCommentContainer,
@@ -156,6 +166,7 @@ css.args = {
 export const cpp = Template.bind({});
 cpp.args = {
     getCodeReviewProps: {
+        author: "Storybook Tester",
         code: cppCode,
         language: "cpp",
         commentContainer:  customCommentContainer,

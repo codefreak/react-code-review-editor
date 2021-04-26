@@ -28,6 +28,7 @@ export const CodeReviewCard: React.FC<CodeReviewCardProps> = ({
                   size={"small"}
             >
                 <CodeReview code={getCodeReviewProps.code}
+                            author={getCodeReviewProps.author}
                             language={getCodeReviewProps.language}
                             commentContainer={getCodeReviewProps.commentContainer}
                             onCommentCreated={getCodeReviewProps.onCommentCreated}

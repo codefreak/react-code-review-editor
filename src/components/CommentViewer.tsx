@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {Collapse, Comment} from "antd";
 import "./CommentViewer.css";
 import ReplyEditor from "./ReplyEditor";
-import {InfoCircleTwoTone} from "@ant-design/icons";
+import {ExclamationCircleTwoTone, InfoCircleTwoTone} from "@ant-design/icons";
 
 const { Panel } = Collapse;
 
@@ -10,6 +10,7 @@ export interface CommentViewerProps {
     comments: CustomComment[]
     onReplyCreated: (value: string) => void
     toggle: boolean
+    result?: boolean
 }
 
 export type CustomComment = {
@@ -21,7 +22,8 @@ export type CustomComment = {
 
 export const CommentViewer: React.FC<CommentViewerProps> = ({comments,
                                                                 onReplyCreated,
-                                                                toggle
+                                                                toggle,
+                                                                result
 }) => {
     const [activeKey, setActiveKey] = useState<string | string[]>("0")
     const [oldToggleState, setOldToggleState] = useState<boolean>(false)
@@ -38,6 +40,9 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({comments,
     }, [toggle, oldToggleState, activeKey])
 
     const getHeader = () => {
+        if(result) {
+            return "Result"
+        }
         const commentNumber = comments.length;
         if(commentNumber === 1) {
             return commentNumber + " comment";
@@ -54,37 +59,74 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({comments,
         <div className="commentViewer" data-testid="commentViewer">
             <Collapse className="commentViewerCollapse" activeKey={activeKey} onChange={handleKeyChange}>
                 <Panel  key={1} header={getHeader()} className="customPanel">
-                    <div data-testid="comments">
-                        {comments.map((comment, key) => {
-                            if(comment.type === "comment") {
-                                return  <Comment key={key}
-                                                 content={comment.content}
-                                                 author={comment.author}
-                                />
-                            }
-                        })}
-                    </div>
-                    <ReplyEditor onSubmit={onReplyCreated} />
-                    <div style={{paddingTop: "0.5em"}}>
-                        {comments.map((comment, key) => {
-                            if(comment.type === "mildInfo") {
-                                return <Comment key={key}
-                                                content={comment.content}
-                                                author={
-                                                    <div style={{display: "flex", flexDirection: "row"}}>
-                                                        <InfoCircleTwoTone twoToneColor="#FAC302"
-                                                                           style={{
-                                                                               paddingTop: "0.25em",
-                                                                               paddingRight: "0.5em"
-                                                                           }}
-                                                        />
-                                                        <p>{comment.author}</p>
-                                                    </div>
-                                                }
-                                />
-                            }
-                        })}
-                    </div>
+                    {!result ? (
+                        <>
+                            <div data-testid="comments">
+                                {comments.map((comment, key) => {
+                                    if((comment.type === "comment") && (comment.line)) {
+                                        return  <Comment key={key}
+                                                         content={comment.content}
+                                                         author={comment.author}
+                                        />
+                                    }
+                                })}
+                            </div>
+                            <ReplyEditor onSubmit={onReplyCreated} />
+                            <div style={{paddingTop: "0.5em"}}>
+                                {comments.map((comment, key) => {
+                                    if(comment.type === "mildInfo") {
+                                        return <Comment key={key}
+                                                        content={comment.content}
+                                                        author={
+                                                            <div style={{display: "flex", flexDirection: "row"}}>
+                                                                <InfoCircleTwoTone twoToneColor="#FAC302"
+                                                                                   style={{
+                                                                                       paddingTop: "0.25em",
+                                                                                       paddingRight: "0.5em"
+                                                                                   }}
+                                                                />
+                                                                <p>{comment.author}</p>
+                                                            </div>
+                                                        }
+                                        />
+                                    }
+                                })}
+                            </div>
+                        </>
+                    ) : (
+                        <>
+                            {comments.map((comment, key) => {
+                                if((comment.type === "comment") && (!comment.line)) {
+                                    return  <Comment key={key}
+                                                     content={comment.content}
+                                                     author={comment.author}
+                                    />
+                                }
+                            })}
+                            <ReplyEditor onSubmit={onReplyCreated} />
+                            <div style={{paddingTop: "0.5em"}}>
+                                {comments.map((comment, key) => {
+                                    if(comment.type === "severeInfo") {
+                                        return <Comment key={key}
+                                                        content={comment.content}
+                                                        author={
+                                                            <div style={{display: "flex", flexDirection: "row"}}>
+                                                                <ExclamationCircleTwoTone twoToneColor="#F00E3B"
+                                                                                   style={{
+                                                                                       paddingTop: "0.25em",
+                                                                                       paddingRight: "0.5em"
+                                                                                   }}
+                                                                />
+                                                                <p>{comment.author}</p>
+                                                            </div>
+                                                        }
+                                        />
+                                    }
+                                })}
+                            </div>
+                        </>
+                    )}
+
 
                 </Panel>
             </Collapse>

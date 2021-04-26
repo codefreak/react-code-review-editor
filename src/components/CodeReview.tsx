@@ -4,13 +4,14 @@ import theme from "prism-react-renderer/themes/vsLight";
 import {Pre} from "./styles";
 import "./CodeReview.css";
 import CodeLine from "./CodeLine";
-import {CustomComment} from "./CommentViewer";
+import CommentViewer, {CustomComment} from "./CommentViewer";
 
 export interface CodeReviewProps {
     code: string;
     language: Language;
     commentContainer?: CustomComment[];
     onCommentCreated: (comment: CustomComment) => void;
+    author: string;
 }
 
 
@@ -18,7 +19,8 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
                                                           code,
                                                           language,
                                                           commentContainer,
-                                                          onCommentCreated
+                                                          onCommentCreated,
+                                                          author
 }) => {
     const [linesWithComment, setLinesWithComment] = useState<number[]>(new Array<number>());
     const [linesWithMildInfo, setLinesWithMildInfo] = useState<number[]>(new Array<number>())
@@ -40,12 +42,21 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
         }
     })
 
-    const createComment = (line: number, content: string, author: string) => {
-        const newComment: CustomComment = {
-            line: line,
-            content: content,
-            author : author,
-            type: "comment"
+    const createComment = (content: string, author: string, line?: number) => {
+        let newComment: CustomComment
+        if(line) {
+            newComment = {
+                line: line,
+                content: content,
+                author : author,
+                type: "comment"
+            }
+        } else {
+            newComment = {
+                content: content,
+                author : author,
+                type: "comment"
+            }
         }
         return newComment;
     }
@@ -57,37 +68,55 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
     }
 
     const getCommentsOfLine = (line: number) => {
-        const CommentsOfLine = new Array<CustomComment>();
+        const commentsOfLine = new Array<CustomComment>();
         commentContainer?.forEach(element => {
             if(element.line === line) {
-                CommentsOfLine.push(element);
+                commentsOfLine.push(element);
             }
         })
-        return CommentsOfLine;
+        return commentsOfLine;
+    }
+
+    const getResults = () => {
+        const results = new Array<CustomComment>();
+        commentContainer?.forEach(element => {
+            if(!element.line || (element.type === "severeInfo") ) {
+                results.push(element);
+            }
+        })
+        return results;
     }
 
     return (
-        <Highlight {...defaultProps} theme={theme} code={code} language={language} >
-                    {({ className, style, tokens, getLineProps, getTokenProps }) => (
-                        <Pre className={className} style={style} data-testid="highlight">
-                            {tokens.map((line, i) => (
-                                <div key={i}>
-                                    <CodeLine lineNo={i}
-                                              line={line}
-                                              getLineProps={getLineProps}
-                                              getTokenProps={getTokenProps}
-                                              onSubmit={(value) => {onCommentCreated(createComment(i, value, "placeholder"))}}
-                                              mildInfo={linesWithMildInfo.includes(i)}
-                                              severeInfo={false}
-                                              commentThread={linesWithComment.includes(i)}
-                                              comments={getCommentsOfLine(i)}
-                                              onReplyCreated={(value) => onCommentCreated(createComment(i, value, "placeholder"))}
-                                    />
-                                </div>
-                            ))}
-                        </Pre>
-                    )}
-        </Highlight>
+        <div>
+            <Highlight {...defaultProps} theme={theme} code={code} language={language} >
+                {({ className, style, tokens, getLineProps, getTokenProps }) => (
+                    <Pre className={className} style={style} data-testid="highlight">
+                        {tokens.map((line, i) => (
+                            <div key={i}>
+                                <CodeLine lineNo={i}
+                                          line={line}
+                                          getLineProps={getLineProps}
+                                          getTokenProps={getTokenProps}
+                                          onSubmit={(value) => {onCommentCreated(createComment(value, author, i))}}
+                                          mildInfo={linesWithMildInfo.includes(i)}
+                                          severeInfo={false}
+                                          commentThread={linesWithComment.includes(i)}
+                                          comments={getCommentsOfLine(i)}
+                                          onReplyCreated={(value) => onCommentCreated(createComment(value, author, i))}
+                                />
+                            </div>
+                        ))}
+                    </Pre>
+                )}
+            </Highlight>
+            <CommentViewer comments={getResults()}
+                           result={true}
+                           onReplyCreated={(value) => onCommentCreated(createComment(value, author))}
+                           toggle={true}
+            />
+        </div>
+
     )
 }
 
