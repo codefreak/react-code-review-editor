@@ -1,7 +1,9 @@
-.commentViewer > .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-content > .ant-collapse-content-box {
+.ant-collapse-content > .ant-collapse-content-box {
+    padding-top: 1em;
     padding-bottom: 0;
-    padding-top: 0;
 }
+
+
 
 .ant-collapse > .ant-collapse-item > .ant-collapse-header {
     padding-top: 0.5em;
@@ -15,9 +17,18 @@
 }
 .ant-comment-inner {
     padding-top: 0;
+    padding-bottom: 0.5em;
 }
 
 .commentViewer {
     padding-bottom: 0.5em;
     padding-top: 0.5em;
+}
+
+.ant-comment-content-author {
+    margin: 0;
+}
+
+p {
+    margin: 0;
 }

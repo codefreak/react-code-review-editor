@@ -4,8 +4,7 @@
 
 .replyEditor {
     width: available;
-    border-bottom: 1px solid #d9d9d9;
-    padding-bottom: 1em;
+    padding-bottom: 0.5em;
 }
 
 .controlElementsReply {
