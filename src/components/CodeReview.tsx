@@ -14,7 +14,6 @@ export interface CodeReviewProps {
     author: string;
 }
 
-
 export const CodeReview: React.FC<CodeReviewProps> = ({
                                                           code,
                                                           language,
@@ -27,10 +26,11 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
 
     // "constructor"
     useEffect(() => {
+        // gather intel about present comments and infos
         if(commentContainer) {
             commentContainer.forEach(comment => {
                 if(comment.type === "comment") {
-                    addCommentLine(comment.line!);
+                    addLineWithComment(comment.line!);
                 }
 
                 if(comment.type === "mildInfo") {
@@ -44,7 +44,9 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
 
     const createComment = (content: string, author: string, line?: number) => {
         let newComment: CustomComment
+
         if(line) {
+            // standard comment
             newComment = {
                 line: line,
                 content: content,
@@ -52,6 +54,7 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
                 type: "comment"
             }
         } else {
+            // result comment
             newComment = {
                 content: content,
                 author : author,
@@ -61,12 +64,14 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
         return newComment;
     }
 
-    const addCommentLine = (line: number) => {
+    // adds a line to the linesWithComment array
+    const addLineWithComment = (line: number) => {
         if(!linesWithComment.includes(line)) {
             setLinesWithComment([...linesWithComment, line]);
         }
     }
 
+    // returns comments of a given line
     const getCommentsOfLine = (line: number) => {
         const commentsOfLine = new Array<CustomComment>();
         commentContainer?.forEach(element => {
@@ -77,6 +82,7 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
         return commentsOfLine;
     }
 
+    // returns all results
     const getResults = () => {
         const results = new Array<CustomComment>();
         commentContainer?.forEach(element => {

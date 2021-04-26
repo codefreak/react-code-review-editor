@@ -43,8 +43,9 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({comments,
             toggleCollapse()
         }
         setOldToggleState(toggle)
-    }, [toggle, oldToggleState, activeKey, toggleCollapse])
+    }, [toggle, oldToggleState, activeKey])
 
+    // returns amount of infos present in the component
     const countInfos = () => {
         let count = 0;
         comments.forEach(element => {
@@ -55,6 +56,7 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({comments,
         return count
     }
 
+    // returns amount of comments present in the component
     const countComments = () => {
         let count = 0;
         comments.forEach(element => {
@@ -81,6 +83,7 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({comments,
         }
     }
 
+    // returns a custom header depending on count and kind of comments present
     const getHeader = () => {
         if(result) {
             return "Result"
@@ -103,6 +106,7 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({comments,
         }
     }
 
+    // returns a custom type for the replyType prop of ReplyEditor
     const getType = () => {
         if(!replyType) {
             let noComment = true;
@@ -120,6 +124,7 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({comments,
         return replyType
     }
 
+    // returns icons for extra context in the result header
     const getExtra = () => {
         if(comments.find(element => element.type === "severeInfo")) {
             if(comments.find(element => element.type === "comment")) {

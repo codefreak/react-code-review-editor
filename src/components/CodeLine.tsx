@@ -75,9 +75,12 @@ export const CodeLine: React.FC<CodeLineProps> = ({line,
     // isShown manages visibility of addButton
     const [isShown, setIsShown] = useState(false);
     const lineNoRef = React.createRef<HTMLSpanElement>();
+
+    // isEditorShown manages visibility of CommentEditor
     const [isEditorShown, setIsEditorShown] = useState(false);
     const [collapseState, setCollapseState] = useState<boolean>(false)
 
+    // returns the right padding value depending on the number of annotations present
     const getPaddingLeft = () => {
         if((commentThread && !(mildInfo || severeInfo))
             || (mildInfo && !(commentThread ||severeInfo))
@@ -95,6 +98,7 @@ export const CodeLine: React.FC<CodeLineProps> = ({line,
         return 4.3;
     }
 
+    // show addButton and adjust padding accordingly
     const handleMouseEnter = () => {
         if(!commentThread && !mildInfo) {
             lineNoRef.current!.style.paddingLeft = (getPaddingLeft() - 1.5) + getPaddingLeftOffset() + "em";
@@ -102,6 +106,7 @@ export const CodeLine: React.FC<CodeLineProps> = ({line,
         }
     }
 
+    // remove addButton and adjust padding accordingly
     const handleMouseLeave = () => {
         lineNoRef.current!.style.paddingLeft = getPaddingLeft() + getPaddingLeftOffset() + "em";
         setIsShown(false)
@@ -111,6 +116,7 @@ export const CodeLine: React.FC<CodeLineProps> = ({line,
         setIsEditorShown(true);
     }
 
+    // returns a higher padding offset for higher than double digit lines
     const getPaddingLeftOffset = () => {
         if(lineNo < 9) {
             return 0.55
