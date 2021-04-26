@@ -110,7 +110,7 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
                     </Pre>
                 )}
             </Highlight>
-            <div style={{paddingLeft: "0.5em", paddingRight: "0.5em"}}>
+            <div style={{paddingLeft: "0.5em", paddingRight: "0.5em", paddingTop: "1em"}}>
                 <CommentViewer comments={getResults()}
                                result={true}
                                onReplyCreated={(value) => onCommentCreated(createComment(value, author))}

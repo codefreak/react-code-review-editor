@@ -45,15 +45,61 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({comments,
         setOldToggleState(toggle)
     }, [toggle, oldToggleState, activeKey, toggleCollapse])
 
+    const countInfos = () => {
+        let count = 0;
+        comments.forEach(element => {
+            if(element.type === ("mildInfo" || "severeInfo")) {
+                count++
+            }
+        })
+        return count
+    }
+
+    const countComments = () => {
+        let count = 0;
+        comments.forEach(element => {
+            if(element.type === "comment") {
+                count++
+            }
+        })
+        return count
+    }
+
+    const getCommentWording = () => {
+        if(countComments() === 1) {
+            return " comment"
+        } else {
+            return " comments"
+        }
+    }
+
+    const getInfoWording = () => {
+        if(countInfos() === 1) {
+            return " info"
+        } else {
+            return " infos"
+        }
+    }
+
     const getHeader = () => {
         if(result) {
             return "Result"
         }
-        const commentNumber = comments.length;
-        if(commentNumber === 1) {
-            return commentNumber + " comment";
-        } else {
-            return commentNumber + " comments";
+
+        if(countComments() > 0) {
+            if(countInfos() > 0) {
+                return countComments()
+                    + getCommentWording()
+                    + ", "
+                    + countInfos()
+                    + getInfoWording()
+            } else {
+                return countComments()
+                    + getCommentWording()
+            }
+        }
+        if(countInfos() > 0) {
+            return countInfos() + getInfoWording()
         }
     }
 
