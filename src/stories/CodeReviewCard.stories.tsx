@@ -115,11 +115,11 @@ const customComment4: CustomComment = {
     content: `
     Expected: 10
     But was: 0
-    `.trim(),
+    `,
     type: "severeInfo"
 }
 
-let customCommentContainer = [ customComment2, customComment3, customComment4];
+let customCommentContainer = [customComment1, customComment2, customComment3, customComment4];
 
 const handleCommentCreatedJsx = (comment: CustomComment) => {
     jsx.args!.getCodeReviewProps!.commentContainer = [...jsx.args!.getCodeReviewProps!.commentContainer!, comment]

@@ -30,16 +30,20 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({comments,
     const [activeKey, setActiveKey] = useState<string | string[]>("0")
     const [oldToggleState, setOldToggleState] = useState<boolean>(false)
 
+    const toggleCollapse = () => {
+        if(activeKey === "0") {
+            setActiveKey("1")
+        } else {
+            setActiveKey("0")
+        }
+    }
+
     useEffect(() => {
         if(toggle !== oldToggleState) {
-            if(activeKey === "0") {
-                setActiveKey("1")
-            } else {
-                setActiveKey("0")
-            }
+            toggleCollapse()
         }
         setOldToggleState(toggle)
-    }, [toggle, oldToggleState, activeKey])
+    }, [toggle, oldToggleState, activeKey, toggleCollapse])
 
     const getHeader = () => {
         if(result) {
@@ -51,10 +55,6 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({comments,
         } else {
             return commentNumber + " comments";
         }
-    }
-
-    const handleKeyChange = (key: string | string[]) => {
-        setActiveKey(key)
     }
 
     const getType = () => {
@@ -92,7 +92,7 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({comments,
 
     return(
         <div className="commentViewer" data-testid="commentViewer">
-            <Collapse className="commentViewerCollapse" activeKey={activeKey} onChange={handleKeyChange}>
+            <Collapse className="commentViewerCollapse" activeKey={activeKey} onChange={() => toggleCollapse()}>
                 <Panel  key={1} header={getHeader()} className="customPanel" extra={getExtra()}>
                     {!result ? (
                         <>
