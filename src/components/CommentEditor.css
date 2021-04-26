@@ -1,11 +1,11 @@
 .commentEditor {
     display: flex;
     flex-direction: column;
-    padding-top: 0.5em;
+    padding-top: 1.1em;
     border: 1px solid #d9d9d9;
-    padding-left: 1.2em;
+    padding-left: 1.1em;
     padding-right: 1.1em;
-    margin-left: 1.8em;
+    margin-left: 0;
     margin-bottom: 0.5em;
     margin-top: 0.5em;
 }
