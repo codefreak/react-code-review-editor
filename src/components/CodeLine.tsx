@@ -3,6 +3,7 @@ import {Line, LineContent, LineNo} from "./styles";
 import {Button} from "antd";
 import { PlusOutlined, ExclamationCircleTwoTone, InfoCircleTwoTone, MessageTwoTone } from '@ant-design/icons';
 import CommentEditor from "./CommentEditor";
+import CommentViewer, {CustomComment} from "./CommentViewer";
 
 // types needed for react-prism-renderer props
 type Token = {
@@ -55,8 +56,8 @@ export interface CodeLineProps {
     mildInfo: boolean,
     severeInfo: boolean,
     commentThread: boolean,
-    onAnnotationClick: (line: number) => void
-    onCommentThreadClick: (line: number) => void
+    comments: CustomComment[]
+    onReplyCreated: (value: string) => void
 }
 
 export const CodeLine: React.FC<CodeLineProps> = ({line,
@@ -66,16 +67,16 @@ export const CodeLine: React.FC<CodeLineProps> = ({line,
                                                       onSubmit,
                                                       mildInfo,
                                                       severeInfo,
-                                                      onAnnotationClick,
                                                       commentThread,
-                                                      onCommentThreadClick
+                                                      comments,
+                                                      onReplyCreated
                                                       }) => {
 
     // isShown manages visibility of addButton
     const [isShown, setIsShown] = useState(false);
     const lineNoRef = React.createRef<HTMLSpanElement>();
     const [isEditorShown, setIsEditorShown] = useState(false);
-
+    const [collapseState, setCollapseState] = useState<boolean>(false)
 
     const getPaddingLeft = () => {
         if((commentThread && !(mildInfo || severeInfo))
@@ -140,7 +141,7 @@ export const CodeLine: React.FC<CodeLineProps> = ({line,
 
                     {severeInfo && (
                         <ExclamationCircleTwoTone style={{ paddingLeft: "0.15em",paddingRight: "0.15em"}}
-                                                  onClick={() => onAnnotationClick(lineNo)}
+                                                  onClick={() => setCollapseState(!collapseState)}
                                                   twoToneColor="#F00E3B"
                         />
 
@@ -149,14 +150,14 @@ export const CodeLine: React.FC<CodeLineProps> = ({line,
                     {mildInfo && (
                         <InfoCircleTwoTone style={{paddingLeft: "0.15em", paddingRight: "0.15em"}}
                                            twoToneColor="#FAC302"
-                                           onClick={() => onAnnotationClick(lineNo)}
+                                           onClick={() => setCollapseState(!collapseState)}
                         />
 
                     )}
 
                     {commentThread && (
                         <MessageTwoTone style={{paddingLeft: "0.15em", paddingRight: "0.15em"}}
-                                        onClick={() => onCommentThreadClick(lineNo)}
+                                        onClick={() => setCollapseState(!collapseState)}
                         />
                     )}
 
@@ -172,6 +173,15 @@ export const CodeLine: React.FC<CodeLineProps> = ({line,
                 </LineContent>
             </Line>
 
+            {commentThread &&(
+                <div data-testid={"commentViewer" + lineNo}>
+                    <CommentViewer comments={comments}
+                                   toggle={collapseState}
+                                   onReplyCreated={onReplyCreated}
+                    />
+                </div>
+            )}
+
             {isEditorShown && (
                 <CommentEditor onCancel={() => setIsEditorShown(false)}
                                line={lineNo}
@@ -181,8 +191,6 @@ export const CodeLine: React.FC<CodeLineProps> = ({line,
                 }}/>
             )}
         </>
-
-
     )
 }
 

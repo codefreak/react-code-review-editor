@@ -4,7 +4,7 @@ import theme from "prism-react-renderer/themes/vsLight";
 import {Pre} from "./styles";
 import "./CodeReview.css";
 import CodeLine from "./CodeLine";
-import CommentViewer, {CustomComment} from "./CommentViewer";
+import {CustomComment} from "./CommentViewer";
 
 export interface CodeReviewProps {
     code: string;
@@ -29,7 +29,6 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
                 addCommentLine(comment.line);
             })
         }
-        console.log(linesWithComment);
     })
 
     const createComment = (line: number, content: string, author: string) => {
@@ -84,17 +83,9 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
                                               mildInfo={mockOne(i)}
                                               severeInfo={mockTwo(i)}
                                               commentThread={linesWithComment.includes(i)}
-                                              onAnnotationClick={() => console.log("annotation")}
-                                              onCommentThreadClick={() => console.log("commentThread")}
+                                              comments={getCommentsOfLine(i)}
+                                              onReplyCreated={(value) => onCommentCreated(createComment(i, value, "placeholder"))}
                                     />
-
-                                    {linesWithComment.includes(i) && (
-                                        <div data-testid={"commentViewer" + i}>
-                                            <CommentViewer comments={getCommentsOfLine(i)}
-                                                           onReplyCreated={(value) => onCommentCreated(createComment(i, value, "placeholder"))}
-                                            />
-                                        </div>
-                                    )}
                                 </div>
                             ))}
                         </Pre>
