@@ -21,12 +21,21 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
                                                           onCommentCreated
 }) => {
     const [linesWithComment, setLinesWithComment] = useState<number[]>(new Array<number>());
+    const [linesWithMildInfo, setLinesWithMildInfo] = useState<number[]>(new Array<number>())
 
     // "constructor"
     useEffect(() => {
         if(commentContainer) {
             commentContainer.forEach(comment => {
-                addCommentLine(comment.line);
+                if(comment.type === "comment") {
+                    addCommentLine(comment.line!);
+                }
+
+                if(comment.type === "mildInfo") {
+                    if(!linesWithMildInfo.includes(comment.line!)) {
+                        setLinesWithMildInfo([...linesWithMildInfo, comment.line!]);
+                    }
+                }
             })
         }
     })
@@ -35,9 +44,9 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
         const newComment: CustomComment = {
             line: line,
             content: content,
-            author : author
+            author : author,
+            type: "comment"
         }
-
         return newComment;
     }
 
@@ -57,18 +66,6 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
         return CommentsOfLine;
     }
 
-    const mockOne = (line: number) => {
-        if(line === 4) return true
-        return line === 3;
-
-    }
-
-    const mockTwo = (line: number) => {
-        if(line === (4)) return true
-        if(line === 3) return true
-        return line === 7;
-    }
-
     return (
         <Highlight {...defaultProps} theme={theme} code={code} language={language} >
                     {({ className, style, tokens, getLineProps, getTokenProps }) => (
@@ -80,8 +77,8 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
                                               getLineProps={getLineProps}
                                               getTokenProps={getTokenProps}
                                               onSubmit={(value) => {onCommentCreated(createComment(i, value, "placeholder"))}}
-                                              mildInfo={mockOne(i)}
-                                              severeInfo={mockTwo(i)}
+                                              mildInfo={linesWithMildInfo.includes(i)}
+                                              severeInfo={false}
                                               commentThread={linesWithComment.includes(i)}
                                               comments={getCommentsOfLine(i)}
                                               onReplyCreated={(value) => onCommentCreated(createComment(i, value, "placeholder"))}

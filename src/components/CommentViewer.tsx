@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import {Collapse, Comment} from "antd";
 import "./CommentViewer.css";
 import ReplyEditor from "./ReplyEditor";
+import {InfoCircleTwoTone} from "@ant-design/icons";
 
 const { Panel } = Collapse;
 
@@ -12,9 +13,10 @@ export interface CommentViewerProps {
 }
 
 export type CustomComment = {
-    author: string;
+    author?: string;
     content: string;
-    line: number;
+    line?: number;
+    type: "comment" | "mildInfo" | "severeInfo"
 }
 
 export const CommentViewer: React.FC<CommentViewerProps> = ({comments,
@@ -33,7 +35,7 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({comments,
             }
         }
         setOldToggleState(toggle)
-    })
+    }, [toggle, oldToggleState, activeKey])
 
     const getHeader = () => {
         const commentNumber = comments.length;
@@ -53,11 +55,37 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({comments,
             <Collapse className="commentViewerCollapse" activeKey={activeKey} onChange={handleKeyChange}>
                 <Panel  key={1} header={getHeader()} className="customPanel">
                     <div data-testid="comments">
-                        {comments.map(((comment, key) =>
-                                <Comment key={key} content={comment.content} author={comment.author}/>
-                        ))}
+                        {comments.map((comment, key) => {
+                            if(comment.type === "comment") {
+                                return  <Comment key={key}
+                                                 content={comment.content}
+                                                 author={comment.author}
+                                />
+                            }
+                        })}
                     </div>
                     <ReplyEditor onSubmit={onReplyCreated} />
+                    <div style={{paddingTop: "0.5em"}}>
+                        {comments.map((comment, key) => {
+                            if(comment.type === "mildInfo") {
+                                return <Comment key={key}
+                                                content={comment.content}
+                                                author={
+                                                    <div style={{display: "flex", flexDirection: "row"}}>
+                                                        <InfoCircleTwoTone twoToneColor="#FAC302"
+                                                                           style={{
+                                                                               paddingTop: "0.25em",
+                                                                               paddingRight: "0.5em"
+                                                                           }}
+                                                        />
+                                                        <p>{comment.author}</p>
+                                                    </div>
+                                                }
+                                />
+                            }
+                        })}
+                    </div>
+
                 </Panel>
             </Collapse>
         </div>

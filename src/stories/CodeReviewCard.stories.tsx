@@ -91,18 +91,27 @@ Matrix::Matrix(int z, int s, int wert) {
 /* TODO: Kopierkonstruktor */`.trim();
 
 const customComment1: CustomComment = {
-    line: 0,
+    line: 1,
     author: "Captain Falcon",
-    content: "Falcoooon PUNCH!!"
+    content: "Falcoooon PUNCH!!",
+    type: "comment"
 }
 
 const customComment2: CustomComment = {
     line: 3,
     author: "Spock",
-    content: "Live long and prosper."
+    content: "Live long and prosper.",
+    type: "comment"
 }
 
-let customCommentContainer = [customComment1, customComment2];
+const customComment3: CustomComment = {
+    line: 3,
+    author: "Code Quality",
+    content: "Syntaktischer Zucker in Linie 4",
+    type: "mildInfo"
+}
+
+let customCommentContainer = [customComment1, customComment2, customComment3];
 
 const handleCommentCreatedJsx = (comment: CustomComment) => {
     jsx.args!.getCodeReviewProps!.commentContainer = [...jsx.args!.getCodeReviewProps!.commentContainer!, comment]
