@@ -6,16 +6,17 @@ import TextArea from "antd/lib/input/TextArea";
 
 export interface ReplyEditorProps {
     onSubmit: (value: string) => void
+    type: string
 }
 
-const ReplyEditor: React.FC<ReplyEditorProps> = ({onSubmit}) => {
+const ReplyEditor: React.FC<ReplyEditorProps> = ({onSubmit, type}) => {
     const[value, setValue] = useState<string>("");
-    const[focused, setFocused] = useState<boolean>(false);
+    const[isFocused, setIsFocused] = useState<boolean>(false);
     const [rows, setRows] = useState<number>(1);
 
     const handleFocus = () => {
         setRows(4);
-        setFocused(true);
+        setIsFocused(true);
     }
 
     const handleSubmit = () => {
@@ -25,14 +26,14 @@ const ReplyEditor: React.FC<ReplyEditorProps> = ({onSubmit}) => {
 
     const resetReplyEditor = () => {
         setRows(1);
-        setFocused(false);
+        setIsFocused(false);
         setValue("");
     }
 
     return (
         <div className={"replyEditor"} data-testid="replyEditor">
             <TextArea rows={rows}
-                      placeholder={"Reply ..."}
+                      placeholder={"Add " + type + " ..."}
                       onChange={extractTargetValue(setValue)}
                       value={value}
                       onFocus={() => handleFocus()}
@@ -42,7 +43,7 @@ const ReplyEditor: React.FC<ReplyEditorProps> = ({onSubmit}) => {
                       style={{resize: "none"}}
                       data-testid="textArea"
             />
-            {focused && (
+            {isFocused && (
                 <div className={"controlElementsReply"}>
                     <Space>
                         <Button htmlType="reset"
@@ -60,7 +61,7 @@ const ReplyEditor: React.FC<ReplyEditorProps> = ({onSubmit}) => {
                                     type="primary"
                                     data-testid="replyButton"
                             >
-                                Add Reply
+                                {"Add " + type}
                             </Button>
                         )}
 
@@ -71,7 +72,7 @@ const ReplyEditor: React.FC<ReplyEditorProps> = ({onSubmit}) => {
                                     data-testid="replyButton"
                                     disabled
                             >
-                                Add Reply
+                                {"Add " + type}
                             </Button>
                         )}
                     </Space>

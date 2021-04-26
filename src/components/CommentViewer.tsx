@@ -11,6 +11,7 @@ export interface CommentViewerProps {
     onReplyCreated: (value: string) => void
     toggle: boolean
     result?: boolean
+    replyType: string
 }
 
 export type CustomComment = {
@@ -23,7 +24,8 @@ export type CustomComment = {
 export const CommentViewer: React.FC<CommentViewerProps> = ({comments,
                                                                 onReplyCreated,
                                                                 toggle,
-                                                                result
+                                                                result,
+                                                                replyType
 }) => {
     const [activeKey, setActiveKey] = useState<string | string[]>("0")
     const [oldToggleState, setOldToggleState] = useState<boolean>(false)
@@ -55,6 +57,21 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({comments,
         setActiveKey(key)
     }
 
+    const getType = () => {
+        let noComment = true;
+        comments.forEach(element => {
+            if(element.type === "comment") {
+                noComment = false;
+            }
+        })
+        if(noComment) {
+            return "result"
+        } else {
+            return "reply"
+        }
+
+    }
+
     return(
         <div className="commentViewer" data-testid="commentViewer">
             <Collapse className="commentViewerCollapse" activeKey={activeKey} onChange={handleKeyChange}>
@@ -71,7 +88,9 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({comments,
                                     }
                                 })}
                             </div>
-                            <ReplyEditor onSubmit={onReplyCreated} />
+                            <ReplyEditor onSubmit={onReplyCreated}
+                                         type={replyType}
+                            />
                             <div style={{paddingTop: "0.5em"}}>
                                 {comments.map((comment, key) => {
                                     if(comment.type === "mildInfo") {
@@ -103,7 +122,9 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({comments,
                                     />
                                 }
                             })}
-                            <ReplyEditor onSubmit={onReplyCreated} />
+                            <ReplyEditor onSubmit={onReplyCreated}
+                                         type={getType()}
+                            />
                             <div style={{paddingTop: "0.5em"}}>
                                 {comments.map((comment, key) => {
                                     if(comment.type === "severeInfo") {
@@ -126,8 +147,6 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({comments,
                             </div>
                         </>
                     )}
-
-
                 </Panel>
             </Collapse>
         </div>

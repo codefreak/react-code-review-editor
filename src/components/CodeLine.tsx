@@ -96,7 +96,7 @@ export const CodeLine: React.FC<CodeLineProps> = ({line,
     }
 
     const handleMouseEnter = () => {
-        if(!commentThread) {
+        if(!commentThread && !mildInfo) {
             lineNoRef.current!.style.paddingLeft = (getPaddingLeft() - 1.5) + getPaddingLeftOffset() + "em";
             setIsShown(true);
         }
@@ -173,14 +173,26 @@ export const CodeLine: React.FC<CodeLineProps> = ({line,
                 </LineContent>
             </Line>
 
-            {commentThread &&(
+            {(commentThread || (commentThread && mildInfo)) &&(
                 <div data-testid={"commentViewer" + lineNo}>
                     <CommentViewer comments={comments}
                                    toggle={collapseState}
                                    onReplyCreated={onReplyCreated}
+                                   replyType={"reply"}
                     />
                 </div>
             )}
+
+            {(mildInfo && !commentThread) &&(
+                <div data-testid={"commentViewer" + lineNo}>
+                    <CommentViewer comments={comments}
+                                   toggle={collapseState}
+                                   onReplyCreated={onReplyCreated}
+                                   replyType={"comment"}
+                    />
+                </div>
+            )}
+
 
             {isEditorShown && (
                 <CommentEditor onCancel={() => setIsEditorShown(false)}

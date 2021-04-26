@@ -104,7 +104,7 @@ const customComment2: CustomComment = {
 }
 
 const customComment3: CustomComment = {
-    line: 3,
+    line: 1,
     author: "Code Quality",
     content: "Syntaktischer Zucker in Linie 4",
     type: "mildInfo"
@@ -119,7 +119,7 @@ const customComment4: CustomComment = {
     type: "severeInfo"
 }
 
-let customCommentContainer = [customComment1, customComment2, customComment3, customComment4];
+let customCommentContainer = [ customComment2, customComment3, customComment4];
 
 const handleCommentCreatedJsx = (comment: CustomComment) => {
     jsx.args!.getCodeReviewProps!.commentContainer = [...jsx.args!.getCodeReviewProps!.commentContainer!, comment]
