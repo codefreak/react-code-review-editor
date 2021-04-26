@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {Collapse, Comment} from "antd";
 import "./CommentViewer.css";
 import ReplyEditor from "./ReplyEditor";
-import {ExclamationCircleTwoTone, InfoCircleTwoTone} from "@ant-design/icons";
+import {ExclamationCircleTwoTone, InfoCircleTwoTone, MessageTwoTone} from "@ant-design/icons";
 
 const { Panel } = Collapse;
 
@@ -11,7 +11,7 @@ export interface CommentViewerProps {
     onReplyCreated: (value: string) => void
     toggle: boolean
     result?: boolean
-    replyType: string
+    replyType?: string
 }
 
 export type CustomComment = {
@@ -58,24 +58,42 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({comments,
     }
 
     const getType = () => {
-        let noComment = true;
-        comments.forEach(element => {
-            if(element.type === "comment") {
-                noComment = false;
+        if(!replyType) {
+            let noComment = true;
+            comments.forEach(element => {
+                if(element.type === "comment") {
+                    noComment = false;
+                }
+            })
+            if(noComment) {
+                return "result"
+            } else {
+                return "reply"
             }
-        })
-        if(noComment) {
-            return "result"
-        } else {
-            return "reply"
         }
+        return replyType
+    }
 
+    const getExtra = () => {
+        if(comments.find(element => element.type === "severeInfo")) {
+            if(comments.find(element => element.type === "comment")) {
+                return (
+                    <>
+                        <ExclamationCircleTwoTone twoToneColor="#F00E3B"/>
+                        <MessageTwoTone style={{paddingLeft: "0.5em"}}/>
+                    </>
+                )
+            }
+            return  <ExclamationCircleTwoTone twoToneColor="#F00E3B"/>
+        } else {
+            return <></>
+        }
     }
 
     return(
         <div className="commentViewer" data-testid="commentViewer">
             <Collapse className="commentViewerCollapse" activeKey={activeKey} onChange={handleKeyChange}>
-                <Panel  key={1} header={getHeader()} className="customPanel">
+                <Panel  key={1} header={getHeader()} className="customPanel" extra={getExtra()}>
                     {!result ? (
                         <>
                             <div data-testid="comments">
@@ -89,7 +107,7 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({comments,
                                 })}
                             </div>
                             <ReplyEditor onSubmit={onReplyCreated}
-                                         type={replyType}
+                                         type={getType()}
                             />
                             <div style={{paddingTop: "0.5em"}}>
                                 {comments.map((comment, key) => {
