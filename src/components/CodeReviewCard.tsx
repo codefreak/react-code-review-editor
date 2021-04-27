@@ -20,6 +20,7 @@ export interface CodeReviewCardProps {
     onCommentCreated: (comment: CustomComment) => void;
     author: string;
     showResult: boolean;
+    showComments: boolean;
 }
 
 export const CodeReviewCard: React.FC<CodeReviewCardProps> = ({
@@ -29,7 +30,8 @@ export const CodeReviewCard: React.FC<CodeReviewCardProps> = ({
                                                                   language,
                                                                   commentContainer,
                                                                   onCommentCreated, author,
-                                                                  showResult
+                                                                  showResult,
+                                                                  showComments
 }) => {
     return (
             <Card style={{ width: width }}
@@ -44,6 +46,7 @@ export const CodeReviewCard: React.FC<CodeReviewCardProps> = ({
                             commentContainer={commentContainer}
                             onCommentCreated={onCommentCreated}
                             showResult={showResult}
+                            showComments={showComments}
                 />
             </Card>
         )

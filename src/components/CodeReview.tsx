@@ -13,6 +13,7 @@ export interface CodeReviewProps {
     onCommentCreated: (comment: CustomComment) => void;
     author: string;
     showResult: boolean;
+    showComments: boolean;
 }
 
 export const CodeReview: React.FC<CodeReviewProps> = ({
@@ -21,7 +22,8 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
                                                           commentContainer,
                                                           onCommentCreated,
                                                           author,
-                                                          showResult
+                                                          showResult,
+                                                          showComments
 }) => {
     const [linesWithComment, setLinesWithComment] = useState<number[]>(new Array<number>());
     const [linesWithMildInfo, setLinesWithMildInfo] = useState<number[]>(new Array<number>())
@@ -112,13 +114,14 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
                                           commentThread={linesWithComment.includes(i)}
                                           comments={getCommentsOfLine(i)}
                                           onReplyCreated={(value) => onCommentCreated(createComment(value, author, i))}
+                                          showComments={showComments}
                                 />
                             </div>
                         ))}
                     </Pre>
                 )}
             </Highlight>
-            {showResult && (
+            {(showResult && showComments) && (
                 <div style={{paddingLeft: "0.5em", paddingRight: "0.5em", paddingTop: "1em"}}>
                     <CommentViewer comments={getResults()}
                                    result={true}

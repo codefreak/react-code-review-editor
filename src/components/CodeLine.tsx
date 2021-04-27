@@ -58,6 +58,7 @@ export interface CodeLineProps {
     commentThread: boolean,
     comments: CustomComment[]
     onReplyCreated: (value: string) => void
+    showComments: boolean
 }
 
 export const CodeLine: React.FC<CodeLineProps> = ({line,
@@ -69,7 +70,8 @@ export const CodeLine: React.FC<CodeLineProps> = ({line,
                                                       severeInfo,
                                                       commentThread,
                                                       comments,
-                                                      onReplyCreated
+                                                      onReplyCreated,
+                                                      showComments
                                                       }) => {
 
     // isShown manages visibility of addButton
@@ -82,6 +84,9 @@ export const CodeLine: React.FC<CodeLineProps> = ({line,
 
     // returns the right padding value depending on the number of annotations present
     const getPaddingLeft = () => {
+        if(!showComments) {
+            return 4.3
+        }
         if((commentThread && !(mildInfo || severeInfo))
             || (mildInfo && !(commentThread ||severeInfo))
             || (severeInfo && !(commentThread || mildInfo))) {
@@ -134,7 +139,8 @@ export const CodeLine: React.FC<CodeLineProps> = ({line,
                   data-testid={"line" + lineNo}
             >
                 <div className="lineLeft">
-                    {isShown && (
+
+                    {(isShown && showComments) && (
                         <>
                             <Button icon={<PlusOutlined style={{paddingLeft: "0.1em"}}/>}
                                     size="small"
@@ -145,7 +151,7 @@ export const CodeLine: React.FC<CodeLineProps> = ({line,
                         </>
                     )}
 
-                    {severeInfo && (
+                    {(severeInfo && showComments) && (
                         <ExclamationCircleTwoTone style={{ paddingLeft: "0.15em",paddingRight: "0.15em"}}
                                                   onClick={() => setCollapseState(!collapseState)}
                                                   twoToneColor="#F00E3B"
@@ -153,7 +159,7 @@ export const CodeLine: React.FC<CodeLineProps> = ({line,
 
                     )}
 
-                    {mildInfo && (
+                    {(mildInfo && showComments) && (
                         <InfoCircleTwoTone style={{paddingLeft: "0.15em", paddingRight: "0.15em"}}
                                            twoToneColor="#FAC302"
                                            onClick={() => setCollapseState(!collapseState)}
@@ -161,7 +167,7 @@ export const CodeLine: React.FC<CodeLineProps> = ({line,
 
                     )}
 
-                    {commentThread && (
+                    {(commentThread && showComments) && (
                         <MessageTwoTone style={{paddingLeft: "0.15em", paddingRight: "0.15em"}}
                                         onClick={() => setCollapseState(!collapseState)}
                         />
@@ -179,7 +185,7 @@ export const CodeLine: React.FC<CodeLineProps> = ({line,
                 </LineContent>
             </Line>
 
-            {(commentThread || (commentThread && mildInfo)) &&(
+            {((commentThread || (commentThread && mildInfo)) && showComments) &&(
                 <div data-testid={"commentViewer" + lineNo}>
                     <CommentViewer comments={comments}
                                    toggle={collapseState}
@@ -189,7 +195,7 @@ export const CodeLine: React.FC<CodeLineProps> = ({line,
                 </div>
             )}
 
-            {(mildInfo && !commentThread) &&(
+            {((mildInfo && !commentThread) && showComments) &&(
                 <div data-testid={"commentViewer" + lineNo}>
                     <CommentViewer comments={comments}
                                    toggle={collapseState}
@@ -200,7 +206,7 @@ export const CodeLine: React.FC<CodeLineProps> = ({line,
             )}
 
 
-            {isEditorShown && (
+            {(isEditorShown && showComments) && (
                 <CommentEditor onCancel={() => setIsEditorShown(false)}
                                line={lineNo}
                                onSubmit={(value) => {

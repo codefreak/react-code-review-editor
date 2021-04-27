@@ -146,6 +146,7 @@ jsx.args = {
     onCommentCreated: handleCommentCreatedJsx,
     width: 500,
     title: "testReview.jsx",
+    showComments: true
 
 }
 
@@ -159,6 +160,7 @@ css.args = {
     onCommentCreated: handleCommentCreatedCss,
     width: 600,
     title: "layout.css",
+    showComments: true
 }
 
 export const cpp = Template.bind({});
@@ -171,4 +173,5 @@ cpp.args = {
     onCommentCreated: handleCommentCreatedCpp,
     width: 500,
     title: "matrix.cpp",
+    showComments: false
 }
