@@ -122,29 +122,28 @@ const customComment4: CustomComment = {
 let customCommentContainer = [customComment1, customComment2, customComment3, customComment4];
 
 const handleCommentCreatedJsx = (comment: CustomComment) => {
-    jsx.args!.getCodeReviewProps!.commentContainer = [...jsx.args!.getCodeReviewProps!.commentContainer!, comment]
+    jsx.args!.commentContainer = [...jsx.args!.commentContainer!, comment]
     forceReRender();
 }
 
 const handleCommentCreatedCss = (comment: CustomComment) => {
-    css.args!.getCodeReviewProps!.commentContainer = [...css.args!.getCodeReviewProps!.commentContainer!, comment]
+    css.args!.commentContainer = [...css.args!.commentContainer!, comment]
     forceReRender();
 }
 
 const handleCommentCreatedCpp = (comment: CustomComment) => {
-    cpp.args!.getCodeReviewProps!.commentContainer = [...cpp.args!.getCodeReviewProps!.commentContainer!, comment]
+    cpp.args!.commentContainer = [...cpp.args!.commentContainer!, comment]
     forceReRender();
 }
 
 export let jsx = Template.bind({});
 jsx.args = {
-    getCodeReviewProps: {
-        author: "Storybook Tester",
-        code: jsxCode,
-        language: "jsx",
-        commentContainer:  customCommentContainer,
-        onCommentCreated: handleCommentCreatedJsx
-    },
+    author: "Storybook Tester",
+    code: jsxCode,
+    language: "jsx",
+    showResult: true,
+    commentContainer:  customCommentContainer,
+    onCommentCreated: handleCommentCreatedJsx,
     width: 500,
     title: "testReview.jsx",
 
@@ -152,26 +151,24 @@ jsx.args = {
 
 export const css = Template.bind({});
 css.args = {
-    getCodeReviewProps: {
-        author: "Storybook Tester",
-        code: cssCode,
-        language: "css",
-        commentContainer:  customCommentContainer,
-        onCommentCreated: handleCommentCreatedCss
-    },
+    author: "Storybook Tester",
+    code: cssCode,
+    language: "css",
+    showResult: true,
+    commentContainer:  customCommentContainer,
+    onCommentCreated: handleCommentCreatedCss,
     width: 600,
     title: "layout.css",
 }
 
 export const cpp = Template.bind({});
 cpp.args = {
-    getCodeReviewProps: {
-        author: "Storybook Tester",
-        code: cppCode,
-        language: "cpp",
-        commentContainer:  customCommentContainer,
-        onCommentCreated: handleCommentCreatedCpp
-    },
+    author: "Storybook Tester",
+    code: cppCode,
+    language: "cpp",
+    showResult: false,
+    commentContainer:  customCommentContainer,
+    onCommentCreated: handleCommentCreatedCpp,
     width: 500,
     title: "matrix.cpp",
 }

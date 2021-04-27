@@ -12,6 +12,7 @@ export interface CodeReviewProps {
     commentContainer?: CustomComment[];
     onCommentCreated: (comment: CustomComment) => void;
     author: string;
+    showResult: boolean;
 }
 
 export const CodeReview: React.FC<CodeReviewProps> = ({
@@ -19,7 +20,8 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
                                                           language,
                                                           commentContainer,
                                                           onCommentCreated,
-                                                          author
+                                                          author,
+                                                          showResult
 }) => {
     const [linesWithComment, setLinesWithComment] = useState<number[]>(new Array<number>());
     const [linesWithMildInfo, setLinesWithMildInfo] = useState<number[]>(new Array<number>())
@@ -116,13 +118,15 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
                     </Pre>
                 )}
             </Highlight>
-            <div style={{paddingLeft: "0.5em", paddingRight: "0.5em", paddingTop: "1em"}}>
-                <CommentViewer comments={getResults()}
-                               result={true}
-                               onReplyCreated={(value) => onCommentCreated(createComment(value, author))}
-                               toggle={true}
-                />
-            </div>
+            {showResult && (
+                <div style={{paddingLeft: "0.5em", paddingRight: "0.5em", paddingTop: "1em"}}>
+                    <CommentViewer comments={getResults()}
+                                   result={true}
+                                   onReplyCreated={(value) => onCommentCreated(createComment(value, author))}
+                                   toggle={true}
+                    />
+                </div>
+            )}
         </div>
 
     )
