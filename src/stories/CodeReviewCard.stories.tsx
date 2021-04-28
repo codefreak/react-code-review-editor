@@ -1,20 +1,19 @@
-import React from 'react';
-import {CodeReviewCard, CodeReviewCardProps} from "../components/CodeReviewCard";
-import { Story, Meta } from '@storybook/react/types-6-0';
-import {CustomComment} from "../components/CommentViewer";
-import {forceReRender} from "@storybook/react";
-
+import React from 'react'
+import {
+  CodeReviewCard,
+  CodeReviewCardProps
+} from '../components/CodeReviewCard'
+import { Story, Meta } from '@storybook/react/types-6-0'
+import { CustomComment } from '../components/CommentViewer'
+import { forceReRender } from '@storybook/react'
 
 export default {
-    component: CodeReviewCard,
-    title: 'CodeReviewCard'
-} as Meta;
+  component: CodeReviewCard,
+  title: 'CodeReviewCard'
+} as Meta
 
-
-const Template: Story<CodeReviewCardProps> = (args) => {
-    return (
-        <CodeReviewCard {...args} />
-    )
+const Template: Story<CodeReviewCardProps> = args => {
+  return <CodeReviewCard {...args} />
 }
 
 const jsxCode = `
@@ -24,7 +23,7 @@ const jsxCode = `
 })();
 
 return () => <App />;
-`.trim();
+`.trim()
 
 const cssCode = `
 .contentLayout {
@@ -59,7 +58,7 @@ body {
 
 header {
     height: 50px !important;
-}`.trim();
+}`.trim()
 
 const cppCode = `
 #include "matrix.h"
@@ -88,90 +87,94 @@ Matrix::Matrix(int z, int s, int wert) {
     }
 }
 
-/* TODO: Kopierkonstruktor */`.trim();
+/* TODO: Kopierkonstruktor */`.trim()
 
 const customComment1: CustomComment = {
-    author: "Teacher",
-    content: "Das war ja wohl nichts.",
-    type: "comment"
+  author: 'Teacher',
+  content: 'Das war ja wohl nichts.',
+  type: 'comment'
 }
 
 const customComment2: CustomComment = {
-    line: 3,
-    author: "Spock",
-    content: "Live long and prosper.",
-    type: "comment"
+  line: 3,
+  author: 'Spock',
+  content: 'Live long and prosper.',
+  type: 'comment'
 }
 
 const customComment3: CustomComment = {
-    line: 1,
-    author: "Code Quality",
-    content: "Syntaktischer Zucker in Linie 4",
-    type: "mildInfo"
+  line: 1,
+  author: 'Code Quality',
+  content: 'Syntaktischer Zucker in Linie 4',
+  type: 'mildInfo'
 }
 
 const customComment4: CustomComment = {
-    author: "Test1",
-    content: `
+  author: 'Test1',
+  content: `
     Expected: 10
     But was: 0
     `,
-    type: "severeInfo"
+  type: 'severeInfo'
 }
 
-let customCommentContainer = [customComment1, customComment2, customComment3, customComment4];
+let customCommentContainer = [
+  customComment1,
+  customComment2,
+  customComment3,
+  customComment4
+]
 
 const handleCommentCreatedJsx = (comment: CustomComment) => {
-    jsx.args!.commentContainer = [...jsx.args!.commentContainer!, comment]
-    forceReRender();
+  jsx.args!.commentContainer = [...jsx.args!.commentContainer!, comment]
+  forceReRender()
 }
 
 const handleCommentCreatedCss = (comment: CustomComment) => {
-    css.args!.commentContainer = [...css.args!.commentContainer!, comment]
-    forceReRender();
+  css.args!.commentContainer = [...css.args!.commentContainer!, comment]
+  forceReRender()
 }
 
 const handleCommentCreatedCpp = (comment: CustomComment) => {
-    cpp.args!.commentContainer = [...cpp.args!.commentContainer!, comment]
-    forceReRender();
+  cpp.args!.commentContainer = [...cpp.args!.commentContainer!, comment]
+  forceReRender()
 }
 
-export let jsx = Template.bind({});
+export let jsx = Template.bind({})
 jsx.args = {
-    author: "Storybook Tester",
-    code: jsxCode,
-    language: "jsx",
-    showResult: true,
-    commentContainer:  customCommentContainer,
-    onCommentCreated: handleCommentCreatedJsx,
-    width: 500,
-    title: "testReview.jsx",
-    showComments: true
-
+  author: 'Storybook Tester',
+  code: jsxCode,
+  language: 'jsx',
+  showResult: true,
+  commentContainer: customCommentContainer,
+  onCommentCreated: handleCommentCreatedJsx,
+  width: 500,
+  title: 'testReview.jsx',
+  showComments: true
 }
 
-export const css = Template.bind({});
+export const css = Template.bind({})
 css.args = {
-    author: "Storybook Tester",
-    code: cssCode,
-    language: "css",
-    showResult: true,
-    commentContainer:  customCommentContainer,
-    onCommentCreated: handleCommentCreatedCss,
-    width: 600,
-    title: "layout.css",
-    showComments: true
+  author: 'Storybook Tester',
+  code: cssCode,
+  language: 'css',
+  showResult: true,
+  commentContainer: customCommentContainer,
+  onCommentCreated: handleCommentCreatedCss,
+  width: 600,
+  title: 'layout.css',
+  showComments: true
 }
 
-export const cpp = Template.bind({});
+export const cpp = Template.bind({})
 cpp.args = {
-    author: "Storybook Tester",
-    code: cppCode,
-    language: "cpp",
-    showResult: false,
-    commentContainer:  customCommentContainer,
-    onCommentCreated: handleCommentCreatedCpp,
-    width: 500,
-    title: "matrix.cpp",
-    showComments: false
+  author: 'Storybook Tester',
+  code: cppCode,
+  language: 'cpp',
+  showResult: false,
+  commentContainer: customCommentContainer,
+  onCommentCreated: handleCommentCreatedCpp,
+  width: 500,
+  title: 'matrix.cpp',
+  showComments: false
 }

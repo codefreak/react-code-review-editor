@@ -4,6 +4,7 @@
   "main": "lib/index.js",
   "module": "lib/index.esm.js",
   "types": "lib/index.d.ts",
+  "prettier": "@codefreak/prettier-config",
   "files": [
     "lib/components",
     "lib/index.d.ts",
@@ -27,7 +28,11 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 6006 -s public",
-    "build-storybook": "build-storybook -s public"
+    "build-storybook": "build-storybook -s public",
+    "lint:eslint": "eslint \"src/**/*.{ts,tsx,js,jsx}\"",
+    "fix:eslint": "eslint --fix \"src/**/*.{ts,tsx,js,jsx}\"",
+    "lint:prettier": "prettier --check \"src/**/*.{ts,tsx,js,jsx}\"",
+    "fix:prettier": "prettier --write \"src/**/*.{ts,tsx,js,jsx}\""
   },
   "eslintConfig": {
     "extends": [
@@ -48,13 +53,11 @@
     ]
   },
   "devDependencies": {
-    "@types/node": "^12.0.0",
-    "typescript": "^4.1.2",
-    "react-scripts": "4.0.3",
-    "@types/react": "^17.0.0",
     "@babel/preset-env": "^7.13.15",
     "@babel/preset-react": "^7.13.13",
     "@babel/preset-typescript": "^7.13.0",
+    "@codefreak/eslint-config": "^0.1.3",
+    "@codefreak/prettier-config": "^0.1.2",
     "@rollup/plugin-commonjs": "^18.0.0",
     "@rollup/plugin-node-resolve": "^11.2.1",
     "@storybook/addon-actions": "^6.1.21",
@@ -66,13 +69,28 @@
     "@testing-library/jest-dom": "^5.11.10",
     "@testing-library/react": "^11.2.6",
     "@types/jest": "^26.0.22",
+    "@types/node": "^12.0.0",
+    "@types/react": "^17.0.0",
     "@types/styled-components": "^5.1.9",
+    "@typescript-eslint/eslint-plugin": "^4.22.0",
+    "@typescript-eslint/parser": "^4.22.0",
     "antd": "^4.15.0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.25.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-react-app": "^6.0.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.23.2",
+    "eslint-plugin-react-hooks": "^4.2.0",
     "postcss": "^8.2.10",
+    "prettier": "^2.2.1",
+    "react-scripts": "4.0.3",
     "rollup": "^2.45.2",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-postcss": "^4.0.0",
-    "rollup-plugin-typescript2": "^0.30.0"
+    "rollup-plugin-typescript2": "^0.30.0",
+    "typescript": "^4.1.2"
   },
   "resolutions": {
     "babel-loader": "8.1.0"
