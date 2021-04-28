@@ -10,7 +10,7 @@ import {
 import CommentEditor from './CommentEditor'
 import CommentViewer, { CustomComment } from './CommentViewer'
 
-// types needed for react-prism-renderer props
+// types needed for react-prism-renderer props. Sadly these types aren't exported by the library itself.
 type Token = {
   types: string[]
   content: string
@@ -114,8 +114,8 @@ export const CodeLine: React.FC<CodeLineProps> = ({
 
   // show addButton and adjust padding accordingly
   const handleMouseEnter = () => {
-    if (!commentThread && !mildInfo) {
-      lineNoRef.current!.style.paddingLeft =
+    if (!commentThread && !mildInfo && lineNoRef.current) {
+      lineNoRef.current.style.paddingLeft =
         getPaddingLeft() - 1.5 + getPaddingLeftOffset() + 'em'
       setIsShown(true)
     }
@@ -123,9 +123,11 @@ export const CodeLine: React.FC<CodeLineProps> = ({
 
   // remove addButton and adjust padding accordingly
   const handleMouseLeave = () => {
-    lineNoRef.current!.style.paddingLeft =
-      getPaddingLeft() + getPaddingLeftOffset() + 'em'
-    setIsShown(false)
+    if (lineNoRef.current) {
+      lineNoRef.current.style.paddingLeft =
+        getPaddingLeft() + getPaddingLeftOffset() + 'em'
+      setIsShown(false)
+    }
   }
 
   const handleAdd = () => {
@@ -209,7 +211,7 @@ export const CodeLine: React.FC<CodeLineProps> = ({
             comments={comments}
             toggle={collapseState}
             onReplyCreated={onReplyCreated}
-            replyType={'reply'}
+            replyType="reply"
           />
         </div>
       )}
@@ -220,7 +222,7 @@ export const CodeLine: React.FC<CodeLineProps> = ({
             comments={comments}
             toggle={collapseState}
             onReplyCreated={onReplyCreated}
-            replyType={'comment'}
+            replyType="comment"
           />
         </div>
       )}

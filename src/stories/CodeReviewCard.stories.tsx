@@ -9,7 +9,7 @@ import { forceReRender } from '@storybook/react'
 
 export default {
   component: CodeReviewCard,
-  title: 'CodeReviewCard'
+  title: 'CodeReviewCard',
 } as Meta
 
 const Template: Story<CodeReviewCardProps> = args => {
@@ -126,21 +126,29 @@ let customCommentContainer = [
 ]
 
 const handleCommentCreatedJsx = (comment: CustomComment) => {
-  jsx.args!.commentContainer = [...jsx.args!.commentContainer!, comment]
-  forceReRender()
+  if (jsx.args && jsx.args.commentContainer) {
+    customCommentContainer = [...customCommentContainer, comment]
+    jsx.args.commentContainer = customCommentContainer
+    forceReRender()
+  }
+
 }
 
 const handleCommentCreatedCss = (comment: CustomComment) => {
-  css.args!.commentContainer = [...css.args!.commentContainer!, comment]
-  forceReRender()
+  if (css.args && css.args.commentContainer) {
+    css.args.commentContainer = [...css.args.commentContainer, comment]
+    forceReRender()
+  }
 }
 
 const handleCommentCreatedCpp = (comment: CustomComment) => {
-  cpp.args!.commentContainer = [...cpp.args!.commentContainer!, comment]
-  forceReRender()
+  if (cpp.args && cpp.args.commentContainer) {
+    cpp.args.commentContainer = [...cpp.args.commentContainer, comment]
+    forceReRender()
+  }
 }
 
-export let jsx = Template.bind({})
+export const jsx = Template.bind({})
 jsx.args = {
   author: 'Storybook Tester',
   code: jsxCode,

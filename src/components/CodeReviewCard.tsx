@@ -16,7 +16,7 @@ export interface CodeReviewCardProps {
   title: string
   code: string
   language: Language
-  commentContainer?: CustomComment[]
+  commentContainer: CustomComment[]
   onCommentCreated: (comment: CustomComment) => void
   author: string
   showResult: boolean
@@ -40,7 +40,7 @@ export const CodeReviewCard: React.FC<CodeReviewCardProps> = ({
       title={title}
       className="codeReview"
       bodyStyle={cardBodyStyle}
-      bordered={true}
+      bordered
       size={'small'}
     >
       <CodeReview

@@ -31,7 +31,7 @@ const ReplyEditor: React.FC<ReplyEditorProps> = ({ onSubmit, type }) => {
   }
 
   return (
-    <div className={'replyEditor'} data-testid="replyEditor">
+    <div className="replyEditor" data-testid="replyEditor">
       <TextArea
         rows={rows}
         placeholder={'Add ' + type + ' ...'}
@@ -47,7 +47,7 @@ const ReplyEditor: React.FC<ReplyEditorProps> = ({ onSubmit, type }) => {
         data-testid="textArea"
       />
       {isFocused && (
-        <div className={'controlElementsReply'}>
+        <div className="controlElementsReply">
           <Space>
             <Button
               htmlType="reset"

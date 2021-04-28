@@ -9,7 +9,7 @@ import CommentViewer, { CustomComment } from './CommentViewer'
 export interface CodeReviewProps {
   code: string
   language: Language
-  commentContainer?: CustomComment[]
+  commentContainer: CustomComment[]
   onCommentCreated: (comment: CustomComment) => void
   author: string
   showResult: boolean
@@ -37,13 +37,13 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
     // gather intel about present comments and infos
     if (commentContainer) {
       commentContainer.forEach(comment => {
-        if (comment.type === 'comment') {
-          addLineWithComment(comment.line!)
+        if (comment.type === 'comment' && comment.line) {
+          addLineWithComment(comment.line)
         }
 
-        if (comment.type === 'mildInfo') {
-          if (!linesWithMildInfo.includes(comment.line!)) {
-            setLinesWithMildInfo([...linesWithMildInfo, comment.line!])
+        if (comment.type === 'mildInfo' && comment.line) {
+          if (!linesWithMildInfo.includes(comment.line)) {
+            setLinesWithMildInfo([...linesWithMildInfo, comment.line])
           }
         }
       })
@@ -145,11 +145,11 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
         >
           <CommentViewer
             comments={getResults()}
-            result={true}
+            result
             onReplyCreated={value =>
               onCommentCreated(createComment(value, author))
             }
-            toggle={true}
+            toggle
           />
         </div>
       )}

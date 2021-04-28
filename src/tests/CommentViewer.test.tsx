@@ -7,22 +7,26 @@ afterEach(cleanup)
 const comment1: CustomComment = {
   line: 0,
   author: 'Captain Falcon',
-  content: 'Falcoooon PUNCH!!'
+  content: 'Falcoooon PUNCH!!',
+  type: "comment"
 }
 
 const comment2: CustomComment = {
-  line: 3,
+  line: 0,
   author: 'Spock',
-  content: 'Live long and prosper.'
+  content: 'Live long and prosper.',
+  type: "comment"
 }
 
-let commentContainer = [comment1]
+const commentContainer = [comment1]
 
 test('title displays comment count', () => {
+  const mockFunction = jest.fn()
   render(
     <CommentViewer
       comments={commentContainer}
-      onReplyCreated={value => console.log(value)}
+      onReplyCreated={value => mockFunction}
+      toggle
     />
   )
   expect(screen.getByTestId('commentViewer')).toHaveTextContent('1 comment')
@@ -32,17 +36,20 @@ test('title displays comment count', () => {
   render(
     <CommentViewer
       comments={commentContainer}
-      onReplyCreated={value => console.log(value)}
+      onReplyCreated={value => mockFunction}
+      toggle
     />
   )
   expect(screen.getByTestId('commentViewer')).toHaveTextContent('2 comments')
 })
 
 test('comments get displayed correctly', () => {
+  const mockFunction = jest.fn()
   render(
     <CommentViewer
       comments={commentContainer}
-      onReplyCreated={value => console.log(value)}
+      onReplyCreated={value => mockFunction}
+      toggle
     />
   )
 

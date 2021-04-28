@@ -209,6 +209,8 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
                         }
                       />
                     )
+                  } else {
+                    return <></>
                   }
                 })}
               </div>
@@ -224,6 +226,8 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
                       author={comment.author}
                     />
                   )
+                } else {
+                  return <></>
                 }
               })}
               <ReplyEditor onSubmit={onReplyCreated} type={getType()} />
@@ -263,6 +267,8 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
                         }
                       />
                     )
+                  } else {
+                    return <></>
                   }
                 })}
               </div>

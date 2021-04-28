@@ -28,33 +28,35 @@ return () => <App />;
 const customComment1: CustomComment = {
   line: 0,
   author: 'Captain Falcon',
-  content: 'Falcoooon PUNCH!!'
+  content: 'Falcoooon PUNCH!!',
+  type: 'comment'
 }
 
 const customComment2: CustomComment = {
   line: 3,
   author: 'Spock',
-  content: 'Live long and prosper.'
+  content: 'Live long and prosper.',
+  type: 'comment'
 }
 
-let customCommentContainer = [customComment1, customComment2]
+const customCommentContainer = [customComment1, customComment2]
 
 const handleCommentCreatedJsx = (comment: CustomComment) => {
-  jsx.args!.getCodeReviewProps!.commentContainer = [
-    ...jsx.args!.getCodeReviewProps!.commentContainer!,
-    comment
-  ]
-  forceReRender()
+  if (jsx.args && jsx.args.commentContainer) {
+    jsx.args.commentContainer = [...jsx.args.commentContainer, comment]
+    forceReRender()
+  }
 }
 
 export const jsx = Template.bind({})
 jsx.args = {
-  getCodeReviewProps: {
-    code: jsxCode,
-    language: 'jsx',
-    commentContainer: customCommentContainer,
-    onCommentCreated: handleCommentCreatedJsx
-  },
+  code: jsxCode,
+  language: 'jsx',
+  commentContainer: customCommentContainer,
+  onCommentCreated: handleCommentCreatedJsx,
+  author: 'Storybook Tester',
+  showResult: true,
+  showComments: true,
   width: 500,
   title: 'testReview.jsx'
 }
