@@ -2,9 +2,8 @@ import React from 'react'
 import { Card } from 'antd'
 import 'antd/dist/antd.css'
 import './CodeReview.css'
-import CodeReview from './CodeReview'
-import { Language } from 'prism-react-renderer'
-import { CustomComment } from './CommentViewer'
+import CodeReview, {CodeReviewProps} from './CodeReview'
+
 
 const cardBodyStyle = {
   paddingTop: '0.5em',
@@ -14,25 +13,13 @@ const cardBodyStyle = {
 export interface CodeReviewCardProps {
   width: number
   title: string
-  code: string
-  language: Language
-  commentContainer: CustomComment[]
-  onCommentCreated: (comment: CustomComment) => void
-  author: string
-  showResult: boolean
-  showComments: boolean
+  reviewProps: CodeReviewProps
 }
 
 export const CodeReviewCard: React.FC<CodeReviewCardProps> = ({
   width,
   title,
-  code,
-  language,
-  commentContainer,
-  onCommentCreated,
-  author,
-  showResult,
-  showComments
+  reviewProps
 }) => {
   return (
     <Card
@@ -44,13 +31,13 @@ export const CodeReviewCard: React.FC<CodeReviewCardProps> = ({
       size={'small'}
     >
       <CodeReview
-        code={code}
-        author={author}
-        language={language}
-        commentContainer={commentContainer}
-        onCommentCreated={onCommentCreated}
-        showResult={showResult}
-        showComments={showComments}
+        code={reviewProps.code}
+        author={reviewProps.author}
+        language={reviewProps.language}
+        commentContainer={reviewProps.commentContainer}
+        onCommentCreated={reviewProps.onCommentCreated}
+        showResult={reviewProps.showResult}
+        showComments={reviewProps.showComments}
       />
     </Card>
   )

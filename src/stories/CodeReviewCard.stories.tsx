@@ -6,6 +6,7 @@ import {
 import { Story, Meta } from '@storybook/react/types-6-0'
 import { CustomComment } from '../components/CommentViewer'
 import { forceReRender } from '@storybook/react'
+import {CodeReviewProps} from "../components/CodeReview";
 
 export default {
   component: CodeReviewCard,
@@ -126,63 +127,72 @@ let customCommentContainer = [
 ]
 
 const handleCommentCreatedJsx = (comment: CustomComment) => {
-  if (jsx.args && jsx.args.commentContainer) {
+  if (jsx.args && jsx.args.reviewProps && jsx.args.reviewProps.commentContainer) {
     customCommentContainer = [...customCommentContainer, comment]
-    jsx.args.commentContainer = customCommentContainer
-    forceReRender()
+    jsx.args.reviewProps.commentContainer = customCommentContainer
   }
-
+  forceReRender()
+  /* eslint-disable */
+  console.log(jsx.args)
+  /* eslint-disable */
 }
 
 const handleCommentCreatedCss = (comment: CustomComment) => {
-  if (css.args && css.args.commentContainer) {
-    css.args.commentContainer = [...css.args.commentContainer, comment]
+  if (css.args && css.args.reviewProps &&css.args.reviewProps.commentContainer) {
+    css.args.reviewProps.commentContainer = [...css.args.reviewProps.commentContainer, comment]
     forceReRender()
   }
 }
 
 const handleCommentCreatedCpp = (comment: CustomComment) => {
-  if (cpp.args && cpp.args.commentContainer) {
-    cpp.args.commentContainer = [...cpp.args.commentContainer, comment]
+  if (cpp.args && cpp.args.reviewProps && cpp.args.reviewProps.commentContainer) {
+    cpp.args.reviewProps.commentContainer = [...cpp.args.reviewProps.commentContainer, comment]
     forceReRender()
   }
 }
 
 export const jsx = Template.bind({})
 jsx.args = {
-  author: 'Storybook Tester',
-  code: jsxCode,
-  language: 'jsx',
-  showResult: true,
-  commentContainer: customCommentContainer,
-  onCommentCreated: handleCommentCreatedJsx,
+  reviewProps: {
+    author: 'Storybook Tester',
+    code: jsxCode,
+    language: 'jsx',
+    showResult: true,
+    commentContainer: customCommentContainer,
+    onCommentCreated: handleCommentCreatedJsx,
+    showComments: true
+  },
   width: 500,
   title: 'testReview.jsx',
-  showComments: true
+
 }
 
 export const css = Template.bind({})
 css.args = {
-  author: 'Storybook Tester',
-  code: cssCode,
-  language: 'css',
-  showResult: true,
-  commentContainer: customCommentContainer,
-  onCommentCreated: handleCommentCreatedCss,
+  reviewProps: {
+    author: 'Storybook Tester',
+    code: cssCode,
+    language: 'css',
+    showResult: true,
+    commentContainer: customCommentContainer,
+    onCommentCreated: handleCommentCreatedCss,
+    showComments: true
+  },
   width: 600,
   title: 'layout.css',
-  showComments: true
 }
 
 export const cpp = Template.bind({})
 cpp.args = {
-  author: 'Storybook Tester',
-  code: cppCode,
-  language: 'cpp',
-  showResult: false,
-  commentContainer: customCommentContainer,
-  onCommentCreated: handleCommentCreatedCpp,
+  reviewProps: {
+    author: 'Storybook Tester',
+    code: cppCode,
+    language: 'cpp',
+    showResult: false,
+    commentContainer: customCommentContainer,
+    onCommentCreated: handleCommentCreatedCpp,
+    showComments: false
+  },
   width: 500,
   title: 'matrix.cpp',
-  showComments: false
 }

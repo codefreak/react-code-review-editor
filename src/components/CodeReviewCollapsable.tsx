@@ -13,7 +13,7 @@ export interface CodeReviewCollapsableProps {
   title: string
   code: string
   language: Language
-  commentContainer?: CustomComment[]
+  commentContainer: CustomComment[]
   onCommentCreated: (comment: CustomComment) => void
   author: string
   showResult: boolean
