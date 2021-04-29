@@ -25,9 +25,9 @@ test('code passed as a prop gets displayed', () => {
   render(
     <CodeReview
       code={jsxCode}
-      language='jsx'
+      language="jsx"
       onCommentCreated={() => mockFunction}
-      author='test'
+      author="test"
       showComments
       showResult
       commentContainer={[]}
@@ -50,9 +50,9 @@ test('line numbers get displayed correctly', () => {
   render(
     <CodeReview
       code={jsxCode}
-      language='jsx'
+      language="jsx"
       onCommentCreated={() => mockFunction}
-      author='test'
+      author="test"
       showComments
       showResult
       commentContainer={[]}
@@ -71,9 +71,9 @@ test('hover over line displays add button', async () => {
   render(
     <CodeReview
       code={jsxCode}
-      language='jsx'
+      language="jsx"
       onCommentCreated={() => mockFunction}
-      author='test'
+      author="test"
       showComments
       showResult
       commentContainer={[]}
@@ -89,9 +89,9 @@ test('klicking the add button opens the comment editor in the correct line', asy
   render(
     <CodeReview
       code={jsxCode}
-      language='jsx'
+      language="jsx"
       onCommentCreated={() => mockFunction}
-      author='test'
+      author="test"
       showComments
       showResult={false}
       commentContainer={[]}
@@ -125,10 +125,10 @@ test('comment gets properly added to the correct line', async () => {
   render(
     <CodeReview
       code={jsxCode}
-      language='jsx'
+      language="jsx"
       commentContainer={commentContainer}
       onCommentCreated={addComment}
-      author='test'
+      author="test"
       showComments
       showResult
     />
@@ -151,10 +151,10 @@ test('comment gets properly added to the correct line', async () => {
   render(
     <CodeReview
       code={jsxCode}
-      language='jsx'
+      language="jsx"
       commentContainer={commentContainer}
       onCommentCreated={addComment}
-      author='test'
+      author="test"
       showComments
       showResult
     />

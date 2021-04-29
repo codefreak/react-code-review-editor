@@ -75,10 +75,15 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
   }
 
   const initializeState = (state: State): State => {
+    // check the amount of values in the current state
+    // and check if new values need to get pushed in case of a new comment
     const count: number = combinedCommentLinesUnique.length
     const dif: number = count - state.length
-    if (state.length !== count) {
-      for (let i = 0; i < dif; i++) {
+
+    // add values
+    // +1 to add a value for the result viewer
+    if (state.length !== count + 1) {
+      for (let i = 0; i < dif + 1; i++) {
         state.push(false)
       }
     }
@@ -110,17 +115,11 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
       })
     }
     dispatch({ type: 'initialize' })
-    /* eslint-disable */
-    console.log(state)
-    /* eslint-enable */
   }, [commentContainer, linesWithComment, linesWithMildInfo, state])
 
   const createComment = (content: string, author: string, line?: number) => {
     let newComment: CustomComment
 
-    /* eslint-disable */
-    console.log(state)
-    /* eslint-enable */
     if (line !== undefined) {
       // standard comment
       newComment = {
@@ -214,14 +213,11 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
                     onCommentCreated(createComment(value, author, i))
                   }
                   showComments={showComments}
-                  active={state[combinedCommentLinesUnique.indexOf(i)]}
+                  active={state[combinedCommentLinesUnique.indexOf(i) + 1]}
                   onToggle={() => {
-                    /* eslint-disable */
-                    console.log('toggle')
-                    /* eslint-enable */
                     dispatch({
                       type: 'toggle',
-                      index: combinedCommentLinesUnique.indexOf(i)
+                      index: combinedCommentLinesUnique.indexOf(i) + 1
                     })
                   }}
                 />
@@ -244,8 +240,8 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
             onReplyCreated={value =>
               onCommentCreated(createComment(value, author))
             }
-            active
-            onToggle={() => alert('whoops')}
+            active={state[0]}
+            onToggle={() => dispatch({ type: 'toggle', index: 0 })}
           />
         </div>
       )}
