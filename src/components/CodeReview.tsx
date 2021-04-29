@@ -99,6 +99,18 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
 
   // "constructor"
   useEffect(() => {
+    // keyboard shortcuts
+    document.addEventListener('keydown', e => {
+      if (e.altKey && e.code === 'KeyE') {
+        dispatch({ type: 'expand-all' })
+        e.preventDefault()
+      }
+      if (e.altKey && e.code === 'KeyC') {
+        dispatch({ type: 'collapse-all' })
+        e.preventDefault()
+      }
+    })
+
     // gather intel about present comments and infos
     if (commentContainer) {
       commentContainer.forEach(comment => {
@@ -115,7 +127,7 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
       })
     }
     dispatch({ type: 'initialize' })
-  }, [commentContainer, linesWithComment, linesWithMildInfo, state])
+  }, [commentContainer, linesWithComment, linesWithMildInfo])
 
   const createComment = (content: string, author: string, line?: number) => {
     let newComment: CustomComment
