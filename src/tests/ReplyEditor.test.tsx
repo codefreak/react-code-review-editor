@@ -6,7 +6,7 @@ afterEach(cleanup)
 
 test('add reply button is disabled when no text is present', () => {
   const mockFunction = jest.fn()
-  render(<ReplyEditor onSubmit={value => mockFunction} type={"Reply"}/>)
+  render(<ReplyEditor onSubmit={value => mockFunction} type="Reply" />)
 
   fireEvent.focus(screen.getByPlaceholderText('Add Reply ...'))
   expect(screen.getByTestId('replyButton')).toHaveAttribute('disabled')
@@ -23,7 +23,7 @@ test('add reply button is disabled when no text is present', () => {
 
 test('add reply button is enabled when text is present', () => {
   const mockFunction = jest.fn()
-  render(<ReplyEditor onSubmit={value => mockFunction} type={"Reply"}/>)
+  render(<ReplyEditor onSubmit={value => mockFunction} type="Reply" />)
 
   fireEvent.focus(screen.getByPlaceholderText('Add Reply ...'))
   fireEvent.change(screen.getByPlaceholderText('Add Reply ...'), {
@@ -34,7 +34,7 @@ test('add reply button is enabled when text is present', () => {
 
 test('component calls onSubmit when clicked', () => {
   const handleSubmit = jest.fn()
-  render(<ReplyEditor onSubmit={handleSubmit} type={"Reply"}/>)
+  render(<ReplyEditor onSubmit={handleSubmit} type="Reply" />)
 
   fireEvent.focus(screen.getByPlaceholderText('Add Reply ...'))
   fireEvent.change(screen.getByPlaceholderText('Add Reply ...'), {
@@ -46,7 +46,7 @@ test('component calls onSubmit when clicked', () => {
 
 test('clicking cancel resets component', () => {
   const mockFunction = jest.fn()
-  render(<ReplyEditor onSubmit={value => mockFunction} type={"Reply"}/>)
+  render(<ReplyEditor onSubmit={value => mockFunction} type="Reply" />)
 
   fireEvent.focus(screen.getByPlaceholderText('Add Reply ...'))
   fireEvent.change(screen.getByPlaceholderText('Add Reply ...'), {
@@ -66,7 +66,7 @@ test('clicking cancel resets component', () => {
 
 test('clicking add reply resets component', () => {
   const mockFunction = jest.fn()
-  render(<ReplyEditor onSubmit={value => mockFunction} type={"Reply"}/>)
+  render(<ReplyEditor onSubmit={value => mockFunction} type="Reply" />)
 
   fireEvent.focus(screen.getByPlaceholderText('Add Reply ...'))
   fireEvent.change(screen.getByPlaceholderText('Add Reply ...'), {

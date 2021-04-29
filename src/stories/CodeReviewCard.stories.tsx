@@ -6,11 +6,10 @@ import {
 import { Story, Meta } from '@storybook/react/types-6-0'
 import { CustomComment } from '../components/CommentViewer'
 import { forceReRender } from '@storybook/react'
-import {CodeReviewProps} from "../components/CodeReview";
 
 export default {
   component: CodeReviewCard,
-  title: 'CodeReviewCard',
+  title: 'CodeReviewCard'
 } as Meta
 
 const Template: Story<CodeReviewCardProps> = args => {
@@ -127,7 +126,11 @@ let customCommentContainer = [
 ]
 
 const handleCommentCreatedJsx = (comment: CustomComment) => {
-  if (jsx.args && jsx.args.reviewProps && jsx.args.reviewProps.commentContainer) {
+  if (
+    jsx.args &&
+    jsx.args.reviewProps &&
+    jsx.args.reviewProps.commentContainer
+  ) {
     customCommentContainer = [...customCommentContainer, comment]
     jsx.args.reviewProps.commentContainer = customCommentContainer
   }
@@ -135,15 +138,29 @@ const handleCommentCreatedJsx = (comment: CustomComment) => {
 }
 
 const handleCommentCreatedCss = (comment: CustomComment) => {
-  if (css.args && css.args.reviewProps &&css.args.reviewProps.commentContainer) {
-    css.args.reviewProps.commentContainer = [...css.args.reviewProps.commentContainer, comment]
+  if (
+    css.args &&
+    css.args.reviewProps &&
+    css.args.reviewProps.commentContainer
+  ) {
+    css.args.reviewProps.commentContainer = [
+      ...css.args.reviewProps.commentContainer,
+      comment
+    ]
     forceReRender()
   }
 }
 
 const handleCommentCreatedCpp = (comment: CustomComment) => {
-  if (cpp.args && cpp.args.reviewProps && cpp.args.reviewProps.commentContainer) {
-    cpp.args.reviewProps.commentContainer = [...cpp.args.reviewProps.commentContainer, comment]
+  if (
+    cpp.args &&
+    cpp.args.reviewProps &&
+    cpp.args.reviewProps.commentContainer
+  ) {
+    cpp.args.reviewProps.commentContainer = [
+      ...cpp.args.reviewProps.commentContainer,
+      comment
+    ]
     forceReRender()
   }
 }
@@ -160,8 +177,7 @@ jsx.args = {
     showComments: true
   },
   width: 500,
-  title: 'testReview.jsx',
-
+  title: 'testReview.jsx'
 }
 
 export const css = Template.bind({})
@@ -176,7 +192,7 @@ css.args = {
     showComments: true
   },
   width: 600,
-  title: 'layout.css',
+  title: 'layout.css'
 }
 
 export const cpp = Template.bind({})
@@ -191,5 +207,5 @@ cpp.args = {
     showComments: false
   },
   width: 500,
-  title: 'matrix.cpp',
+  title: 'matrix.cpp'
 }

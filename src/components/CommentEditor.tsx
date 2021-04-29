@@ -39,7 +39,7 @@ export const CommentEditor: React.FC<CommentEditorProps> = ({
         value={value}
         className="textArea"
         style={{ resize: 'none' }}
-        data-testid={'textArea'}
+        data-testid='textArea'
       />
 
       <div className="controlElements">

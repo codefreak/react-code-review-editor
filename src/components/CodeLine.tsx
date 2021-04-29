@@ -10,7 +10,8 @@ import {
 import CommentEditor from './CommentEditor'
 import CommentViewer, { CustomComment } from './CommentViewer'
 
-// types needed for react-prism-renderer props. Sadly these types aren't exported by the library itself.
+// types needed for react-prism-renderer props. Sadly these types aren't exported by the library itself hence copying.
+// eslint disable as the [otherProp: string]: any causes trouble with linting.
 type Token = {
   types: string[]
   content: string
@@ -22,7 +23,9 @@ type LineInputProps = {
   style?: StyleObj
   className?: string
   line: Token[]
+  /* eslint-disable */
   [otherProp: string]: any
+  /* eslint-enable */
 }
 
 type TokenInputProps = {
@@ -30,7 +33,9 @@ type TokenInputProps = {
   style?: StyleObj
   className?: string
   token: Token
+  /* eslint-disable */
   [otherProp: string]: any
+  /* eslint-enable */
 }
 
 type TokenOutputProps = {
@@ -38,14 +43,18 @@ type TokenOutputProps = {
   style?: StyleObj
   className: string
   children: string
+  /* eslint-disable */
   [otherProp: string]: any
+  /* eslint-enable */
 }
 
 type LineOutputProps = {
   key?: React.Key
   style?: StyleObj
   className: string
-  [otherProps: string]: any
+  /* eslint-disable */
+  [otherProp: string]: any
+  /* eslint-enable */
 }
 
 type StyleObj = {
@@ -64,6 +73,8 @@ export interface CodeLineProps {
   comments: CustomComment[]
   onReplyCreated: (value: string) => void
   showComments: boolean
+  active: boolean
+  onToggle: () => void
 }
 
 export const CodeLine: React.FC<CodeLineProps> = ({
@@ -77,7 +88,9 @@ export const CodeLine: React.FC<CodeLineProps> = ({
   commentThread,
   comments,
   onReplyCreated,
-  showComments
+  showComments,
+  active,
+  onToggle
 }) => {
   // isShown manages visibility of addButton
   const [isShown, setIsShown] = useState(false)
@@ -85,7 +98,6 @@ export const CodeLine: React.FC<CodeLineProps> = ({
 
   // isEditorShown manages visibility of CommentEditor
   const [isEditorShown, setIsEditorShown] = useState(false)
-  const [collapseState, setCollapseState] = useState<boolean>(false)
 
   // returns the right padding value depending on the number of annotations present
   const getPaddingLeft = () => {
@@ -168,7 +180,7 @@ export const CodeLine: React.FC<CodeLineProps> = ({
           {severeInfo && showComments && (
             <ExclamationCircleTwoTone
               style={{ paddingLeft: '0.15em', paddingRight: '0.15em' }}
-              onClick={() => setCollapseState(!collapseState)}
+              onClick={() => onToggle()}
               twoToneColor="#F00E3B"
             />
           )}
@@ -177,14 +189,14 @@ export const CodeLine: React.FC<CodeLineProps> = ({
             <InfoCircleTwoTone
               style={{ paddingLeft: '0.15em', paddingRight: '0.15em' }}
               twoToneColor="#FAC302"
-              onClick={() => setCollapseState(!collapseState)}
+              onClick={() => onToggle()}
             />
           )}
 
           {commentThread && showComments && (
             <MessageTwoTone
               style={{ paddingLeft: '0.15em', paddingRight: '0.15em' }}
-              onClick={() => setCollapseState(!collapseState)}
+              onClick={() => onToggle()}
             />
           )}
 
@@ -209,9 +221,10 @@ export const CodeLine: React.FC<CodeLineProps> = ({
         <div data-testid={'commentViewer' + lineNo}>
           <CommentViewer
             comments={comments}
-            toggle={collapseState}
             onReplyCreated={onReplyCreated}
             replyType="reply"
+            active={active}
+            onToggle={() => onToggle()}
           />
         </div>
       )}
@@ -220,9 +233,10 @@ export const CodeLine: React.FC<CodeLineProps> = ({
         <div data-testid={'commentViewer' + lineNo}>
           <CommentViewer
             comments={comments}
-            toggle={collapseState}
             onReplyCreated={onReplyCreated}
             replyType="comment"
+            active={active}
+            onToggle={() => onToggle()}
           />
         </div>
       )}

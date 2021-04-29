@@ -23,13 +23,14 @@ return () => <App />;
 test('code passed as a prop gets displayed', () => {
   const mockFunction = jest.fn()
   render(
-    <CodeReview code={jsxCode}
-                language={'jsx'}
-                onCommentCreated={() => mockFunction}
-                author={"test"}
-                showComments
-                showResult
-                commentContainer={[]}
+    <CodeReview
+      code={jsxCode}
+      language='jsx'
+      onCommentCreated={() => mockFunction}
+      author='test'
+      showComments
+      showResult
+      commentContainer={[]}
     />
   )
 
@@ -47,13 +48,14 @@ test('code passed as a prop gets displayed', () => {
 test('line numbers get displayed correctly', () => {
   const mockFunction = jest.fn()
   render(
-    <CodeReview code={jsxCode}
-                language={'jsx'}
-                onCommentCreated={() => mockFunction}
-                author={"test"}
-                showComments
-                showResult
-                commentContainer={[]}
+    <CodeReview
+      code={jsxCode}
+      language='jsx'
+      onCommentCreated={() => mockFunction}
+      author='test'
+      showComments
+      showResult
+      commentContainer={[]}
     />
   )
   expect(screen.getByTestId('line0')).toHaveTextContent('1')
@@ -67,13 +69,14 @@ test('line numbers get displayed correctly', () => {
 test('hover over line displays add button', async () => {
   const mockFunction = jest.fn()
   render(
-    <CodeReview code={jsxCode}
-                language={'jsx'}
-                onCommentCreated={() => mockFunction}
-                author={"test"}
-                showComments
-                showResult
-                commentContainer={[]}
+    <CodeReview
+      code={jsxCode}
+      language='jsx'
+      onCommentCreated={() => mockFunction}
+      author='test'
+      showComments
+      showResult
+      commentContainer={[]}
     />
   )
   fireEvent.mouseEnter(screen.getByTestId('line1'))
@@ -84,19 +87,22 @@ test('hover over line displays add button', async () => {
 test('klicking the add button opens the comment editor in the correct line', async () => {
   const mockFunction = jest.fn()
   render(
-    <CodeReview code={jsxCode}
-                language={'jsx'}
-                onCommentCreated={() => mockFunction}
-                author={"test"}
-                showComments
-                showResult={false}
-                commentContainer={[]}
+    <CodeReview
+      code={jsxCode}
+      language='jsx'
+      onCommentCreated={() => mockFunction}
+      author='test'
+      showComments
+      showResult={false}
+      commentContainer={[]}
     />
   )
   fireEvent.mouseEnter(screen.getByTestId('line1'))
   await waitFor(() => screen.getByTestId('addButton'))
   fireEvent.click(screen.getByTestId('addButton'))
-  expect(screen.getByPlaceholderText('Add a comment to line 2 ...')).toBeInTheDocument()
+  expect(
+    screen.getByPlaceholderText('Add a comment to line 2 ...')
+  ).toBeInTheDocument()
 
   // expect line 2 as line id starts at 0
   expect(screen.getByTestId('textArea')).toHaveProperty(
@@ -119,10 +125,10 @@ test('comment gets properly added to the correct line', async () => {
   render(
     <CodeReview
       code={jsxCode}
-      language={'jsx'}
+      language='jsx'
       commentContainer={commentContainer}
       onCommentCreated={addComment}
-      author={"test"}
+      author='test'
       showComments
       showResult
     />
@@ -145,10 +151,10 @@ test('comment gets properly added to the correct line', async () => {
   render(
     <CodeReview
       code={jsxCode}
-      language={'jsx'}
+      language='jsx'
       commentContainer={commentContainer}
       onCommentCreated={addComment}
-      author={"test"}
+      author='test'
       showComments
       showResult
     />

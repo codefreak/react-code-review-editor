@@ -13,9 +13,10 @@ const { Panel } = Collapse
 export interface CommentViewerProps {
   comments: CustomComment[]
   onReplyCreated: (value: string) => void
-  toggle: boolean
   result?: boolean
   replyType?: string
+  active: boolean
+  onToggle: () => void
 }
 
 export type CustomComment = {
@@ -28,27 +29,20 @@ export type CustomComment = {
 export const CommentViewer: React.FC<CommentViewerProps> = ({
   comments,
   onReplyCreated,
-  toggle,
   result,
-  replyType
+  replyType,
+  active,
+  onToggle
 }) => {
   const [activeKey, setActiveKey] = useState<string | string[]>('0')
-  const [oldToggleState, setOldToggleState] = useState<boolean>(false)
 
-  const toggleCollapse = () => {
-    if (activeKey === '0') {
+  useEffect(() => {
+    if (active) {
       setActiveKey('1')
     } else {
       setActiveKey('0')
     }
-  }
-
-  useEffect(() => {
-    if (toggle !== oldToggleState) {
-      toggleCollapse()
-    }
-    setOldToggleState(toggle)
-  }, [toggle, oldToggleState, activeKey])
+  }, [active])
 
   // returns amount of infos present in the component
   const countInfos = () => {
@@ -59,6 +53,11 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
       }
     })
     return count
+  }
+
+  const handleReplyCreated = (value: string) => {
+    setActiveKey('1')
+    onReplyCreated(value)
   }
 
   // returns amount of comments present in the component
@@ -152,7 +151,7 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
       <Collapse
         className="commentViewerCollapse"
         activeKey={activeKey}
-        onChange={() => toggleCollapse()}
+        onChange={() => onToggle()}
       >
         <Panel
           key={1}
@@ -164,7 +163,10 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
             <>
               <div data-testid="comments">
                 {comments.map((comment, key) => {
-                  if (comment.type === 'comment' && (comment.line !== undefined)) {
+                  if (
+                    comment.type === 'comment' &&
+                    comment.line !== undefined
+                  ) {
                     return (
                       <Comment
                         key={key}
@@ -172,20 +174,22 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
                         author={comment.author}
                       />
                     )
+                  } else {
+                    return <></>
                   }
                 })}
               </div>
-              <ReplyEditor onSubmit={onReplyCreated} type={getType()} />
+              <ReplyEditor onSubmit={handleReplyCreated} type={getType()} />
 
-              <div
-                style={{
-                  paddingTop: '0.5em',
-                  paddingLeft: '0.15em'
-                }}
-              >
-                {comments.map((comment, key) => {
-                  if (comment.type === 'mildInfo') {
-                    return (
+              {comments.map((comment, key) => {
+                if (comment.type === 'mildInfo') {
+                  return (
+                    <div
+                      style={{
+                        paddingTop: '0.5em',
+                        paddingLeft: '0.15em'
+                      }}
+                    >
                       <Comment
                         key={key}
                         content={comment.content}
@@ -208,17 +212,17 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
                           </div>
                         }
                       />
-                    )
-                  } else {
-                    return <></>
-                  }
-                })}
-              </div>
+                    </div>
+                  )
+                } else {
+                  return <></>
+                }
+              })}
             </>
           ) : (
             <>
               {comments.map((comment, key) => {
-                if (comment.type === 'comment' && (comment.line === undefined)) {
+                if (comment.type === 'comment' && comment.line === undefined) {
                   return (
                     <Comment
                       key={key}
@@ -230,16 +234,17 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
                   return <></>
                 }
               })}
-              <ReplyEditor onSubmit={onReplyCreated} type={getType()} />
-              <div
-                style={{
-                  paddingTop: '0.5em',
-                  paddingLeft: '0.15em'
-                }}
-              >
-                {comments.map((comment, key) => {
-                  if (comment.type === 'severeInfo') {
-                    return (
+              <ReplyEditor onSubmit={handleReplyCreated} type={getType()} />
+
+              {comments.map((comment, key) => {
+                if (comment.type === 'severeInfo') {
+                  return (
+                    <div
+                      style={{
+                        paddingTop: '0.5em',
+                        paddingLeft: '0.15em'
+                      }}
+                    >
                       <Comment
                         key={key}
                         content={comment.content}
@@ -266,12 +271,12 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
                           </div>
                         }
                       />
-                    )
-                  } else {
-                    return <></>
-                  }
-                })}
-              </div>
+                    </div>
+                  )
+                } else {
+                  return <></>
+                }
+              })}
             </>
           )}
         </Panel>

@@ -2,8 +2,7 @@ import React from 'react'
 import { Card } from 'antd'
 import 'antd/dist/antd.css'
 import './CodeReview.css'
-import CodeReview, {CodeReviewProps} from './CodeReview'
-
+import CodeReview, { CodeReviewProps } from './CodeReview'
 
 const cardBodyStyle = {
   paddingTop: '0.5em',
@@ -28,7 +27,7 @@ export const CodeReviewCard: React.FC<CodeReviewCardProps> = ({
       className="codeReview"
       bodyStyle={cardBodyStyle}
       bordered
-      size={'small'}
+      size="small"
     >
       <CodeReview
         code={reviewProps.code}

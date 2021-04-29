@@ -8,14 +8,14 @@ const comment1: CustomComment = {
   line: 0,
   author: 'Captain Falcon',
   content: 'Falcoooon PUNCH!!',
-  type: "comment"
+  type: 'comment'
 }
 
 const comment2: CustomComment = {
   line: 0,
   author: 'Spock',
   content: 'Live long and prosper.',
-  type: "comment"
+  type: 'comment'
 }
 
 const commentContainer = [comment1]

@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useReducer, useState } from 'react'
 import Highlight, { defaultProps, Language } from 'prism-react-renderer'
 import theme from 'prism-react-renderer/themes/vsLight'
 import { Pre } from './styles'
 import './CodeReview.css'
 import CodeLine from './CodeLine'
 import CommentViewer, { CustomComment } from './CommentViewer'
+import { Button, Space } from 'antd'
 
 export interface CodeReviewProps {
   code: string
@@ -14,6 +15,17 @@ export interface CodeReviewProps {
   author: string
   showResult: boolean
   showComments: boolean
+}
+
+type Action =
+  | { type: 'expand-all' }
+  | { type: 'collapse-all' }
+  | { type: 'initialize' }
+  | { type: 'toggle'; index: number }
+type State = boolean[]
+
+function onlyUnique(value: number, index: number, self: Array<number>) {
+  return self.indexOf(value) === index
 }
 
 export const CodeReview: React.FC<CodeReviewProps> = ({
@@ -32,27 +44,83 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
     new Array<number>()
   )
 
+  const reducer = (state: State, action: Action) => {
+    let newState = []
+    switch (action.type) {
+      case 'toggle':
+        return state.map((value, index) => {
+          if (index === action.index) {
+            return !value
+          } else {
+            return value
+          }
+        })
+
+      case 'expand-all':
+        return state.map(element => {
+          return true
+        })
+
+      case 'collapse-all':
+        return state.map(element => {
+          return false
+        })
+
+      case 'initialize':
+        newState = initializeState(state)
+        return newState
+      default:
+        return state
+    }
+  }
+
+  const initializeState = (state: State): State => {
+    const count: number = combinedCommentLinesUnique.length
+    const dif: number = count - state.length
+    if (state.length !== count) {
+      for (let i = 0; i < dif; i++) {
+        state.push(false)
+      }
+    }
+    return state
+  }
+
+  const combinedCommentLinesUnique = linesWithComment
+    .concat(linesWithMildInfo)
+    .filter(onlyUnique)
+
+  const initialState: State = []
+  const [state, dispatch] = useReducer(reducer, initialState, initializeState)
+
   // "constructor"
   useEffect(() => {
     // gather intel about present comments and infos
     if (commentContainer) {
       commentContainer.forEach(comment => {
-        if ((comment.type === 'comment') && (comment.line !== undefined)) {
-          addLineWithComment(comment.line)
+        if (comment.type === 'comment' && comment.line !== undefined) {
+          if (!linesWithComment.includes(comment.line)) {
+            setLinesWithComment([...linesWithComment, comment.line])
+          }
         }
-
-        if (comment.type === 'mildInfo' && (comment.line !== undefined)) {
+        if (comment.type === 'mildInfo' && comment.line !== undefined) {
           if (!linesWithMildInfo.includes(comment.line)) {
             setLinesWithMildInfo([...linesWithMildInfo, comment.line])
           }
         }
       })
     }
-  })
+    dispatch({ type: 'initialize' })
+    /* eslint-disable */
+    console.log(state)
+    /* eslint-enable */
+  }, [commentContainer, linesWithComment, linesWithMildInfo, state])
 
   const createComment = (content: string, author: string, line?: number) => {
     let newComment: CustomComment
 
+    /* eslint-disable */
+    console.log(state)
+    /* eslint-enable */
     if (line !== undefined) {
       // standard comment
       newComment = {
@@ -69,17 +137,7 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
         type: 'comment'
       }
     }
-    /* eslint-disable */
-    console.log(newComment, line)
-    /* eslint-enable */
     return newComment
-  }
-
-  // adds a line to the linesWithComment array
-  const addLineWithComment = (line: number) => {
-    if (!linesWithComment.includes(line)) {
-      setLinesWithComment([...linesWithComment, line])
-    }
   }
 
   // returns comments of a given line
@@ -97,7 +155,7 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
   const getResults = () => {
     const results = new Array<CustomComment>()
     commentContainer?.forEach(element => {
-      if ((element.line === undefined) || (element.type === 'severeInfo')) {
+      if (element.line === undefined || element.type === 'severeInfo') {
         results.push(element)
       }
     })
@@ -106,6 +164,30 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
 
   return (
     <div>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row-reverse',
+          paddingBottom: '1em'
+        }}
+      >
+        <Space>
+          <Button
+            type="default"
+            onClick={() => dispatch({ type: 'expand-all' })}
+          >
+            Expand all
+          </Button>
+
+          <Button
+            type="default"
+            onClick={() => dispatch({ type: 'collapse-all' })}
+          >
+            Collapse all
+          </Button>
+        </Space>
+      </div>
+
       <Highlight
         {...defaultProps}
         theme={theme}
@@ -123,9 +205,6 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
                   getTokenProps={getTokenProps}
                   onSubmit={value => {
                     onCommentCreated(createComment(value, author, i))
-                    /* eslint-disable */
-                    console.log("line: " + i)
-                    /* eslint-enable */
                   }}
                   mildInfo={linesWithMildInfo.includes(i)}
                   severeInfo={false}
@@ -135,6 +214,16 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
                     onCommentCreated(createComment(value, author, i))
                   }
                   showComments={showComments}
+                  active={state[combinedCommentLinesUnique.indexOf(i)]}
+                  onToggle={() => {
+                    /* eslint-disable */
+                    console.log('toggle')
+                    /* eslint-enable */
+                    dispatch({
+                      type: 'toggle',
+                      index: combinedCommentLinesUnique.indexOf(i)
+                    })
+                  }}
                 />
               </div>
             ))}
@@ -155,7 +244,8 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
             onReplyCreated={value =>
               onCommentCreated(createComment(value, author))
             }
-            toggle
+            active
+            onToggle={() => alert('whoops')}
           />
         </div>
       )}

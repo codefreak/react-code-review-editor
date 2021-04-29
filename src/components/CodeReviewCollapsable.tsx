@@ -1,7 +1,7 @@
 import React from 'react'
 import { Collapse } from 'antd'
 import 'antd/dist/antd.css'
-import CodeReview, { CodeReviewProps } from './CodeReview'
+import CodeReview from './CodeReview'
 import './CodeReviewCollapsable.css'
 import { Language } from 'prism-react-renderer'
 import { CustomComment } from './CommentViewer'
