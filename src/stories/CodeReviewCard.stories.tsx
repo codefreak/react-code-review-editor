@@ -132,9 +132,6 @@ const handleCommentCreatedJsx = (comment: CustomComment) => {
     jsx.args.reviewProps.commentContainer = customCommentContainer
   }
   forceReRender()
-  /* eslint-disable */
-  console.log(jsx.args)
-  /* eslint-disable */
 }
 
 const handleCommentCreatedCss = (comment: CustomComment) => {

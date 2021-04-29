@@ -164,7 +164,7 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
             <>
               <div data-testid="comments">
                 {comments.map((comment, key) => {
-                  if (comment.type === 'comment' && comment.line) {
+                  if (comment.type === 'comment' && (comment.line !== undefined)) {
                     return (
                       <Comment
                         key={key}
@@ -218,7 +218,7 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
           ) : (
             <>
               {comments.map((comment, key) => {
-                if (comment.type === 'comment' && !comment.line) {
+                if (comment.type === 'comment' && (comment.line === undefined)) {
                   return (
                     <Comment
                       key={key}

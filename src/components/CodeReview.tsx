@@ -37,11 +37,11 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
     // gather intel about present comments and infos
     if (commentContainer) {
       commentContainer.forEach(comment => {
-        if (comment.type === 'comment' && comment.line) {
+        if ((comment.type === 'comment') && (comment.line !== undefined)) {
           addLineWithComment(comment.line)
         }
 
-        if (comment.type === 'mildInfo' && comment.line) {
+        if (comment.type === 'mildInfo' && (comment.line !== undefined)) {
           if (!linesWithMildInfo.includes(comment.line)) {
             setLinesWithMildInfo([...linesWithMildInfo, comment.line])
           }
@@ -53,7 +53,7 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
   const createComment = (content: string, author: string, line?: number) => {
     let newComment: CustomComment
 
-    if (line) {
+    if (line !== undefined) {
       // standard comment
       newComment = {
         line: line,
@@ -69,6 +69,9 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
         type: 'comment'
       }
     }
+    /* eslint-disable */
+    console.log(newComment, line)
+    /* eslint-enable */
     return newComment
   }
 
@@ -94,7 +97,7 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
   const getResults = () => {
     const results = new Array<CustomComment>()
     commentContainer?.forEach(element => {
-      if (!element.line || element.type === 'severeInfo') {
+      if ((element.line === undefined) || (element.type === 'severeInfo')) {
         results.push(element)
       }
     })
@@ -120,6 +123,9 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
                   getTokenProps={getTokenProps}
                   onSubmit={value => {
                     onCommentCreated(createComment(value, author, i))
+                    /* eslint-disable */
+                    console.log("line: " + i)
+                    /* eslint-enable */
                   }}
                   mildInfo={linesWithMildInfo.includes(i)}
                   severeInfo={false}
