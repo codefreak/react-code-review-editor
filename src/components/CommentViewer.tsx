@@ -219,62 +219,66 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
             </>
           ) : (
             <>
-              {comments.map((comment, key) => {
-                if (comment.type === 'comment' && comment.line === undefined) {
-                  return (
-                    <Comment
-                      key={key}
-                      content={comment.content}
-                      author={comment.author}
-                    />
-                  )
-                } else {
-                  return <></>
-                }
-              })}
+              <div className="comments">
+                {comments.map((comment, key) => {
+                  if (comment.type === 'comment' && comment.line === undefined) {
+                    return (
+                        <Comment
+                            key={key}
+                            content={comment.content}
+                            author={comment.author}
+                        />
+                    )
+                  } else {
+                    return <></>
+                  }
+                })}
+              </div>
               <ReplyEditor onSubmit={handleReplyCreated} type={getType()} />
 
-              {comments.map((comment, key) => {
-                if (comment.type === 'severeInfo') {
-                  return (
-                    <div
-                      style={{
-                        paddingTop: '0.5em',
-                        paddingLeft: '0.15em'
-                      }}
-                    >
-                      <Comment
-                        key={key}
-                        content={comment.content}
-                        style={{
-                          borderTop: '1px solid #d9d9d9',
-                          paddingTop: '0.5em'
-                        }}
-                        author={
-                          <div
+              <div className="comments">
+                {comments.map((comment, key) => {
+                  if (comment.type === 'severeInfo') {
+                    return (
+                        <div
                             style={{
-                              display: 'flex',
-                              flexDirection: 'row',
-                              margin: '0'
+                              paddingTop: '0.5em',
+                              paddingLeft: '0.15em'
                             }}
-                          >
-                            <ExclamationCircleTwoTone
-                              twoToneColor="#F00E3B"
+                        >
+                          <Comment
+                              key={key}
+                              content={comment.content}
                               style={{
-                                paddingTop: '0.25em',
-                                paddingRight: '0.5em'
+                                borderTop: '1px solid #d9d9d9',
+                                paddingTop: '0.5em'
                               }}
-                            />
-                            <p>{comment.author}</p>
-                          </div>
-                        }
-                      />
-                    </div>
-                  )
-                } else {
-                  return <></>
-                }
-              })}
+                              author={
+                                <div
+                                    style={{
+                                      display: 'flex',
+                                      flexDirection: 'row',
+                                      margin: '0'
+                                    }}
+                                >
+                                  <ExclamationCircleTwoTone
+                                      twoToneColor="#F00E3B"
+                                      style={{
+                                        paddingTop: '0.25em',
+                                        paddingRight: '0.5em'
+                                      }}
+                                  />
+                                  <p>{comment.author}</p>
+                                </div>
+                              }
+                          />
+                        </div>
+                    )
+                  } else {
+                    return <></>
+                  }
+                })}
+              </div>
             </>
           )}
         </Panel>
