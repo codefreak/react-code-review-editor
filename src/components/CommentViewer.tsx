@@ -161,7 +161,7 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
         >
           {!result ? (
             <>
-              <div data-testid="comments">
+              <div className="comments" data-testid="comments">
                 {comments.map((comment, key) => {
                   if (
                     comment.type === 'comment' &&
@@ -181,43 +181,41 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
               </div>
               <ReplyEditor onSubmit={handleReplyCreated} type={getType()} />
 
-              {comments.map((comment, key) => {
-                if (comment.type === 'mildInfo') {
-                  return (
-                    <div
-                      style={{
-                        paddingTop: '0.5em',
-                        paddingLeft: '0.15em'
-                      }}
-                    >
-                      <Comment
-                        key={key}
-                        content={comment.content}
-                        style={{
-                          borderTop: '1px solid #d9d9d9',
-                          paddingTop: '0.5em'
-                        }}
-                        author={
-                          <div
-                            style={{ display: 'flex', flexDirection: 'row' }}
-                          >
-                            <InfoCircleTwoTone
-                              twoToneColor="#FAC302"
-                              style={{
-                                paddingTop: '0.25em',
-                                paddingRight: '0.5em'
-                              }}
-                            />
-                            <p>{comment.author}</p>
-                          </div>
-                        }
-                      />
-                    </div>
-                  )
-                } else {
-                  return <></>
-                }
-              })}
+              <div className="comments">
+                {comments.map((comment, key) => {
+                  if (comment.type === 'mildInfo') {
+                    return (
+                        <div
+                            style={{
+                              paddingTop: '0.5em',
+                              paddingLeft: '0.15em'
+                            }}
+                        >
+                          <Comment
+                              key={key}
+                              content={comment.content}
+                              author={
+                                <div
+                                    style={{ display: 'flex', flexDirection: 'row' }}
+                                >
+                                  <InfoCircleTwoTone
+                                      twoToneColor="#FAC302"
+                                      style={{
+                                        paddingTop: '0.25em',
+                                        paddingRight: '0.5em'
+                                      }}
+                                  />
+                                  <p>{comment.author}</p>
+                                </div>
+                              }
+                          />
+                        </div>
+                    )
+                  } else {
+                    return <></>
+                  }
+                })}
+              </div>
             </>
           ) : (
             <>

@@ -1,11 +1,16 @@
-import React, { useEffect, useReducer, useState } from 'react'
+import React, { CSSProperties, useEffect, useReducer, useState } from 'react'
 import Highlight, { defaultProps, Language } from 'prism-react-renderer'
 import theme from 'prism-react-renderer/themes/vsLight'
 import { Pre } from './styles'
 import './CodeReview.css'
 import CodeLine from './CodeLine'
 import CommentViewer, { CustomComment } from './CommentViewer'
-import { Button, Space } from 'antd'
+import { Button, Dropdown, Space } from 'antd'
+import { onlyUnique } from '../utils/UtilityFunctions'
+import { State, Action } from '../types/types'
+import { SettingOutlined } from '@ant-design/icons'
+
+import { Menu } from 'antd'
 
 export interface CodeReviewProps {
   code: string
@@ -17,17 +22,6 @@ export interface CodeReviewProps {
   showComments: boolean
 }
 
-type Action =
-  | { type: 'expand-all' }
-  | { type: 'collapse-all' }
-  | { type: 'initialize' }
-  | { type: 'toggle'; index: number }
-type State = boolean[]
-
-function onlyUnique(value: number, index: number, self: Array<number>) {
-  return self.indexOf(value) === index
-}
-
 export const CodeReview: React.FC<CodeReviewProps> = ({
   code,
   language,
@@ -37,15 +31,8 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
   showResult,
   showComments
 }) => {
-  const [linesWithComment, setLinesWithComment] = useState<number[]>(
-    new Array<number>()
-  )
-  const [linesWithMildInfo, setLinesWithMildInfo] = useState<number[]>(
-    new Array<number>()
-  )
-
+  // reducer for handling collapse state of potentially present comment viewers
   const reducer = (state: State, action: Action) => {
-    let newState = []
     switch (action.type) {
       case 'toggle':
         return state.map((value, index) => {
@@ -66,15 +53,14 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
           return false
         })
 
-      case 'initialize':
-        newState = initializeState(state)
-        return newState
+      case 'setup':
+        return setupState(state)
       default:
         return state
     }
   }
 
-  const initializeState = (state: State): State => {
+  const setupState = (state: State): State => {
     // check the amount of values in the current state
     // and check if new values need to get pushed in case of a new comment
     const count: number = combinedCommentLinesUnique.length
@@ -90,12 +76,19 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
     return state
   }
 
+  const [linesWithComment, setLinesWithComment] = useState<number[]>(
+    new Array<number>()
+  )
+  const [linesWithMildInfo, setLinesWithMildInfo] = useState<number[]>(
+    new Array<number>()
+  )
+
+  // array containing all unique lines that contain comments or infos
   const combinedCommentLinesUnique = linesWithComment
     .concat(linesWithMildInfo)
     .filter(onlyUnique)
-
   const initialState: State = []
-  const [state, dispatch] = useReducer(reducer, initialState, initializeState)
+  const [state, dispatch] = useReducer(reducer, initialState, setupState)
 
   // "constructor"
   useEffect(() => {
@@ -126,7 +119,7 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
         }
       })
     }
-    dispatch({ type: 'initialize' })
+    dispatch({ type: 'setup' })
   }, [commentContainer, linesWithComment, linesWithMildInfo])
 
   const createComment = (content: string, author: string, line?: number) => {
@@ -151,7 +144,7 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
     return newComment
   }
 
-  // returns comments of a given line
+  // returns all comments of a given line
   const getCommentsOfLine = (line: number) => {
     const commentsOfLine = new Array<CustomComment>()
     commentContainer?.forEach(element => {
@@ -173,30 +166,48 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
     return results
   }
 
+  const menuItemStyle: CSSProperties = {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  }
+
+  const shortcutStyle: CSSProperties = {
+    background: '#ECECEC',
+    marginLeft: '1em',
+    paddingLeft: '0.5em',
+    paddingRight: '0.5em',
+    borderRadius: '5px'
+  }
+
+  const dropMenu = (
+    <Menu>
+      <Menu.Item onClick={() => dispatch({ type: 'expand-all' })}>
+        <div style={menuItemStyle}>
+          <p>Expand all</p>
+          <p style={shortcutStyle}>alt + e</p>
+        </div>
+      </Menu.Item>
+      <Menu.Item onClick={() => dispatch({ type: 'collapse-all' })}>
+        <div style={menuItemStyle}>
+          <p>Collapse all</p>
+          <p style={shortcutStyle}>alt + c</p>
+        </div>
+      </Menu.Item>
+    </Menu>
+  )
   return (
     <div>
       <div
         style={{
           display: 'flex',
           flexDirection: 'row-reverse',
-          paddingBottom: '1em'
+          paddingTop: '0.5em'
         }}
       >
-        <Space>
-          <Button
-            type="default"
-            onClick={() => dispatch({ type: 'expand-all' })}
-          >
-            Expand all
-          </Button>
-
-          <Button
-            type="default"
-            onClick={() => dispatch({ type: 'collapse-all' })}
-          >
-            Collapse all
-          </Button>
-        </Space>
+        <Dropdown overlay={dropMenu} placement="bottomCenter">
+          <Button icon={<SettingOutlined />} shape="circle" />
+        </Dropdown>
       </div>
 
       <Highlight

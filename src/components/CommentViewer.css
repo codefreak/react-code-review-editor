@@ -3,7 +3,21 @@
     padding-bottom: 0;
 }
 
+.comments {
+    padding: 0.5em 0.5em 0.5em 1em;
+}
 
+.ant-collapse {
+    border: 1px solid #f0f0f0;
+}
+
+.ant-collapse-content > .ant-collapse-content-box {
+    padding: 0;
+}
+
+.ant-input {
+    background-color: #fdfdfd;
+}
 
 .ant-collapse > .ant-collapse-item > .ant-collapse-header {
     padding-top: 0.5em;
@@ -22,7 +36,7 @@
 
 .commentViewer {
     padding-bottom: 0.5em;
-    padding-top: 0.5em;
+    padding-top: 0.1em;
 }
 
 .ant-comment-content-author {
