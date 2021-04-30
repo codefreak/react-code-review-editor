@@ -126,7 +126,7 @@ export const CodeLine: React.FC<CodeLineProps> = ({
 
   // show addButton and adjust padding accordingly
   const handleMouseEnter = () => {
-    if (!commentThread && !mildInfo && lineNoRef.current) {
+    if (!commentThread && !mildInfo && lineNoRef.current && showComments) {
       lineNoRef.current.style.paddingLeft =
         getPaddingLeft() - 1.5 + getPaddingLeftOffset() + 'em'
       setIsShown(true)
