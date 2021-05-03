@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import {Button, Collapse, Comment, Dropdown, Menu, Modal, Popconfirm} from 'antd'
+import { Button, Collapse, Comment, Dropdown, Menu, Modal } from 'antd'
 import './CommentViewer.css'
 import ReplyEditor from './ReplyEditor'
 import {
@@ -37,7 +37,8 @@ export type CustomComment = {
 export const CommentViewer: React.FC<CommentViewerProps> = ({
   comments,
   onReplyCreated,
-  onCommentEdited, onCommentDeleted,
+  onCommentEdited,
+  onCommentDeleted,
   result,
   replyType,
   active,
@@ -171,17 +172,17 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
   }
 
   const handleDelete = () => {
-    if(commentContext !== undefined) {
+    if (commentContext !== undefined) {
       onCommentDeleted(commentContext)
     }
   }
 
   const confirm = () => {
     Modal.confirm({
-      title: "Are you sure you want to delete your comment?",
+      title: 'Are you sure you want to delete your comment?',
       icon: <ExclamationCircleTwoTone twoToneColor="#F00E3B" />,
-      okText: "Yes",
-      cancelText: "No",
+      okText: 'Yes',
+      cancelText: 'No',
       onOk: () => handleDelete(),
       mask: true,
       centered: true
@@ -256,11 +257,17 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
                         comment === commentContext
                       ) {
                         return (
-                          <ReplyEditor
-                            onSubmit={handleEdit}
-                            type="Edit"
-                            textValue={comment.content}
-                            onCancel={() => setIsEditing(false)}
+                          <Comment
+                            key={key}
+                            content={
+                              <ReplyEditor
+                                onSubmit={handleEdit}
+                                type="Edit"
+                                textValue={comment.content}
+                                onCancel={() => setIsEditing(false)}
+                              />
+                            }
+                            author={comment.author}
                           />
                         )
                       }
@@ -276,8 +283,11 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
                     return <></>
                   }
                 })}
+
+                {!isEditing && (
+                  <ReplyEditor onSubmit={handleReplyCreated} type={getType()} />
+                )}
               </div>
-              <ReplyEditor onSubmit={handleReplyCreated} type={getType()} />
 
               <div className="comments">
                 {comments.map((comment, key) => {

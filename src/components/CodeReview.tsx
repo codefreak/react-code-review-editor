@@ -5,7 +5,7 @@ import { Pre } from './styles'
 import './CodeReview.css'
 import CodeLine from './CodeLine'
 import CommentViewer, { CustomComment } from './CommentViewer'
-import {Button, Dropdown, Tooltip} from 'antd'
+import { Button, Dropdown, Tooltip } from 'antd'
 import { onlyUnique } from '../utils/UtilityFunctions'
 import { State, Action } from '../types/types'
 import { SettingOutlined } from '@ant-design/icons'
@@ -213,7 +213,11 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
           paddingTop: '0.5em'
         }}
       >
-        <Dropdown overlay={dropMenu} placement="bottomCenter" trigger={["click"]}>
+        <Dropdown
+          overlay={dropMenu}
+          placement="bottomCenter"
+          trigger={['click']}
+        >
           <Tooltip title="shortcuts">
             <Button icon={<SettingOutlined />} type="text" shape="circle" />
           </Tooltip>

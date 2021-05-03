@@ -131,23 +131,28 @@ const handleCommentEdited = (
   story: Story<CodeReviewCardProps>
 ) => {
   if (
-      story.args &&
-      story.args.reviewProps &&
-      story.args.reviewProps.commentContainer
+    story.args &&
+    story.args.reviewProps &&
+    story.args.reviewProps.commentContainer
   ) {
-    const index = story.args.reviewProps.commentContainer.findIndex(element => element === oldComment)
-    if(index > 1) {
+    const index = story.args.reviewProps.commentContainer.findIndex(
+      element => element === oldComment
+    )
+    if (index > 1) {
       story.args.reviewProps.commentContainer[index] = newComment
       forceReRender()
     }
   }
 }
 
-const handleCommentCreated = (comment: CustomComment, story: Story<CodeReviewCardProps>) => {
+const handleCommentCreated = (
+  comment: CustomComment,
+  story: Story<CodeReviewCardProps>
+) => {
   if (
-      story.args &&
-      story.args.reviewProps &&
-      story.args.reviewProps.commentContainer
+    story.args &&
+    story.args.reviewProps &&
+    story.args.reviewProps.commentContainer
   ) {
     customCommentContainer = [...customCommentContainer, comment]
     story.args.reviewProps.commentContainer = customCommentContainer
@@ -155,14 +160,19 @@ const handleCommentCreated = (comment: CustomComment, story: Story<CodeReviewCar
   forceReRender()
 }
 
-const handleCommentDeleted = (comment: CustomComment, story: Story<CodeReviewCardProps>) => {
+const handleCommentDeleted = (
+  comment: CustomComment,
+  story: Story<CodeReviewCardProps>
+) => {
   if (
-      story.args &&
-      story.args.reviewProps &&
-      story.args.reviewProps.commentContainer
+    story.args &&
+    story.args.reviewProps &&
+    story.args.reviewProps.commentContainer
   ) {
-    const index = story.args.reviewProps.commentContainer.findIndex(element => element === comment)
-    if(index > -1) {
+    const index = story.args.reviewProps.commentContainer.findIndex(
+      element => element === comment
+    )
+    if (index > -1) {
       story.args.reviewProps.commentContainer.splice(index, 1)
       forceReRender()
     }
@@ -178,7 +188,8 @@ jsx.args = {
     commentContainer: customCommentContainer,
     onCommentCreated: comment => handleCommentCreated(comment, jsx),
     onCommentDeleted: comment => handleCommentDeleted(comment, jsx),
-    onCommentEdited: (oldComment, newComment) => handleCommentEdited(oldComment, newComment, jsx),
+    onCommentEdited: (oldComment, newComment) =>
+      handleCommentEdited(oldComment, newComment, jsx),
     showComments: true,
     user: 'Storybook Tester'
   },
@@ -193,9 +204,10 @@ css.args = {
     language: 'css',
     showResult: true,
     commentContainer: customCommentContainer,
-    onCommentCreated: (comment => handleCommentCreated(comment, css)),
+    onCommentCreated: comment => handleCommentCreated(comment, css),
     onCommentDeleted: comment => handleCommentDeleted(comment, css),
-    onCommentEdited: (oldComment, newComment) => handleCommentEdited(oldComment, newComment, css),
+    onCommentEdited: (oldComment, newComment) =>
+      handleCommentEdited(oldComment, newComment, css),
     showComments: true,
     user: 'Storybook Tester'
   },
@@ -210,9 +222,10 @@ cpp.args = {
     language: 'cpp',
     showResult: false,
     commentContainer: customCommentContainer,
-    onCommentCreated: (comment => handleCommentCreated(comment, cpp)),
+    onCommentCreated: comment => handleCommentCreated(comment, cpp),
     onCommentDeleted: comment => handleCommentDeleted(comment, cpp),
-    onCommentEdited: (oldComment, newComment) => handleCommentEdited(oldComment, newComment, cpp),
+    onCommentEdited: (oldComment, newComment) =>
+      handleCommentEdited(oldComment, newComment, cpp),
     showComments: false,
     user: 'Storybook Tester'
   },
