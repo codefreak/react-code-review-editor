@@ -1,18 +1,32 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { extractTargetValue } from './CommentEditor'
 import { Button, Space } from 'antd'
 import './ReplyEditor.css'
 import TextArea from 'antd/lib/input/TextArea'
+import { EditorTypes } from '../types/types'
 
 export interface ReplyEditorProps {
   onSubmit: (value: string) => void
-  type: string
+  type: EditorTypes
+  textValue?: string
+  onCancel?: () => void
 }
 
-const ReplyEditor: React.FC<ReplyEditorProps> = ({ onSubmit, type }) => {
-  const [value, setValue] = useState<string>('')
+const ReplyEditor: React.FC<ReplyEditorProps> = ({
+  onSubmit,
+  type,
+  textValue,
+  onCancel
+}) => {
+  const [value, setValue] = useState<string>(textValue || '')
   const [isFocused, setIsFocused] = useState<boolean>(false)
   const [rows, setRows] = useState<number>(1)
+
+  useEffect(() => {
+    if (textValue !== undefined) {
+      handleFocus()
+    }
+  }, [textValue])
 
   const handleFocus = () => {
     setRows(4)
@@ -28,6 +42,9 @@ const ReplyEditor: React.FC<ReplyEditorProps> = ({ onSubmit, type }) => {
     setRows(1)
     setIsFocused(false)
     setValue('')
+    if (onCancel) {
+      onCancel()
+    }
   }
 
   return (

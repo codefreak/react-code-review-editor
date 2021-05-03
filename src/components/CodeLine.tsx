@@ -72,9 +72,15 @@ export interface CodeLineProps {
   commentThread: boolean
   comments: CustomComment[]
   onReplyCreated: (value: string) => void
+  onCommentEdited: (
+    oldComment: CustomComment,
+    newComment: CustomComment
+  ) => void
+  onCommentDeleted: (deletedComment: CustomComment) => void
   showComments: boolean
   active: boolean
   onToggle: () => void
+  user: string
 }
 
 export const CodeLine: React.FC<CodeLineProps> = ({
@@ -90,7 +96,10 @@ export const CodeLine: React.FC<CodeLineProps> = ({
   onReplyCreated,
   showComments,
   active,
-  onToggle
+  onToggle,
+  user,
+  onCommentEdited,
+  onCommentDeleted
 }) => {
   // isShown manages visibility of addButton
   const [isShown, setIsShown] = useState(false)
@@ -225,6 +234,9 @@ export const CodeLine: React.FC<CodeLineProps> = ({
             replyType="reply"
             active={active}
             onToggle={() => onToggle()}
+            user={user}
+            onCommentEdited={onCommentEdited}
+            onCommentDeleted={onCommentDeleted}
           />
         </div>
       )}
@@ -237,6 +249,9 @@ export const CodeLine: React.FC<CodeLineProps> = ({
             replyType="comment"
             active={active}
             onToggle={() => onToggle()}
+            user={user}
+            onCommentEdited={onCommentEdited}
+            onCommentDeleted={onCommentDeleted}
           />
         </div>
       )}

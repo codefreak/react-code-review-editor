@@ -125,6 +125,29 @@ let customCommentContainer = [
   customComment4
 ]
 
+const handleCommentEdited = (
+  oldComment: CustomComment,
+  newComment: CustomComment,
+  story: Story<CodeReviewCardProps>
+) => {
+  if (
+      story.args &&
+      story.args.reviewProps &&
+      story.args.reviewProps.commentContainer
+  ) {
+    const index = story.args.reviewProps.commentContainer.findIndex(element => element === oldComment)
+    story.args.reviewProps.commentContainer[index] = newComment
+    forceReRender()
+  }
+}
+
+const handleCommentDeleted = (comment: CustomComment) => {
+  /* eslint-disable */
+  console.log('delete')
+  console.log(comment)
+  /* eslint-enable */
+}
+
 const handleCommentCreatedJsx = (comment: CustomComment) => {
   if (
     jsx.args &&
@@ -168,13 +191,15 @@ const handleCommentCreatedCpp = (comment: CustomComment) => {
 export const jsx = Template.bind({})
 jsx.args = {
   reviewProps: {
-    author: 'Storybook Tester',
     code: jsxCode,
     language: 'jsx',
     showResult: true,
     commentContainer: customCommentContainer,
     onCommentCreated: handleCommentCreatedJsx,
-    showComments: true
+    onCommentDeleted: handleCommentDeleted,
+    onCommentEdited: (oldComment, newComment) => handleCommentEdited(oldComment, newComment, jsx),
+    showComments: true,
+    user: 'Storybook Tester'
   },
   width: 500,
   title: 'testReview.jsx'
@@ -183,13 +208,15 @@ jsx.args = {
 export const css = Template.bind({})
 css.args = {
   reviewProps: {
-    author: 'Storybook Tester',
     code: cssCode,
     language: 'css',
     showResult: true,
     commentContainer: customCommentContainer,
     onCommentCreated: handleCommentCreatedCss,
-    showComments: true
+    onCommentDeleted: handleCommentDeleted,
+    onCommentEdited: (oldComment, newComment) => handleCommentEdited(oldComment, newComment, css),
+    showComments: true,
+    user: 'Storybook Tester'
   },
   width: 600,
   title: 'layout.css'
@@ -198,13 +225,15 @@ css.args = {
 export const cpp = Template.bind({})
 cpp.args = {
   reviewProps: {
-    author: 'Storybook Tester',
     code: cppCode,
     language: 'cpp',
     showResult: false,
     commentContainer: customCommentContainer,
     onCommentCreated: handleCommentCreatedCpp,
-    showComments: false
+    onCommentDeleted: handleCommentDeleted,
+    onCommentEdited: (oldComment, newComment) => handleCommentEdited(oldComment, newComment, cpp),
+    showComments: false,
+    user: 'Storybook Tester'
   },
   width: 500,
   title: 'matrix.cpp'

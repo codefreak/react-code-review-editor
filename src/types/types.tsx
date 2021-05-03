@@ -5,3 +5,5 @@ export type Action =
   | { type: 'toggle'; index: number }
 
 export type State = boolean[]
+
+export type EditorTypes = 'Reply' | 'Edit' | 'Comment' | 'Result'

@@ -5,7 +5,7 @@ import { Pre } from './styles'
 import './CodeReview.css'
 import CodeLine from './CodeLine'
 import CommentViewer, { CustomComment } from './CommentViewer'
-import { Button, Dropdown, Space } from 'antd'
+import { Button, Dropdown } from 'antd'
 import { onlyUnique } from '../utils/UtilityFunctions'
 import { State, Action } from '../types/types'
 import { SettingOutlined } from '@ant-design/icons'
@@ -17,9 +17,14 @@ export interface CodeReviewProps {
   language: Language
   commentContainer: CustomComment[]
   onCommentCreated: (comment: CustomComment) => void
-  author: string
+  onCommentEdited: (
+    oldComment: CustomComment,
+    newComment: CustomComment
+  ) => void
+  onCommentDeleted: (deletedComment: CustomComment) => void
   showResult: boolean
   showComments: boolean
+  user: string
 }
 
 export const CodeReview: React.FC<CodeReviewProps> = ({
@@ -27,9 +32,11 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
   language,
   commentContainer,
   onCommentCreated,
-  author,
   showResult,
-  showComments
+  showComments,
+  user,
+  onCommentDeleted,
+  onCommentEdited
 }) => {
   // reducer for handling collapse state of potentially present comment viewers
   const reducer = (state: State, action: Action) => {
@@ -196,6 +203,7 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
       </Menu.Item>
     </Menu>
   )
+
   return (
     <div>
       <div
@@ -206,7 +214,7 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
         }}
       >
         <Dropdown overlay={dropMenu} placement="bottomCenter">
-          <Button icon={<SettingOutlined />} shape="circle" />
+          <Button icon={<SettingOutlined />} type="text" shape="circle" />
         </Dropdown>
       </div>
 
@@ -226,15 +234,17 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
                   getLineProps={getLineProps}
                   getTokenProps={getTokenProps}
                   onSubmit={value => {
-                    onCommentCreated(createComment(value, author, i))
+                    onCommentCreated(createComment(value, user, i))
                   }}
                   mildInfo={linesWithMildInfo.includes(i)}
                   severeInfo={false}
                   commentThread={linesWithComment.includes(i)}
                   comments={getCommentsOfLine(i)}
                   onReplyCreated={value =>
-                    onCommentCreated(createComment(value, author, i))
+                    onCommentCreated(createComment(value, user, i))
                   }
+                  onCommentEdited={onCommentEdited}
+                  onCommentDeleted={onCommentDeleted}
                   showComments={showComments}
                   active={state[combinedCommentLinesUnique.indexOf(i) + 1]}
                   onToggle={() => {
@@ -243,6 +253,7 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
                       index: combinedCommentLinesUnique.indexOf(i) + 1
                     })
                   }}
+                  user={user}
                 />
               </div>
             ))}
@@ -261,10 +272,13 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
             comments={getResults()}
             result
             onReplyCreated={value =>
-              onCommentCreated(createComment(value, author))
+              onCommentCreated(createComment(value, user))
             }
             active={state[0]}
             onToggle={() => dispatch({ type: 'toggle', index: 0 })}
+            user={user}
+            onCommentDeleted={onCommentDeleted}
+            onCommentEdited={onCommentEdited}
           />
         </div>
       )}

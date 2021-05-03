@@ -31,12 +31,14 @@ export const CodeReviewCard: React.FC<CodeReviewCardProps> = ({
     >
       <CodeReview
         code={reviewProps.code}
-        author={reviewProps.author}
         language={reviewProps.language}
         commentContainer={reviewProps.commentContainer}
         onCommentCreated={reviewProps.onCommentCreated}
         showResult={reviewProps.showResult}
         showComments={reviewProps.showComments}
+        user={reviewProps.user}
+        onCommentEdited={reviewProps.onCommentEdited}
+        onCommentDeleted={reviewProps.onCommentDeleted}
       />
     </Card>
   )
