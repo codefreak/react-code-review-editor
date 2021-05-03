@@ -141,51 +141,23 @@ const handleCommentEdited = (
   }
 }
 
+const handleCommentCreated = (comment: CustomComment, story: Story<CodeReviewCardProps>) => {
+  if (
+      story.args &&
+      story.args.reviewProps &&
+      story.args.reviewProps.commentContainer
+  ) {
+    customCommentContainer = [...customCommentContainer, comment]
+    story.args.reviewProps.commentContainer = customCommentContainer
+  }
+  forceReRender()
+}
+
 const handleCommentDeleted = (comment: CustomComment) => {
   /* eslint-disable */
   console.log('delete')
   console.log(comment)
   /* eslint-enable */
-}
-
-const handleCommentCreatedJsx = (comment: CustomComment) => {
-  if (
-    jsx.args &&
-    jsx.args.reviewProps &&
-    jsx.args.reviewProps.commentContainer
-  ) {
-    customCommentContainer = [...customCommentContainer, comment]
-    jsx.args.reviewProps.commentContainer = customCommentContainer
-  }
-  forceReRender()
-}
-
-const handleCommentCreatedCss = (comment: CustomComment) => {
-  if (
-    css.args &&
-    css.args.reviewProps &&
-    css.args.reviewProps.commentContainer
-  ) {
-    css.args.reviewProps.commentContainer = [
-      ...css.args.reviewProps.commentContainer,
-      comment
-    ]
-    forceReRender()
-  }
-}
-
-const handleCommentCreatedCpp = (comment: CustomComment) => {
-  if (
-    cpp.args &&
-    cpp.args.reviewProps &&
-    cpp.args.reviewProps.commentContainer
-  ) {
-    cpp.args.reviewProps.commentContainer = [
-      ...cpp.args.reviewProps.commentContainer,
-      comment
-    ]
-    forceReRender()
-  }
 }
 
 export const jsx = Template.bind({})
@@ -195,7 +167,7 @@ jsx.args = {
     language: 'jsx',
     showResult: true,
     commentContainer: customCommentContainer,
-    onCommentCreated: handleCommentCreatedJsx,
+    onCommentCreated: (comment => handleCommentCreated(comment, jsx)),
     onCommentDeleted: handleCommentDeleted,
     onCommentEdited: (oldComment, newComment) => handleCommentEdited(oldComment, newComment, jsx),
     showComments: true,
@@ -212,7 +184,7 @@ css.args = {
     language: 'css',
     showResult: true,
     commentContainer: customCommentContainer,
-    onCommentCreated: handleCommentCreatedCss,
+    onCommentCreated: (comment => handleCommentCreated(comment, css)),
     onCommentDeleted: handleCommentDeleted,
     onCommentEdited: (oldComment, newComment) => handleCommentEdited(oldComment, newComment, css),
     showComments: true,
@@ -229,7 +201,7 @@ cpp.args = {
     language: 'cpp',
     showResult: false,
     commentContainer: customCommentContainer,
-    onCommentCreated: handleCommentCreatedCpp,
+    onCommentCreated: (comment => handleCommentCreated(comment, cpp)),
     onCommentDeleted: handleCommentDeleted,
     onCommentEdited: (oldComment, newComment) => handleCommentEdited(oldComment, newComment, cpp),
     showComments: false,
