@@ -289,41 +289,44 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
                 )}
               </div>
 
-              <div className="comments">
-                {comments.map((comment, key) => {
-                  if (comment.type === 'mildInfo') {
-                    return (
-                      <div
-                        style={{
-                          paddingTop: '0.5em',
-                          paddingLeft: '0.15em'
-                        }}
-                      >
-                        <Comment
-                          key={key}
-                          content={comment.content}
-                          author={
+              {comments.find(element => element.type === 'mildInfo') && (
+                  <div className="infoComments">
+                    {comments.map((comment, key) => {
+                      if (comment.type === 'mildInfo') {
+                        return (
                             <div
-                              style={{ display: 'flex', flexDirection: 'row' }}
-                            >
-                              <InfoCircleTwoTone
-                                twoToneColor="#FAC302"
                                 style={{
-                                  paddingTop: '0.25em',
-                                  paddingRight: '0.5em'
+                                  paddingTop: '0.5em',
+                                  paddingLeft: '0.15em'
                                 }}
+                            >
+                              <Comment
+                                  key={key}
+                                  content={comment.content}
+                                  author={
+                                    <div
+                                        style={{ display: 'flex', flexDirection: 'row' }}
+                                    >
+                                      <InfoCircleTwoTone
+                                          twoToneColor="#FAC302"
+                                          style={{
+                                            paddingTop: '0.25em',
+                                            paddingRight: '0.5em'
+                                          }}
+                                      />
+                                      <p>{comment.author}</p>
+                                    </div>
+                                  }
                               />
-                              <p>{comment.author}</p>
                             </div>
-                          }
-                        />
-                      </div>
-                    )
-                  } else {
-                    return <></>
-                  }
-                })}
-              </div>
+                        )
+                      } else {
+                        return <></>
+                      }
+                    })}
+                  </div>
+              )}
+
             </>
           ) : (
             <>
