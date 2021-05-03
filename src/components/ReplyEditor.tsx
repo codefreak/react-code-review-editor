@@ -47,6 +47,14 @@ const ReplyEditor: React.FC<ReplyEditorProps> = ({
     }
   }
 
+  const getSubmitButtonText = () => {
+    if(type === "Edit")
+      return "Edit"
+    else {
+      return "Add " + type
+    }
+  }
+
   return (
     <div className="replyEditor" data-testid="replyEditor">
       <TextArea
@@ -83,7 +91,7 @@ const ReplyEditor: React.FC<ReplyEditorProps> = ({
                 type="primary"
                 data-testid="replyButton"
               >
-                {'Add ' + type}
+                {getSubmitButtonText()}
               </Button>
             )}
 
@@ -95,7 +103,7 @@ const ReplyEditor: React.FC<ReplyEditorProps> = ({
                 data-testid="replyButton"
                 disabled
               >
-                {'Add ' + type}
+                {getSubmitButtonText()}
               </Button>
             )}
           </Space>
