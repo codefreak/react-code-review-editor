@@ -136,8 +136,10 @@ const handleCommentEdited = (
       story.args.reviewProps.commentContainer
   ) {
     const index = story.args.reviewProps.commentContainer.findIndex(element => element === oldComment)
-    story.args.reviewProps.commentContainer[index] = newComment
-    forceReRender()
+    if(index > 1) {
+      story.args.reviewProps.commentContainer[index] = newComment
+      forceReRender()
+    }
   }
 }
 
@@ -153,11 +155,18 @@ const handleCommentCreated = (comment: CustomComment, story: Story<CodeReviewCar
   forceReRender()
 }
 
-const handleCommentDeleted = (comment: CustomComment) => {
-  /* eslint-disable */
-  console.log('delete')
-  console.log(comment)
-  /* eslint-enable */
+const handleCommentDeleted = (comment: CustomComment, story: Story<CodeReviewCardProps>) => {
+  if (
+      story.args &&
+      story.args.reviewProps &&
+      story.args.reviewProps.commentContainer
+  ) {
+    const index = story.args.reviewProps.commentContainer.findIndex(element => element === comment)
+    if(index > -1) {
+      story.args.reviewProps.commentContainer.splice(index, 1)
+      forceReRender()
+    }
+  }
 }
 
 export const jsx = Template.bind({})
@@ -167,8 +176,8 @@ jsx.args = {
     language: 'jsx',
     showResult: true,
     commentContainer: customCommentContainer,
-    onCommentCreated: (comment => handleCommentCreated(comment, jsx)),
-    onCommentDeleted: handleCommentDeleted,
+    onCommentCreated: comment => handleCommentCreated(comment, jsx),
+    onCommentDeleted: comment => handleCommentDeleted(comment, jsx),
     onCommentEdited: (oldComment, newComment) => handleCommentEdited(oldComment, newComment, jsx),
     showComments: true,
     user: 'Storybook Tester'
@@ -185,7 +194,7 @@ css.args = {
     showResult: true,
     commentContainer: customCommentContainer,
     onCommentCreated: (comment => handleCommentCreated(comment, css)),
-    onCommentDeleted: handleCommentDeleted,
+    onCommentDeleted: comment => handleCommentDeleted(comment, css),
     onCommentEdited: (oldComment, newComment) => handleCommentEdited(oldComment, newComment, css),
     showComments: true,
     user: 'Storybook Tester'
@@ -202,7 +211,7 @@ cpp.args = {
     showResult: false,
     commentContainer: customCommentContainer,
     onCommentCreated: (comment => handleCommentCreated(comment, cpp)),
-    onCommentDeleted: handleCommentDeleted,
+    onCommentDeleted: comment => handleCommentDeleted(comment, cpp),
     onCommentEdited: (oldComment, newComment) => handleCommentEdited(oldComment, newComment, cpp),
     showComments: false,
     user: 'Storybook Tester'

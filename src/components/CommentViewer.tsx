@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Collapse, Comment, Dropdown, Menu } from 'antd'
+import {Button, Collapse, Comment, Dropdown, Menu, Modal, Popconfirm} from 'antd'
 import './CommentViewer.css'
 import ReplyEditor from './ReplyEditor'
 import {
@@ -37,7 +37,7 @@ export type CustomComment = {
 export const CommentViewer: React.FC<CommentViewerProps> = ({
   comments,
   onReplyCreated,
-  onCommentEdited,
+  onCommentEdited, onCommentDeleted,
   result,
   replyType,
   active,
@@ -171,18 +171,29 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
   }
 
   const handleDelete = () => {
-    /* eslint-disable */
-    console.log('delete')
-    console.log(commentContext)
-    /* eslint-enable */
+    if(commentContext !== undefined) {
+      onCommentDeleted(commentContext)
+    }
+  }
+
+  const confirm = () => {
+    Modal.confirm({
+      title: "Are you sure you want to delete your comment?",
+      icon: <ExclamationCircleTwoTone twoToneColor="#F00E3B" />,
+      okText: "Yes",
+      cancelText: "No",
+      onOk: () => handleDelete(),
+      mask: true,
+      centered: true
+    })
   }
 
   const dropMenu = (
     <Menu>
-      <Menu.Item onClick={() => setIsEditing(true)}>
+      <Menu.Item key="1" onClick={() => setIsEditing(true)}>
         <p>Edit</p>
       </Menu.Item>
-      <Menu.Item onClick={() => handleDelete()}>
+      <Menu.Item key="2" onClick={() => confirm()}>
         <p>Delete</p>
       </Menu.Item>
     </Menu>
