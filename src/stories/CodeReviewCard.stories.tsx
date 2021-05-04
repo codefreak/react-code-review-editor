@@ -173,9 +173,8 @@ const handleCommentDeleted = (
       element => element === comment
     )
     if (index > -1) {
-      const newContainer = story.args.reviewProps.commentContainer
-      newContainer.splice(index, 1)
-      story.args.reviewProps.commentContainer = newContainer
+      customCommentContainer.splice(index, 1)
+      story.args.reviewProps.commentContainer = customCommentContainer
       forceReRender()
     }
   }

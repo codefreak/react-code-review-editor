@@ -81,20 +81,15 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
     }
   }
 
+  // processes possible change in commentViewer numbers
   const setupState = (state: State): State => {
-    // check the amount of values in the current state
-    // and check if new values need to get pushed in case of a new comment
-    const count: number = linesWithCommentViewer.length
-    const dif: number = count - state.length
+    let newState: State = []
 
-    // add values
-    // +1 to add a value for the result viewer
-    if (state.length !== count + 1) {
-      for (let i = 0; i < dif + 1; i++) {
-        state.push(false)
-      }
+    // length +1 to add a value for the result viewer
+    for(let i = 0; i < linesWithCommentViewer.length + 1; i++) {
+      newState = [...newState, false]
     }
-    return state
+    return newState
   }
 
   // array containing all unique lines that contain comments or infos
