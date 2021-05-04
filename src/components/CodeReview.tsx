@@ -2,6 +2,7 @@ import React, {
   CSSProperties,
   useCallback,
   useEffect,
+  useMemo,
   useReducer,
   useState
 } from 'react'
@@ -15,7 +16,6 @@ import { Button, Dropdown, Tooltip } from 'antd'
 import { onlyUnique } from '../utils/UtilityFunctions'
 import { State, Action } from '../types/types'
 import { SettingOutlined } from '@ant-design/icons'
-
 import { Menu } from 'antd'
 
 export interface CodeReviewProps {
@@ -30,6 +30,16 @@ export interface CodeReviewProps {
   onCommentDeleted: (deletedComment: CustomComment) => void
   showResult: boolean
   user: string
+}
+
+const setupMemo = (comments: CustomComment[]) => {
+  const memo: number[] = []
+  comments.forEach(comment => {
+    if (comment.line !== undefined) {
+      memo.push(comment.line)
+    }
+  })
+  return memo.filter(onlyUnique).sort((a, b) => a - b)
 }
 
 export const CodeReview: React.FC<CodeReviewProps> = ({
@@ -88,7 +98,10 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
   }
 
   // array containing all unique lines that contain comments or infos
-  const linesWithCommentViewer: number[] = []
+  const linesWithCommentViewer: number[] = useMemo(
+    () => setupMemo(commentContainer),
+    [commentContainer]
+  )
   const initialState: State = []
   const [state, dispatch] = useReducer(reducer, initialState, setupState)
   const [showComments, setShowComments] = useState<boolean>(true)
@@ -113,16 +126,9 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
 
   // setup for comments
   useEffect(() => {
-    commentContainer.forEach(comment => {
-      if (comment.line) {
-        linesWithCommentViewer.push(comment.line)
-      }
-    })
-    linesWithCommentViewer.filter(onlyUnique)
-
     // setup collapse state
     dispatch({ type: 'setup' })
-  }, [commentContainer])
+  }, [commentContainer, linesWithCommentViewer])
 
   // setup shortcut listeners
   useEffect(() => {
