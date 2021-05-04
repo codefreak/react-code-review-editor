@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Line, LineContent, LineNo } from './styles'
 import { Button } from 'antd'
 import {
@@ -67,9 +67,6 @@ export interface CodeLineProps {
   getLineProps: (input: LineInputProps) => LineOutputProps
   getTokenProps: (input: TokenInputProps) => TokenOutputProps
   onSubmit: (value: string) => void
-  mildInfo: boolean
-  severeInfo: boolean
-  commentThread: boolean
   comments: CustomComment[]
   onReplyCreated: (value: string) => void
   onCommentEdited: (
@@ -89,9 +86,6 @@ export const CodeLine: React.FC<CodeLineProps> = ({
   getLineProps,
   getTokenProps,
   onSubmit,
-  mildInfo,
-  severeInfo,
-  commentThread,
   comments,
   onReplyCreated,
   showComments,
@@ -107,6 +101,33 @@ export const CodeLine: React.FC<CodeLineProps> = ({
 
   // isEditorShown manages visibility of CommentEditor
   const [isEditorShown, setIsEditorShown] = useState(false)
+  const [commentThread, setCommentThread] = useState<boolean>()
+  const [mildInfo, setMildInfo] = useState<boolean>(
+    comments.map(element => element.type).includes('mildInfo')
+  )
+  const [severeInfo, setSevereInfo] = useState<boolean>(
+    comments.map(element => element.type).includes('severeInfo')
+  )
+
+  useEffect(() => {
+    if (comments.map(element => element.type).includes('comment')) {
+      setCommentThread(true)
+    } else {
+      setCommentThread(false)
+    }
+
+    if (comments.map(element => element.type).includes('mildInfo')) {
+      setMildInfo(true)
+    } else {
+      setMildInfo(false)
+    }
+
+    if (comments.map(element => element.type).includes('severeInfo')) {
+      setSevereInfo(true)
+    } else {
+      setSevereInfo(false)
+    }
+  }, [comments])
 
   // returns the right padding value depending on the number of annotations present
   const getPaddingLeft = () => {

@@ -35,7 +35,6 @@ export const CodeReviewCard: React.FC<CodeReviewCardProps> = ({
         commentContainer={reviewProps.commentContainer}
         onCommentCreated={reviewProps.onCommentCreated}
         showResult={reviewProps.showResult}
-        showComments={reviewProps.showComments}
         user={reviewProps.user}
         onCommentEdited={reviewProps.onCommentEdited}
         onCommentDeleted={reviewProps.onCommentDeleted}

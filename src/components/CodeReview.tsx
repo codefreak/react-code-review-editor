@@ -1,4 +1,10 @@
-import React, {CSSProperties, useCallback, useEffect, useReducer, useState} from 'react'
+import React, {
+  CSSProperties,
+  useCallback,
+  useEffect,
+  useReducer,
+  useState
+} from 'react'
 import Highlight, { defaultProps, Language } from 'prism-react-renderer'
 import theme from 'prism-react-renderer/themes/vsLight'
 import { Pre } from './styles'
@@ -68,7 +74,7 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
   const setupState = (state: State): State => {
     // check the amount of values in the current state
     // and check if new values need to get pushed in case of a new comment
-    const count: number = combinedCommentLinesUnique.length
+    const count: number = linesWithCommentViewer.length
     const dif: number = count - state.length
 
     // add values
@@ -81,67 +87,52 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
     return state
   }
 
-  const [linesWithComment, setLinesWithComment] = useState<number[]>(
-    new Array<number>()
-  )
-  const [linesWithMildInfo, setLinesWithMildInfo] = useState<number[]>(
-    new Array<number>()
-  )
-  const [showComments, setShowComments] = useState<boolean>(true)
-
   // array containing all unique lines that contain comments or infos
-  const combinedCommentLinesUnique = linesWithComment
-    .concat(linesWithMildInfo)
-    .filter(onlyUnique)
+  const linesWithCommentViewer: number[] = []
   const initialState: State = []
   const [state, dispatch] = useReducer(reducer, initialState, setupState)
+  const [showComments, setShowComments] = useState<boolean>(true)
 
   const handleShortcuts = useCallback(
-      (e: KeyboardEvent) => {
-        if (e.altKey && e.code === 'KeyE') {
-          dispatch({ type: 'expand-all' })
-          e.preventDefault()
-        }
-        if (e.altKey && e.code === 'KeyC') {
-          dispatch({ type: 'collapse-all' })
-          e.preventDefault()
-        }
-        if (e.altKey && e.code === 'KeyH') {
-          setShowComments(!showComments)
-          e.preventDefault()
-          /* eslint-disable */
-          console.log(showComments)
-          /* eslint-enable */
-        }
-  }, [showComments])
+    (e: KeyboardEvent) => {
+      if (e.altKey && e.code === 'KeyE') {
+        dispatch({ type: 'expand-all' })
+        e.preventDefault()
+      }
+      if (e.altKey && e.code === 'KeyC') {
+        dispatch({ type: 'collapse-all' })
+        e.preventDefault()
+      }
+      if (e.altKey && e.code === 'KeyH') {
+        setShowComments(!showComments)
+        e.preventDefault()
+      }
+    },
+    [showComments]
+  )
 
+  // setup for comments
   useEffect(() => {
-    document.addEventListener('keydown', handleShortcuts)
-
-    // gather info about present comments and infos
-    if (commentContainer) {
-      commentContainer.forEach(comment => {
-        if (comment.type === 'comment' && comment.line !== undefined) {
-          if (!linesWithComment.includes(comment.line)) {
-            setLinesWithComment([...linesWithComment, comment.line])
-          }
-        }
-        if (comment.type === 'mildInfo' && comment.line !== undefined) {
-          if (!linesWithMildInfo.includes(comment.line)) {
-            setLinesWithMildInfo([...linesWithMildInfo, comment.line])
-          }
-        }
-      })
-    }
+    commentContainer.forEach(comment => {
+      if (comment.line) {
+        linesWithCommentViewer.push(comment.line)
+      }
+    })
+    linesWithCommentViewer.filter(onlyUnique)
 
     // setup collapse state
     dispatch({ type: 'setup' })
+  }, [commentContainer])
+
+  // setup shortcut listeners
+  useEffect(() => {
+    document.addEventListener('keydown', handleShortcuts)
 
     // cleanup
     return () => {
       document.removeEventListener('keydown', handleShortcuts)
     }
-  }, [commentContainer, handleShortcuts, linesWithComment, linesWithMildInfo, showComments])
+  }, [handleShortcuts])
 
   const createComment = (content: string, author: string, line?: number) => {
     let newComment: CustomComment
@@ -167,7 +158,7 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
 
   // returns all comments of a given line
   const getCommentsOfLine = (line: number) => {
-    const commentsOfLine = new Array<CustomComment>()
+    const commentsOfLine: CustomComment[] = []
     commentContainer?.forEach(element => {
       if (element.line === line) {
         commentsOfLine.push(element)
@@ -185,6 +176,10 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
       }
     })
     return results
+  }
+
+  const handleDelete = (comment: CustomComment) => {
+    onCommentDeleted(comment)
   }
 
   const menuItemStyle: CSSProperties = {
@@ -218,11 +213,7 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
       </Menu.Item>
       <Menu.Item onClick={() => setShowComments(!showComments)}>
         <div style={menuItemStyle}>
-          {showComments ? (
-              <p>Hide comments</p>
-          ) : (
-              <p>Show comments</p>
-          )}
+          {showComments ? <p>Hide comments</p> : <p>Show comments</p>}
           <p style={shortcutStyle}>alt + h</p>
         </div>
       </Menu.Item>
@@ -267,21 +258,18 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
                   onSubmit={value => {
                     onCommentCreated(createComment(value, user, i))
                   }}
-                  mildInfo={linesWithMildInfo.includes(i)}
-                  severeInfo={false}
-                  commentThread={linesWithComment.includes(i)}
                   comments={getCommentsOfLine(i)}
                   onReplyCreated={value =>
                     onCommentCreated(createComment(value, user, i))
                   }
                   onCommentEdited={onCommentEdited}
-                  onCommentDeleted={onCommentDeleted}
+                  onCommentDeleted={handleDelete}
                   showComments={showComments}
-                  active={state[combinedCommentLinesUnique.indexOf(i) + 1]}
+                  active={state[linesWithCommentViewer.indexOf(i) + 1]}
                   onToggle={() => {
                     dispatch({
                       type: 'toggle',
-                      index: combinedCommentLinesUnique.indexOf(i) + 1
+                      index: linesWithCommentViewer.indexOf(i) + 1
                     })
                   }}
                   user={user}
@@ -309,7 +297,7 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
             onToggle={() => dispatch({ type: 'toggle', index: 0 })}
             user={user}
             onCommentDeleted={onCommentDeleted}
-            onCommentEdited={onCommentEdited}
+            onCommentEdited={handleDelete}
           />
         </div>
       )}
