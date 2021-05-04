@@ -231,7 +231,7 @@ export const CodeLine: React.FC<CodeLineProps> = ({
           <CommentViewer
             comments={comments}
             onReplyCreated={onReplyCreated}
-            replyType="reply"
+            replyType="Reply"
             active={active}
             onToggle={() => onToggle()}
             user={user}
@@ -246,7 +246,7 @@ export const CodeLine: React.FC<CodeLineProps> = ({
           <CommentViewer
             comments={comments}
             onReplyCreated={onReplyCreated}
-            replyType="comment"
+            replyType="Comment"
             active={active}
             onToggle={() => onToggle()}
             user={user}

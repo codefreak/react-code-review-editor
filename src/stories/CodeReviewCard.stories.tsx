@@ -190,7 +190,6 @@ jsx.args = {
     onCommentDeleted: comment => handleCommentDeleted(comment, jsx),
     onCommentEdited: (oldComment, newComment) =>
       handleCommentEdited(oldComment, newComment, jsx),
-    showComments: true,
     user: 'Storybook Tester'
   },
   width: 500,
@@ -208,7 +207,6 @@ css.args = {
     onCommentDeleted: comment => handleCommentDeleted(comment, css),
     onCommentEdited: (oldComment, newComment) =>
       handleCommentEdited(oldComment, newComment, css),
-    showComments: true,
     user: 'Storybook Tester'
   },
   width: 600,
@@ -226,7 +224,6 @@ cpp.args = {
     onCommentDeleted: comment => handleCommentDeleted(comment, cpp),
     onCommentEdited: (oldComment, newComment) =>
       handleCommentEdited(oldComment, newComment, cpp),
-    showComments: false,
     user: 'Storybook Tester'
   },
   width: 500,

@@ -290,43 +290,45 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
               </div>
 
               {comments.find(element => element.type === 'mildInfo') && (
-                  <div className="infoComments">
-                    {comments.map((comment, key) => {
-                      if (comment.type === 'mildInfo') {
-                        return (
-                            <div
+                <div className="infoComments">
+                  {comments.map((comment, key) => {
+                    if (comment.type === 'mildInfo') {
+                      return (
+                        <div
+                          style={{
+                            paddingTop: '0.5em',
+                            paddingLeft: '0.15em'
+                          }}
+                        >
+                          <Comment
+                            key={key}
+                            content={comment.content}
+                            author={
+                              <div
                                 style={{
-                                  paddingTop: '0.5em',
-                                  paddingLeft: '0.15em'
+                                  display: 'flex',
+                                  flexDirection: 'row'
                                 }}
-                            >
-                              <Comment
-                                  key={key}
-                                  content={comment.content}
-                                  author={
-                                    <div
-                                        style={{ display: 'flex', flexDirection: 'row' }}
-                                    >
-                                      <InfoCircleTwoTone
-                                          twoToneColor="#FAC302"
-                                          style={{
-                                            paddingTop: '0.25em',
-                                            paddingRight: '0.5em'
-                                          }}
-                                      />
-                                      <p>{comment.author}</p>
-                                    </div>
-                                  }
-                              />
-                            </div>
-                        )
-                      } else {
-                        return <></>
-                      }
-                    })}
-                  </div>
+                              >
+                                <InfoCircleTwoTone
+                                  twoToneColor="#FAC302"
+                                  style={{
+                                    paddingTop: '0.25em',
+                                    paddingRight: '0.5em'
+                                  }}
+                                />
+                                <p>{comment.author}</p>
+                              </div>
+                            }
+                          />
+                        </div>
+                      )
+                    } else {
+                      return <></>
+                    }
+                  })}
+                </div>
               )}
-
             </>
           ) : (
             <>
@@ -347,10 +349,10 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
                     return <></>
                   }
                 })}
+                <ReplyEditor onSubmit={handleReplyCreated} type={getType()} />
               </div>
-              <ReplyEditor onSubmit={handleReplyCreated} type={getType()} />
 
-              <div className="comments">
+              <div className="infoComments">
                 {comments.map((comment, key) => {
                   if (comment.type === 'severeInfo') {
                     return (
@@ -363,16 +365,11 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
                         <Comment
                           key={key}
                           content={comment.content}
-                          style={{
-                            borderTop: '1px solid #d9d9d9',
-                            paddingTop: '0.5em'
-                          }}
                           author={
                             <div
                               style={{
                                 display: 'flex',
-                                flexDirection: 'row',
-                                margin: '0'
+                                flexDirection: 'row'
                               }}
                             >
                               <ExclamationCircleTwoTone

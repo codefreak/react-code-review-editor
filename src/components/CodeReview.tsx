@@ -1,4 +1,4 @@
-import React, { CSSProperties, useEffect, useReducer, useState } from 'react'
+import React, {CSSProperties, useCallback, useEffect, useReducer, useState} from 'react'
 import Highlight, { defaultProps, Language } from 'prism-react-renderer'
 import theme from 'prism-react-renderer/themes/vsLight'
 import { Pre } from './styles'
@@ -23,7 +23,6 @@ export interface CodeReviewProps {
   ) => void
   onCommentDeleted: (deletedComment: CustomComment) => void
   showResult: boolean
-  showComments: boolean
   user: string
 }
 
@@ -33,7 +32,6 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
   commentContainer,
   onCommentCreated,
   showResult,
-  showComments,
   user,
   onCommentDeleted,
   onCommentEdited
@@ -89,6 +87,7 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
   const [linesWithMildInfo, setLinesWithMildInfo] = useState<number[]>(
     new Array<number>()
   )
+  const [showComments, setShowComments] = useState<boolean>(true)
 
   // array containing all unique lines that contain comments or infos
   const combinedCommentLinesUnique = linesWithComment
@@ -97,21 +96,29 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
   const initialState: State = []
   const [state, dispatch] = useReducer(reducer, initialState, setupState)
 
-  // "constructor"
-  useEffect(() => {
-    // keyboard shortcuts
-    document.addEventListener('keydown', e => {
-      if (e.altKey && e.code === 'KeyE') {
-        dispatch({ type: 'expand-all' })
-        e.preventDefault()
-      }
-      if (e.altKey && e.code === 'KeyC') {
-        dispatch({ type: 'collapse-all' })
-        e.preventDefault()
-      }
-    })
+  const handleShortcuts = useCallback(
+      (e: KeyboardEvent) => {
+        if (e.altKey && e.code === 'KeyE') {
+          dispatch({ type: 'expand-all' })
+          e.preventDefault()
+        }
+        if (e.altKey && e.code === 'KeyC') {
+          dispatch({ type: 'collapse-all' })
+          e.preventDefault()
+        }
+        if (e.altKey && e.code === 'KeyH') {
+          setShowComments(!showComments)
+          e.preventDefault()
+          /* eslint-disable */
+          console.log(showComments)
+          /* eslint-enable */
+        }
+  }, [showComments])
 
-    // gather intel about present comments and infos
+  useEffect(() => {
+    document.addEventListener('keydown', handleShortcuts)
+
+    // gather info about present comments and infos
     if (commentContainer) {
       commentContainer.forEach(comment => {
         if (comment.type === 'comment' && comment.line !== undefined) {
@@ -126,8 +133,15 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
         }
       })
     }
+
+    // setup collapse state
     dispatch({ type: 'setup' })
-  }, [commentContainer, linesWithComment, linesWithMildInfo])
+
+    // cleanup
+    return () => {
+      document.removeEventListener('keydown', handleShortcuts)
+    }
+  }, [commentContainer, handleShortcuts, linesWithComment, linesWithMildInfo, showComments])
 
   const createComment = (content: string, author: string, line?: number) => {
     let newComment: CustomComment
@@ -187,6 +201,7 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
     borderRadius: '5px'
   }
 
+  // TODO refactor to own component
   const dropMenu = (
     <Menu>
       <Menu.Item onClick={() => dispatch({ type: 'expand-all' })}>
@@ -199,6 +214,16 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
         <div style={menuItemStyle}>
           <p>Collapse all</p>
           <p style={shortcutStyle}>alt + c</p>
+        </div>
+      </Menu.Item>
+      <Menu.Item onClick={() => setShowComments(!showComments)}>
+        <div style={menuItemStyle}>
+          {showComments ? (
+              <p>Hide comments</p>
+          ) : (
+              <p>Show comments</p>
+          )}
+          <p style={shortcutStyle}>alt + h</p>
         </div>
       </Menu.Item>
     </Menu>

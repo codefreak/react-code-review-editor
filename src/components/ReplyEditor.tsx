@@ -48,10 +48,9 @@ const ReplyEditor: React.FC<ReplyEditorProps> = ({
   }
 
   const getSubmitButtonText = () => {
-    if(type === "Edit")
-      return "Edit"
+    if (type === 'Edit') return 'Edit'
     else {
-      return "Add " + type
+      return 'Add ' + type
     }
   }
 
