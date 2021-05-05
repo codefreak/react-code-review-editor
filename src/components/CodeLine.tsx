@@ -7,59 +7,16 @@ import {
   InfoCircleTwoTone,
   MessageTwoTone
 } from '@ant-design/icons'
+import {
+  Token,
+  LineInputProps,
+  LineOutputProps,
+  TokenInputProps,
+  TokenOutputProps,
+  EditorPlaceholder
+} from '../types/types'
 import CommentEditor from './CommentEditor'
 import CommentViewer, { CustomComment } from './CommentViewer'
-
-// types needed for react-prism-renderer props. Sadly these types aren't exported by the library itself hence copying.
-// eslint disable as the [otherProp: string]: any causes trouble with linting.
-type Token = {
-  types: string[]
-  content: string
-  empty?: boolean
-}
-
-type LineInputProps = {
-  key?: React.Key
-  style?: StyleObj
-  className?: string
-  line: Token[]
-  /* eslint-disable */
-  [otherProp: string]: any
-  /* eslint-enable */
-}
-
-type TokenInputProps = {
-  key?: React.Key
-  style?: StyleObj
-  className?: string
-  token: Token
-  /* eslint-disable */
-  [otherProp: string]: any
-  /* eslint-enable */
-}
-
-type TokenOutputProps = {
-  key?: React.Key
-  style?: StyleObj
-  className: string
-  children: string
-  /* eslint-disable */
-  [otherProp: string]: any
-  /* eslint-enable */
-}
-
-type LineOutputProps = {
-  key?: React.Key
-  style?: StyleObj
-  className: string
-  /* eslint-disable */
-  [otherProp: string]: any
-  /* eslint-enable */
-}
-
-type StyleObj = {
-  [key: string]: string | number | null
-}
 
 export interface CodeLineProps {
   line: Token[]
@@ -98,8 +55,6 @@ export const CodeLine: React.FC<CodeLineProps> = ({
   // isShown manages visibility of addButton
   const [isShown, setIsShown] = useState(false)
   const lineNoRef = React.createRef<HTMLSpanElement>()
-
-  // isEditorShown manages visibility of CommentEditor
   const [isEditorShown, setIsEditorShown] = useState(false)
   const [commentThread, setCommentThread] = useState<boolean>()
   const [mildInfo, setMildInfo] = useState<boolean>(
@@ -109,6 +64,7 @@ export const CodeLine: React.FC<CodeLineProps> = ({
     comments.map(element => element.type).includes('severeInfo')
   )
 
+  // check what kind of comments are present to manage annotations
   useEffect(() => {
     if (comments.map(element => element.type).includes('comment')) {
       setCommentThread(true)
@@ -163,19 +119,6 @@ export const CodeLine: React.FC<CodeLineProps> = ({
     }
   }
 
-  // remove addButton and adjust padding accordingly
-  const handleMouseLeave = () => {
-    if (lineNoRef.current) {
-      lineNoRef.current.style.paddingLeft =
-        getPaddingLeft() + getPaddingLeftOffset() + 'em'
-      setIsShown(false)
-    }
-  }
-
-  const handleAdd = () => {
-    setIsEditorShown(true)
-  }
-
   // returns a higher padding offset for higher than double digit lines
   const getPaddingLeftOffset = () => {
     if (lineNo < 9) {
@@ -185,7 +128,16 @@ export const CodeLine: React.FC<CodeLineProps> = ({
     }
   }
 
-  const getReplyType = () => {
+  // remove addButton and adjust padding accordingly
+  const handleMouseLeave = () => {
+    if (lineNoRef.current) {
+      lineNoRef.current.style.paddingLeft =
+        getPaddingLeft() + getPaddingLeftOffset() + 'em'
+      setIsShown(false)
+    }
+  }
+
+  const getPlaceholder = (): EditorPlaceholder => {
     if (mildInfo && !commentThread) {
       return 'Comment'
     } else {
@@ -208,7 +160,7 @@ export const CodeLine: React.FC<CodeLineProps> = ({
               <Button
                 icon={<PlusOutlined style={{ paddingLeft: '0.1em' }} />}
                 size="small"
-                onClick={() => handleAdd()}
+                onClick={() => setIsEditorShown(true)}
                 style={{ width: '1.5em', height: '1.5em' }}
                 data-testid="addButton"
               />
@@ -260,7 +212,7 @@ export const CodeLine: React.FC<CodeLineProps> = ({
           <CommentViewer
             comments={comments}
             onReplyCreated={onReplyCreated}
-            replyType={getReplyType()}
+            placeholder={getPlaceholder()}
             active={active}
             onToggle={() => onToggle()}
             user={user}

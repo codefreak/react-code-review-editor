@@ -3,18 +3,18 @@ import { extractTargetValue } from './CommentEditor'
 import { Button, Space } from 'antd'
 import './ReplyEditor.css'
 import TextArea from 'antd/lib/input/TextArea'
-import { EditorTypes } from '../types/types'
+import { EditorPlaceholder } from '../types/types'
 
 export interface ReplyEditorProps {
   onSubmit: (value: string) => void
-  type: EditorTypes
+  placeholder: EditorPlaceholder
   textValue?: string
   onCancel?: () => void
 }
 
 const ReplyEditor: React.FC<ReplyEditorProps> = ({
   onSubmit,
-  type,
+  placeholder,
   textValue,
   onCancel
 }) => {
@@ -48,9 +48,9 @@ const ReplyEditor: React.FC<ReplyEditorProps> = ({
   }
 
   const getSubmitButtonText = () => {
-    if (type === 'Edit') return 'Edit'
+    if (placeholder === 'Edit') return 'Edit'
     else {
-      return 'Add ' + type
+      return 'Add ' + placeholder
     }
   }
 
@@ -58,7 +58,7 @@ const ReplyEditor: React.FC<ReplyEditorProps> = ({
     <div className="replyEditor" data-testid="replyEditor">
       <TextArea
         rows={rows}
-        placeholder={'Add ' + type + ' ...'}
+        placeholder={'Add ' + placeholder + ' ...'}
         onChange={extractTargetValue(setValue)}
         value={value}
         onFocus={() => handleFocus()}

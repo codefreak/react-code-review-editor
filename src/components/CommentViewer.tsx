@@ -8,7 +8,7 @@ import {
   MessageTwoTone,
   EllipsisOutlined
 } from '@ant-design/icons'
-import { EditorTypes } from '../types/types'
+import { EditorPlaceholder } from '../types/types'
 
 const { Panel } = Collapse
 
@@ -21,7 +21,7 @@ export interface CommentViewerProps {
   ) => void
   onCommentDeleted: (deletedComment: CustomComment) => void
   result?: boolean
-  replyType?: EditorTypes
+  placeholder?: EditorPlaceholder
   active: boolean
   onToggle: () => void
   user: string
@@ -40,7 +40,7 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
   onCommentEdited,
   onCommentDeleted,
   result,
-  replyType,
+  placeholder,
   active,
   onToggle,
   user
@@ -125,8 +125,8 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
   }
 
   // returns a custom type for the replyType prop of ReplyEditor
-  const getType = (): EditorTypes => {
-    if (!replyType) {
+  const getPlaceholder = (): EditorPlaceholder => {
+    if (!placeholder) {
       let noComment = true
       comments.forEach(element => {
         if (element.type === 'comment') {
@@ -139,7 +139,7 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
         return 'Reply'
       }
     }
-    return replyType
+    return placeholder
   }
 
   // returns icons for extra context in the result header
@@ -262,7 +262,7 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
                             content={
                               <ReplyEditor
                                 onSubmit={handleEdit}
-                                type="Edit"
+                                placeholder="Edit"
                                 textValue={comment.content}
                                 onCancel={() => setIsEditing(false)}
                               />
@@ -285,7 +285,10 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
                 })}
 
                 {!isEditing && (
-                  <ReplyEditor onSubmit={handleReplyCreated} type={getType()} />
+                  <ReplyEditor
+                    onSubmit={handleReplyCreated}
+                    placeholder={getPlaceholder()}
+                  />
                 )}
               </div>
 
@@ -349,7 +352,10 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
                     return <></>
                   }
                 })}
-                <ReplyEditor onSubmit={handleReplyCreated} type={getType()} />
+                <ReplyEditor
+                  onSubmit={handleReplyCreated}
+                  placeholder={getPlaceholder()}
+                />
               </div>
 
               <div className="infoComments">
