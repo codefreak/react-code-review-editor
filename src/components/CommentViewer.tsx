@@ -224,6 +224,7 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
                     if (comment.author === user && !isEditing) {
                       return (
                         <div
+                          key={key}
                           style={{
                             display: 'flex',
                             flexDirection: 'row',
@@ -232,8 +233,7 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
                           }}
                         >
                           <Comment
-                            key={key}
-                            content={comment.content}
+                            content={<pre>{comment.content}</pre>}
                             author={comment.author}
                           />
                           <Dropdown
@@ -274,13 +274,11 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
                       return (
                         <Comment
                           key={key}
-                          content={comment.content}
+                          content={<pre>{comment.content}</pre>}
                           author={comment.author}
                         />
                       )
                     }
-                  } else {
-                    return <></>
                   }
                 })}
 
@@ -298,14 +296,14 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
                     if (comment.type === 'mildInfo') {
                       return (
                         <div
+                          key={key}
                           style={{
                             paddingTop: '0.5em',
                             paddingLeft: '0.15em'
                           }}
                         >
                           <Comment
-                            key={key}
-                            content={comment.content}
+                            content={<pre>{comment.content}</pre>}
                             author={
                               <div
                                 style={{
@@ -326,8 +324,6 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
                           />
                         </div>
                       )
-                    } else {
-                      return <></>
                     }
                   })}
                 </div>
@@ -348,8 +344,6 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
                         author={comment.author}
                       />
                     )
-                  } else {
-                    return <></>
                   }
                 })}
                 <ReplyEditor
@@ -363,14 +357,14 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
                   if (comment.type === 'severeInfo') {
                     return (
                       <div
+                        key={key}
                         style={{
                           paddingTop: '0.5em',
                           paddingLeft: '0.15em'
                         }}
                       >
                         <Comment
-                          key={key}
-                          content={comment.content}
+                          content={<pre>{comment.content}</pre>}
                           author={
                             <div
                               style={{
@@ -391,8 +385,6 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
                         />
                       </div>
                     )
-                  } else {
-                    return <></>
                   }
                 })}
               </div>

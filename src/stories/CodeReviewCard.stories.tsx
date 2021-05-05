@@ -111,10 +111,13 @@ const customComment3: CustomComment = {
 
 const customComment4: CustomComment = {
   author: 'Test1',
-  content: `
-    Expected: 10
-    But was: 0
-    `,
+  content: `Expected: 10\nBut was: 0`,
+  type: 'severeInfo'
+}
+
+const customComment5: CustomComment = {
+  author: 'Test1',
+  content: `Expected: 10\nBut was: 0`,
   type: 'severeInfo'
 }
 
@@ -122,7 +125,8 @@ let customCommentContainer = [
   customComment1,
   customComment2,
   customComment3,
-  customComment4
+  customComment4,
+    customComment5
 ]
 
 const handleCommentEdited = (
