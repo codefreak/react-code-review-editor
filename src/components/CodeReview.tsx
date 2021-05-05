@@ -42,6 +42,73 @@ const setupMemo = (comments: CustomComment[]) => {
   return memo.filter(onlyUnique).sort((a, b) => a - b)
 }
 
+const setupState = (state: State, linesWithCommentViewer: number[]): State => {
+  let newState: State = []
+  const dif = linesWithCommentViewer.length + 1 - state.length
+
+  // new comments added
+  if (dif > 0 && state.length !== 0) {
+    let toAdd: State = []
+    for (let i = 0; i < dif; i++) {
+      toAdd = [...toAdd, true]
+    }
+    newState = state.concat(toAdd)
+    return newState
+  }
+
+  // initial setup
+  if (state.length === 0) {
+    // length +1 to add a value for the result viewer
+    for (let i = 0; i < linesWithCommentViewer.length + 1; i++) {
+      newState = [...newState, false]
+    }
+    return newState
+  }
+
+  // default
+  return state
+}
+
+const reducer = (state: State, action: Action) => {
+  switch (action.type) {
+    case 'toggle':
+      return state.map((value, index) => {
+        if (index === action.index) {
+          return !value
+        } else {
+          return value
+        }
+      })
+
+    case 'expand-all':
+      return state.map(element => {
+        return true
+      })
+
+    case 'collapse-all':
+      return state.map(element => {
+        return false
+      })
+
+    case 'setup':
+      return setupState(state, action.linesWithComments)
+
+    case 'remove':
+      const newState = state
+      newState.splice(action.index, 1)
+      /*eslint-disable*/
+      console.log(newState)
+      /*eslint-enable*/
+      /* eslint-disable*/
+      console.log('hallo')
+      /*eslint-enable */
+      return newState
+
+    default:
+      return state
+  }
+}
+
 export const CodeReview: React.FC<CodeReviewProps> = ({
   code,
   language,
@@ -52,53 +119,11 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
   onCommentDeleted,
   onCommentEdited
 }) => {
-  // reducer for handling collapse state of potentially present comment viewers
-  const reducer = (state: State, action: Action) => {
-    switch (action.type) {
-      case 'toggle':
-        return state.map((value, index) => {
-          if (index === action.index) {
-            return !value
-          } else {
-            return value
-          }
-        })
-
-      case 'expand-all':
-        return state.map(element => {
-          return true
-        })
-
-      case 'collapse-all':
-        return state.map(element => {
-          return false
-        })
-
-      case 'setup':
-        return setupState(state)
-      default:
-        return state
-    }
-  }
-
-  // processes possible change in commentViewer numbers
-  const setupState = (state: State): State => {
-    let newState: State = []
-
-    // length +1 to add a value for the result viewer
-    for(let i = 0; i < linesWithCommentViewer.length + 1; i++) {
-      newState = [...newState, false]
-    }
-    return newState
-  }
-
-  // array containing all unique lines that contain comments or infos
   const linesWithCommentViewer: number[] = useMemo(
     () => setupMemo(commentContainer),
     [commentContainer]
   )
-  const initialState: State = []
-  const [state, dispatch] = useReducer(reducer, initialState, setupState)
+  const [state, dispatch] = useReducer(reducer, [])
   const [showComments, setShowComments] = useState<boolean>(true)
 
   const handleShortcuts = useCallback(
@@ -119,10 +144,9 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
     [showComments]
   )
 
-  // setup for comments
+  // setup collapse state
   useEffect(() => {
-    // setup collapse state
-    dispatch({ type: 'setup' })
+    dispatch({ type: 'setup', linesWithComments: linesWithCommentViewer })
   }, [commentContainer, linesWithCommentViewer])
 
   // setup shortcut listeners
@@ -180,6 +204,19 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
   }
 
   const handleDelete = (comment: CustomComment) => {
+    // check if the deleted comment was the only comment in that line
+    let isAlone = true
+    commentContainer.forEach(element => {
+      if (element.line === comment.line && element !== comment) isAlone = false
+    })
+
+    if (isAlone && comment.line) {
+      // update collapse state
+      dispatch({
+        type: 'remove',
+        index: linesWithCommentViewer.indexOf(comment.line)
+      })
+    }
     onCommentDeleted(comment)
   }
 
@@ -280,6 +317,7 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
           </Pre>
         )}
       </Highlight>
+
       {showResult && showComments && (
         <div
           style={{

@@ -185,6 +185,14 @@ export const CodeLine: React.FC<CodeLineProps> = ({
     }
   }
 
+  const getReplyType = () => {
+    if (mildInfo && !commentThread) {
+      return 'Comment'
+    } else {
+      return 'Reply'
+    }
+  }
+
   return (
     <>
       <Line
@@ -247,32 +255,21 @@ export const CodeLine: React.FC<CodeLineProps> = ({
         </LineContent>
       </Line>
 
-      {(commentThread || (commentThread && mildInfo)) && showComments && (
+      {showComments && comments.length > 0 && (
         <div data-testid={'commentViewer' + lineNo}>
           <CommentViewer
             comments={comments}
             onReplyCreated={onReplyCreated}
-            replyType="Reply"
+            replyType={getReplyType()}
             active={active}
             onToggle={() => onToggle()}
             user={user}
-            onCommentEdited={onCommentEdited}
-            onCommentDeleted={onCommentDeleted}
-          />
-        </div>
-      )}
-
-      {mildInfo && !commentThread && showComments && (
-        <div data-testid={'commentViewer' + lineNo}>
-          <CommentViewer
-            comments={comments}
-            onReplyCreated={onReplyCreated}
-            replyType="Comment"
-            active={active}
-            onToggle={() => onToggle()}
-            user={user}
-            onCommentEdited={onCommentEdited}
-            onCommentDeleted={onCommentDeleted}
+            onCommentEdited={(oldComment, newComment) =>
+              onCommentEdited(oldComment, newComment)
+            }
+            onCommentDeleted={deletedComment =>
+              onCommentDeleted(deletedComment)
+            }
           />
         </div>
       )}
