@@ -38,6 +38,7 @@ export const CodeReviewCard: React.FC<CodeReviewCardProps> = ({
         user={reviewProps.user}
         onCommentEdited={reviewProps.onCommentEdited}
         onCommentDeleted={reviewProps.onCommentDeleted}
+        role={reviewProps.role}
       />
     </Card>
   )

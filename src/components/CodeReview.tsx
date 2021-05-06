@@ -11,7 +11,8 @@ import theme from 'prism-react-renderer/themes/vsLight'
 import { Pre } from './styles'
 import './CodeReview.css'
 import CodeLine from './CodeLine'
-import CommentViewer, { CustomComment } from './CommentViewer'
+import CommentViewer from './CommentViewer'
+import { CustomComment, Role } from '../types/types'
 import { Button, Dropdown, Tooltip } from 'antd'
 import { onlyUnique } from '../utils/UtilityFunctions'
 import { State, Action } from '../types/types'
@@ -30,6 +31,7 @@ export interface CodeReviewProps {
   onCommentDeleted: (deletedComment: CustomComment) => void
   showResult: boolean
   user: string
+  role: Role
 }
 
 const setupMemo = (comments: CustomComment[]) => {
@@ -70,6 +72,8 @@ const setupState = (state: State, linesWithCommentViewer: number[]): State => {
 }
 
 const reducer = (state: State, action: Action) => {
+  const newState = state
+
   switch (action.type) {
     case 'toggle':
       return state.map((value, index) => {
@@ -94,14 +98,7 @@ const reducer = (state: State, action: Action) => {
       return setupState(state, action.linesWithComments)
 
     case 'remove':
-      const newState = state
       newState.splice(action.index, 1)
-      /*eslint-disable*/
-      console.log(newState)
-      /*eslint-enable*/
-      /* eslint-disable*/
-      console.log('hallo')
-      /*eslint-enable */
       return newState
 
     default:
@@ -117,7 +114,8 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
   showResult,
   user,
   onCommentDeleted,
-  onCommentEdited
+  onCommentEdited,
+  role
 }) => {
   const linesWithCommentViewer: number[] = useMemo(
     () => setupMemo(commentContainer),
@@ -311,6 +309,7 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
                     })
                   }}
                   user={user}
+                  role={role}
                 />
               </div>
             ))}

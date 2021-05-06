@@ -4,8 +4,9 @@ import {
   CodeReviewCollapsableProps
 } from '../components/CodeReviewCollapsable'
 import { Story, Meta } from '@storybook/react/types-6-0'
-import { CustomComment } from '../components/CommentViewer'
+import { CustomComment } from '../types/types'
 import { forceReRender } from '@storybook/react'
+import { CodeReviewCardProps } from '../components/CodeReviewCard'
 
 export default {
   component: CodeReviewCollapsable,
@@ -39,24 +40,76 @@ const customComment2: CustomComment = {
   type: 'comment'
 }
 
-const customCommentContainer = [customComment1, customComment2]
+let customCommentContainer = [customComment1, customComment2]
 
-const handleCommentCreatedJsx = (comment: CustomComment) => {
-  if (jsx.args && jsx.args.commentContainer) {
-    jsx.args.commentContainer = [...jsx.args.commentContainer, comment]
-    forceReRender()
+const handleCommentEdited = (
+  oldComment: CustomComment,
+  newComment: CustomComment,
+  story: Story<CodeReviewCollapsableProps>
+) => {
+  if (
+    story.args &&
+    story.args.reviewProps &&
+    story.args.reviewProps.commentContainer
+  ) {
+    const index = story.args.reviewProps.commentContainer.findIndex(
+      element => element === oldComment
+    )
+    if (index > 1) {
+      story.args.reviewProps.commentContainer[index] = newComment
+      forceReRender()
+    }
+  }
+}
+
+const handleCommentCreated = (
+  comment: CustomComment,
+  story: Story<CodeReviewCollapsableProps>
+) => {
+  if (
+    story.args &&
+    story.args.reviewProps &&
+    story.args.reviewProps.commentContainer
+  ) {
+    customCommentContainer = [...customCommentContainer, comment]
+    story.args.reviewProps.commentContainer = customCommentContainer
+  }
+  forceReRender()
+}
+
+const handleCommentDeleted = (
+  comment: CustomComment,
+  story: Story<CodeReviewCollapsableProps>
+) => {
+  if (
+    story.args &&
+    story.args.reviewProps &&
+    story.args.reviewProps.commentContainer
+  ) {
+    const index = story.args.reviewProps.commentContainer.findIndex(
+      element => element === comment
+    )
+    if (index > -1) {
+      customCommentContainer.splice(index, 1)
+      story.args.reviewProps.commentContainer = customCommentContainer
+      forceReRender()
+    }
   }
 }
 
 export const jsx = Template.bind({})
 jsx.args = {
-  code: jsxCode,
-  language: 'jsx',
-  commentContainer: customCommentContainer,
-  onCommentCreated: handleCommentCreatedJsx,
-  author: 'Storybook Tester',
-  showResult: true,
-  showComments: true,
+  reviewProps: {
+    code: jsxCode,
+    language: 'jsx',
+    showResult: true,
+    commentContainer: customCommentContainer,
+    onCommentCreated: comment => handleCommentCreated(comment, jsx),
+    onCommentDeleted: comment => handleCommentDeleted(comment, jsx),
+    onCommentEdited: (oldComment, newComment) =>
+      handleCommentEdited(oldComment, newComment, jsx),
+    user: 'Storybook Tester'
+  },
   width: 500,
   title: 'testReview.jsx'
 }

@@ -4,7 +4,7 @@ import {
   CodeReviewCardProps
 } from '../components/CodeReviewCard'
 import { Story, Meta } from '@storybook/react/types-6-0'
-import { CustomComment } from '../components/CommentViewer'
+import { CustomComment } from '../types/types'
 import { forceReRender } from '@storybook/react'
 
 export default {
@@ -126,7 +126,7 @@ let customCommentContainer = [
   customComment2,
   customComment3,
   customComment4,
-    customComment5
+  customComment5
 ]
 
 const handleCommentEdited = (
@@ -195,7 +195,8 @@ jsx.args = {
     onCommentDeleted: comment => handleCommentDeleted(comment, jsx),
     onCommentEdited: (oldComment, newComment) =>
       handleCommentEdited(oldComment, newComment, jsx),
-    user: 'Storybook Tester'
+    user: 'Storybook Tester',
+    role: 'student'
   },
   width: 500,
   title: 'testReview.jsx'
@@ -212,7 +213,8 @@ css.args = {
     onCommentDeleted: comment => handleCommentDeleted(comment, css),
     onCommentEdited: (oldComment, newComment) =>
       handleCommentEdited(oldComment, newComment, css),
-    user: 'Storybook Tester'
+    user: 'Storybook Tester',
+    role: 'teacher'
   },
   width: 600,
   title: 'layout.css'
@@ -229,7 +231,8 @@ cpp.args = {
     onCommentDeleted: comment => handleCommentDeleted(comment, cpp),
     onCommentEdited: (oldComment, newComment) =>
       handleCommentEdited(oldComment, newComment, cpp),
-    user: 'Storybook Tester'
+    user: 'Storybook Tester',
+    role: 'student'
   },
   width: 500,
   title: 'matrix.cpp'

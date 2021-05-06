@@ -8,7 +8,7 @@ import {
   MessageTwoTone,
   EllipsisOutlined
 } from '@ant-design/icons'
-import { EditorPlaceholder } from '../types/types'
+import { CustomComment, EditorPlaceholder } from '../types/types'
 
 const { Panel } = Collapse
 
@@ -25,13 +25,6 @@ export interface CommentViewerProps {
   active: boolean
   onToggle: () => void
   user: string
-}
-
-export type CustomComment = {
-  author?: string
-  content: string
-  line?: number
-  type: 'comment' | 'mildInfo' | 'severeInfo'
 }
 
 export const CommentViewer: React.FC<CommentViewerProps> = ({

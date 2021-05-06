@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { extractTargetValue } from './CommentEditor'
+import { extractTargetValue } from '../utils/UtilityFunctions'
 import { Button, Space } from 'antd'
 import './ReplyEditor.css'
 import TextArea from 'antd/lib/input/TextArea'
@@ -10,20 +10,24 @@ export interface ReplyEditorProps {
   placeholder: EditorPlaceholder
   textValue?: string
   onCancel?: () => void
+  line?: number
+  focus?: boolean
 }
 
 const ReplyEditor: React.FC<ReplyEditorProps> = ({
   onSubmit,
   placeholder,
   textValue,
-  onCancel
+  onCancel,
+  line,
+  focus
 }) => {
   const [value, setValue] = useState<string>(textValue || '')
   const [isFocused, setIsFocused] = useState<boolean>(false)
   const [rows, setRows] = useState<number>(1)
 
   useEffect(() => {
-    if (textValue !== undefined) {
+    if (textValue !== undefined || focus) {
       handleFocus()
     }
   }, [textValue])
@@ -54,11 +58,19 @@ const ReplyEditor: React.FC<ReplyEditorProps> = ({
     }
   }
 
+  const getPlaceholder = () => {
+    if (line !== undefined) {
+      return 'Add a ' + placeholder + ' to line ' + (line + 1) + ' ...'
+    } else {
+      return 'Add ' + placeholder + ' ...'
+    }
+  }
+
   return (
     <div className="replyEditor" data-testid="replyEditor">
       <TextArea
         rows={rows}
-        placeholder={'Add ' + placeholder + ' ...'}
+        placeholder={getPlaceholder()}
         onChange={extractTargetValue(setValue)}
         value={value}
         onFocus={() => handleFocus()}

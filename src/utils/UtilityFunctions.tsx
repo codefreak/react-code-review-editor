@@ -6,3 +6,7 @@ export function onlyUnique(
 ): boolean {
   return self.indexOf(value) === index
 }
+
+export function extractTargetValue<V, T>(fn: (value: V) => T) {
+  return (e: { target: { value: V } }) => fn(e.target.value)
+}

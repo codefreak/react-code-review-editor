@@ -13,10 +13,12 @@ import {
   LineOutputProps,
   TokenInputProps,
   TokenOutputProps,
-  EditorPlaceholder
+  EditorPlaceholder,
+  Role
 } from '../types/types'
-import CommentEditor from './CommentEditor'
-import CommentViewer, { CustomComment } from './CommentViewer'
+import CommentViewer from './CommentViewer'
+import { CustomComment } from '../types/types'
+import ReplyEditor from './ReplyEditor'
 
 export interface CodeLineProps {
   line: Token[]
@@ -35,6 +37,7 @@ export interface CodeLineProps {
   active: boolean
   onToggle: () => void
   user: string
+  role: Role
 }
 
 export const CodeLine: React.FC<CodeLineProps> = ({
@@ -50,7 +53,8 @@ export const CodeLine: React.FC<CodeLineProps> = ({
   onToggle,
   user,
   onCommentEdited,
-  onCommentDeleted
+  onCommentDeleted,
+  role
 }) => {
   // isShown manages visibility of addButton
   const [isShown, setIsShown] = useState(false)
@@ -139,10 +143,20 @@ export const CodeLine: React.FC<CodeLineProps> = ({
 
   const getPlaceholder = (): EditorPlaceholder => {
     if (mildInfo && !commentThread) {
-      return 'Comment'
-    } else {
-      return 'Reply'
+      if (role === 'teacher') {
+        return 'Comment'
+      } else {
+        return 'Question'
+      }
     }
+    if (!mildInfo && !commentThread && !severeInfo) {
+      if (role === 'teacher') {
+        return 'Comment'
+      } else {
+        return 'Question'
+      }
+    }
+    return 'Reply'
   }
 
   return (
@@ -227,14 +241,37 @@ export const CodeLine: React.FC<CodeLineProps> = ({
       )}
 
       {isEditorShown && showComments && (
-        <CommentEditor
-          onCancel={() => setIsEditorShown(false)}
-          line={lineNo}
-          onSubmit={value => {
-            onSubmit(value)
-            setIsEditorShown(false)
+        <div
+          style={{
+            paddingLeft: '6em'
           }}
-        />
+        >
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              paddingTop: '0.5em',
+              paddingBottom: '1em',
+              border: '1px solid #d9d9d9',
+              paddingLeft: '1.1em',
+              paddingRight: '1.1em',
+              marginLeft: 0,
+              marginBottom: '0.5em',
+              marginTop: '0.5em'
+            }}
+          >
+            <ReplyEditor
+              onCancel={() => setIsEditorShown(false)}
+              line={lineNo}
+              onSubmit={value => {
+                onSubmit(value)
+                setIsEditorShown(false)
+              }}
+              placeholder={getPlaceholder()}
+              focus
+            />
+          </div>
+        </div>
       )}
     </>
   )

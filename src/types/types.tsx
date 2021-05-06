@@ -9,7 +9,23 @@ export type Action =
 
 export type State = boolean[]
 
-export type EditorPlaceholder = 'Reply' | 'Edit' | 'Comment' | 'Result'
+export type Direction = 'up' | 'down'
+
+export type EditorPlaceholder =
+  | 'Reply'
+  | 'Edit'
+  | 'Comment'
+  | 'Result'
+  | 'Question'
+
+export type Role = 'student' | 'teacher'
+
+export type CustomComment = {
+  author?: string
+  content: string
+  line?: number
+  type: 'comment' | 'mildInfo' | 'severeInfo'
+}
 
 /*
 Following types are needed for react-prism-renderer props. Sadly these types aren't exported by the library itself hence
