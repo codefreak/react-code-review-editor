@@ -6,6 +6,7 @@ import {
 import { Story, Meta } from '@storybook/react/types-6-0'
 import { CustomComment } from '../types/types'
 import { forceReRender } from '@storybook/react'
+import moment from 'moment'
 
 export default {
   component: CodeReviewCard,
@@ -92,33 +93,38 @@ Matrix::Matrix(int z, int s, int wert) {
 const customComment1: CustomComment = {
   author: 'Teacher',
   content: 'Das war ja wohl nichts.',
-  type: 'comment'
+  type: 'comment',
+  timeAdded: moment().format('DD-MM-YY HH:mm')
 }
 
 const customComment2: CustomComment = {
   line: 3,
   author: 'Spock',
   content: 'Live long and prosper.',
-  type: 'comment'
+  type: 'comment',
+  timeAdded: moment().format('DD-MM-YY HH:mm')
 }
 
 const customComment3: CustomComment = {
   line: 1,
   author: 'Code Quality',
   content: 'Syntaktischer Zucker in Linie 4',
-  type: 'mildInfo'
+  type: 'mildInfo',
+  timeAdded: moment().format('DD-MM-YY HH:mm')
 }
 
 const customComment4: CustomComment = {
   author: 'Test1',
   content: `Expected: 10\nBut was: 0`,
-  type: 'severeInfo'
+  type: 'severeInfo',
+  timeAdded: moment().format('DD-MM-YY HH:mm')
 }
 
 const customComment5: CustomComment = {
   author: 'Test1',
-  content: `Expected: 10\nBut was: 0`,
-  type: 'severeInfo'
+  content: `Expected better results.. :(`,
+  type: 'severeInfo',
+  timeAdded: moment().format('DD-MM-YY HH:mm')
 }
 
 let customCommentContainer = [
@@ -198,7 +204,7 @@ jsx.args = {
     user: 'Storybook Tester',
     role: 'student'
   },
-  width: 500,
+  width: 700,
   title: 'testReview.jsx'
 }
 
@@ -216,7 +222,7 @@ css.args = {
     user: 'Storybook Tester',
     role: 'teacher'
   },
-  width: 600,
+  width: 700,
   title: 'layout.css'
 }
 
@@ -234,6 +240,6 @@ cpp.args = {
     user: 'Storybook Tester',
     role: 'student'
   },
-  width: 500,
+  width: 700,
   title: 'matrix.cpp'
 }

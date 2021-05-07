@@ -9,6 +9,7 @@ import {
   EllipsisOutlined
 } from '@ant-design/icons'
 import { CustomComment, EditorPlaceholder } from '../types/types'
+import BorderWrapper from './BorderWrapper'
 
 const { Panel } = Collapse
 
@@ -158,7 +159,8 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
         author: commentContext.author,
         content: value,
         type: commentContext.type,
-        line: commentContext.line
+        line: commentContext.line,
+        timeAdded: commentContext.timeAdded
       }
       onCommentEdited(commentContext, newComment)
     }
@@ -193,100 +195,186 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
     </Menu>
   )
 
+  const getWrapperTop = () => {
+    if (result) {
+      return 2
+    } else {
+      return 0.5
+    }
+  }
+
+  const getWrapperBottom = () => {
+    if (result) {
+      return 0
+    } else {
+      return 1.5
+    }
+  }
+
   return (
     <div className="commentViewer" data-testid="commentViewer">
-      <Collapse
-        className="commentViewerCollapse"
-        activeKey={activeKey}
-        onChange={() => onToggle()}
+      <BorderWrapper
+        heightTop={getWrapperTop()}
+        heightBottom={getWrapperBottom()}
       >
-        <Panel
-          key={1}
-          header={getHeader()}
-          className="customPanel"
-          extra={getExtra()}
+        <Collapse
+          className="commentViewerCollapse"
+          activeKey={activeKey}
+          onChange={() => onToggle()}
         >
-          {!result ? (
-            <>
-              <div className="comments" data-testid="comments">
-                {comments.map((comment, key) => {
-                  if (
-                    comment.type === 'comment' &&
-                    comment.line !== undefined
-                  ) {
-                    if (comment.author === user && !isEditing) {
-                      return (
-                        <div
-                          key={key}
-                          style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                            paddingRight: '0.5em'
-                          }}
-                        >
-                          <Comment
-                            content={<pre>{comment.content}</pre>}
-                            author={comment.author}
-                          />
-                          <Dropdown
-                            overlay={dropMenu}
-                            placement="bottomCenter"
-                            trigger={['click']}
+          <Panel
+            key={1}
+            header={getHeader()}
+            className="customPanel"
+            extra={getExtra()}
+          >
+            {!result ? (
+              <>
+                <div className="comments" data-testid="comments">
+                  {comments.map((comment, key) => {
+                    if (
+                      comment.type === 'comment' &&
+                      comment.line !== undefined
+                    ) {
+                      if (comment.author === user && !isEditing) {
+                        return (
+                          <div
+                            key={key}
+                            style={{
+                              display: 'flex',
+                              flexDirection: 'row',
+                              justifyContent: 'space-between',
+                              paddingRight: '0.5em'
+                            }}
                           >
-                            <Button
-                              icon={<EllipsisOutlined />}
-                              type="text"
-                              shape="circle"
-                              onClick={() => setCommentContext(comment)}
+                            <Comment
+                              content={<pre>{comment.content}</pre>}
+                              author={comment.author}
+                              datetime={comment.timeAdded}
                             />
-                          </Dropdown>
-                        </div>
-                      )
-                    } else {
-                      if (
-                        comment.author === user &&
-                        isEditing &&
-                        comment === commentContext
-                      ) {
+                            <Dropdown
+                              overlay={dropMenu}
+                              placement="bottomCenter"
+                              trigger={['click']}
+                            >
+                              <Button
+                                icon={<EllipsisOutlined />}
+                                type="text"
+                                shape="circle"
+                                onClick={() => setCommentContext(comment)}
+                              />
+                            </Dropdown>
+                          </div>
+                        )
+                      } else {
+                        if (
+                          comment.author === user &&
+                          isEditing &&
+                          comment === commentContext
+                        ) {
+                          return (
+                            <Comment
+                              key={key}
+                              datetime={comment.timeAdded}
+                              content={
+                                <ReplyEditor
+                                  onSubmit={handleEdit}
+                                  placeholder="Edit"
+                                  textValue={comment.content}
+                                  onCancel={() => setIsEditing(false)}
+                                />
+                              }
+                              author={comment.author}
+                            />
+                          )
+                        }
                         return (
                           <Comment
                             key={key}
-                            content={
-                              <ReplyEditor
-                                onSubmit={handleEdit}
-                                placeholder="Edit"
-                                textValue={comment.content}
-                                onCancel={() => setIsEditing(false)}
-                              />
-                            }
+                            content={<pre>{comment.content}</pre>}
                             author={comment.author}
+                            datetime={comment.timeAdded}
                           />
                         )
                       }
+                    }
+                  })}
+
+                  {!isEditing && (
+                    <ReplyEditor
+                      onSubmit={handleReplyCreated}
+                      placeholder={getPlaceholder()}
+                    />
+                  )}
+                </div>
+
+                {comments.find(element => element.type === 'mildInfo') && (
+                  <div className="infoComments">
+                    {comments.map((comment, key) => {
+                      if (comment.type === 'mildInfo') {
+                        return (
+                          <div
+                            key={key}
+                            style={{
+                              paddingTop: '0.5em',
+                              paddingLeft: '0.15em'
+                            }}
+                          >
+                            <Comment
+                              content={<pre>{comment.content}</pre>}
+                              datetime={comment.timeAdded}
+                              author={
+                                <div
+                                  style={{
+                                    display: 'flex',
+                                    flexDirection: 'row'
+                                  }}
+                                >
+                                  <InfoCircleTwoTone
+                                    twoToneColor="#FAC302"
+                                    style={{
+                                      paddingTop: '0.25em',
+                                      paddingRight: '0.5em'
+                                    }}
+                                  />
+                                  <p>{comment.author}</p>
+                                </div>
+                              }
+                            />
+                          </div>
+                        )
+                      }
+                    })}
+                  </div>
+                )}
+              </>
+            ) : (
+              <>
+                <div className="comments">
+                  {comments.map((comment, key) => {
+                    if (
+                      comment.type === 'comment' &&
+                      comment.line === undefined
+                    ) {
                       return (
                         <Comment
                           key={key}
-                          content={<pre>{comment.content}</pre>}
+                          datetime={comment.timeAdded}
+                          content={comment.content}
                           author={comment.author}
                         />
                       )
                     }
-                  }
-                })}
-
-                {!isEditing && (
+                  })}
                   <ReplyEditor
                     onSubmit={handleReplyCreated}
                     placeholder={getPlaceholder()}
                   />
-                )}
-              </div>
+                </div>
 
-              {comments.find(element => element.type === 'mildInfo') && (
                 <div className="infoComments">
                   {comments.map((comment, key) => {
-                    if (comment.type === 'mildInfo') {
+                    if (comment.type === 'severeInfo') {
                       return (
                         <div
                           key={key}
@@ -297,6 +385,7 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
                         >
                           <Comment
                             content={<pre>{comment.content}</pre>}
+                            datetime={comment.timeAdded}
                             author={
                               <div
                                 style={{
@@ -304,8 +393,8 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
                                   flexDirection: 'row'
                                 }}
                               >
-                                <InfoCircleTwoTone
-                                  twoToneColor="#FAC302"
+                                <ExclamationCircleTwoTone
+                                  twoToneColor="#F00E3B"
                                   style={{
                                     paddingTop: '0.25em',
                                     paddingRight: '0.5em'
@@ -320,71 +409,11 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
                     }
                   })}
                 </div>
-              )}
-            </>
-          ) : (
-            <>
-              <div className="comments">
-                {comments.map((comment, key) => {
-                  if (
-                    comment.type === 'comment' &&
-                    comment.line === undefined
-                  ) {
-                    return (
-                      <Comment
-                        key={key}
-                        content={comment.content}
-                        author={comment.author}
-                      />
-                    )
-                  }
-                })}
-                <ReplyEditor
-                  onSubmit={handleReplyCreated}
-                  placeholder={getPlaceholder()}
-                />
-              </div>
-
-              <div className="infoComments">
-                {comments.map((comment, key) => {
-                  if (comment.type === 'severeInfo') {
-                    return (
-                      <div
-                        key={key}
-                        style={{
-                          paddingTop: '0.5em',
-                          paddingLeft: '0.15em'
-                        }}
-                      >
-                        <Comment
-                          content={<pre>{comment.content}</pre>}
-                          author={
-                            <div
-                              style={{
-                                display: 'flex',
-                                flexDirection: 'row'
-                              }}
-                            >
-                              <ExclamationCircleTwoTone
-                                twoToneColor="#F00E3B"
-                                style={{
-                                  paddingTop: '0.25em',
-                                  paddingRight: '0.5em'
-                                }}
-                              />
-                              <p>{comment.author}</p>
-                            </div>
-                          }
-                        />
-                      </div>
-                    )
-                  }
-                })}
-              </div>
-            </>
-          )}
-        </Panel>
-      </Collapse>
+              </>
+            )}
+          </Panel>
+        </Collapse>
+      </BorderWrapper>
     </div>
   )
 }

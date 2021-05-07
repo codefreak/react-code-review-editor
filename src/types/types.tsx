@@ -25,6 +25,7 @@ export type CustomComment = {
   content: string
   line?: number
   type: 'comment' | 'mildInfo' | 'severeInfo'
+  timeAdded: string
 }
 
 /*

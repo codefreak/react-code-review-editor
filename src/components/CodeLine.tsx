@@ -3,7 +3,6 @@ import { Line, LineContent, LineNo } from './styles'
 import { Button } from 'antd'
 import {
   PlusOutlined,
-  ExclamationCircleTwoTone,
   InfoCircleTwoTone,
   MessageTwoTone
 } from '@ant-design/icons'
@@ -19,6 +18,7 @@ import {
 import CommentViewer from './CommentViewer'
 import { CustomComment } from '../types/types'
 import ReplyEditor from './ReplyEditor'
+import BorderWrapper from './BorderWrapper'
 
 export interface CodeLineProps {
   line: Token[]
@@ -64,9 +64,6 @@ export const CodeLine: React.FC<CodeLineProps> = ({
   const [mildInfo, setMildInfo] = useState<boolean>(
     comments.map(element => element.type).includes('mildInfo')
   )
-  const [severeInfo, setSevereInfo] = useState<boolean>(
-    comments.map(element => element.type).includes('severeInfo')
-  )
 
   // check what kind of comments are present to manage annotations
   useEffect(() => {
@@ -81,37 +78,21 @@ export const CodeLine: React.FC<CodeLineProps> = ({
     } else {
       setMildInfo(false)
     }
-
-    if (comments.map(element => element.type).includes('severeInfo')) {
-      setSevereInfo(true)
-    } else {
-      setSevereInfo(false)
-    }
   }, [comments])
 
   // returns the right padding value depending on the number of annotations present
   const getPaddingLeft = () => {
     if (!showComments) {
-      return 4.3
+      return 3
     }
-    if (
-      (commentThread && !(mildInfo || severeInfo)) ||
-      (mildInfo && !(commentThread || severeInfo)) ||
-      (severeInfo && !(commentThread || mildInfo))
-    ) {
-      return 2.95
-    }
-    if (
-      (commentThread && mildInfo && !severeInfo) ||
-      (mildInfo && severeInfo && !commentThread) ||
-      (commentThread && severeInfo && !mildInfo)
-    ) {
+    if ((commentThread && !mildInfo) || (mildInfo && !commentThread)) {
       return 1.65
     }
-    if (commentThread && mildInfo && severeInfo) {
+    if (commentThread && mildInfo) {
       return 0.35
     }
-    return 4.3
+
+    return 3
   }
 
   // show addButton and adjust padding accordingly
@@ -149,7 +130,7 @@ export const CodeLine: React.FC<CodeLineProps> = ({
         return 'Question'
       }
     }
-    if (!mildInfo && !commentThread && !severeInfo) {
+    if (!mildInfo && !commentThread) {
       if (role === 'teacher') {
         return 'Comment'
       } else {
@@ -168,7 +149,11 @@ export const CodeLine: React.FC<CodeLineProps> = ({
         onMouseLeave={() => handleMouseLeave()}
         data-testid={'line' + lineNo}
       >
-        <div className="lineLeft">
+        <div
+          style={{
+            display: 'table-row'
+          }}
+        >
           {isShown && showComments && (
             <>
               <Button
@@ -179,14 +164,6 @@ export const CodeLine: React.FC<CodeLineProps> = ({
                 data-testid="addButton"
               />
             </>
-          )}
-
-          {severeInfo && showComments && (
-            <ExclamationCircleTwoTone
-              style={{ paddingLeft: '0.15em', paddingRight: '0.15em' }}
-              onClick={() => onToggle()}
-              twoToneColor="#F00E3B"
-            />
           )}
 
           {mildInfo && showComments && (
@@ -243,34 +220,35 @@ export const CodeLine: React.FC<CodeLineProps> = ({
       {isEditorShown && showComments && (
         <div
           style={{
-            paddingLeft: '6em'
+            paddingLeft: '4.65em'
           }}
         >
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              paddingTop: '0.5em',
-              paddingBottom: '1em',
-              border: '1px solid #d9d9d9',
-              paddingLeft: '1.1em',
-              paddingRight: '1.1em',
-              marginLeft: 0,
-              marginBottom: '0.5em',
-              marginTop: '0.5em'
-            }}
-          >
-            <ReplyEditor
-              onCancel={() => setIsEditorShown(false)}
-              line={lineNo}
-              onSubmit={value => {
-                onSubmit(value)
-                setIsEditorShown(false)
+          <BorderWrapper heightTop={0.5} heightBottom={2}>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                paddingTop: '0.5em',
+                paddingBottom: '0.5em',
+                border: '1px solid #d9d9d9',
+                borderRadius: '0 2px 15px 0',
+                paddingLeft: '1.1em',
+                paddingRight: '0.5em',
+                marginLeft: 0
               }}
-              placeholder={getPlaceholder()}
-              focus
-            />
-          </div>
+            >
+              <ReplyEditor
+                onCancel={() => setIsEditorShown(false)}
+                line={lineNo}
+                onSubmit={value => {
+                  onSubmit(value)
+                  setIsEditorShown(false)
+                }}
+                placeholder={getPlaceholder()}
+                focus
+              />
+            </div>
+          </BorderWrapper>
         </div>
       )}
     </>

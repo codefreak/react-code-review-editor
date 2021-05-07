@@ -18,6 +18,7 @@ import { onlyUnique } from '../utils/UtilityFunctions'
 import { State, Action } from '../types/types'
 import { SettingOutlined } from '@ant-design/icons'
 import { Menu } from 'antd'
+import moment from 'moment'
 
 export interface CodeReviewProps {
   code: string
@@ -166,14 +167,16 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
         line: line,
         content: content,
         author: author,
-        type: 'comment'
+        type: 'comment',
+        timeAdded: moment().format('DD-MM-YY HH:mm')
       }
     } else {
       // result comment
       newComment = {
         content: content,
         author: author,
-        type: 'comment'
+        type: 'comment',
+        timeAdded: moment().format('DD-MM-YY HH:mm')
       }
     }
     return newComment
@@ -257,12 +260,13 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
   )
 
   return (
-    <div>
+    <div className="codeReview">
       <div
         style={{
           display: 'flex',
           flexDirection: 'row-reverse',
-          paddingTop: '0.5em'
+          borderLeft: '1px solid #d9d9d9',
+          marginLeft: '4.65em'
         }}
       >
         <Dropdown
@@ -318,13 +322,7 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
       </Highlight>
 
       {showResult && showComments && (
-        <div
-          style={{
-            paddingLeft: '0.5em',
-            paddingRight: '0.5em',
-            paddingTop: '1em'
-          }}
-        >
+        <div>
           <CommentViewer
             comments={getResults()}
             result

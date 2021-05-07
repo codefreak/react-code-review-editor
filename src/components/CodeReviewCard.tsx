@@ -1,7 +1,7 @@
 import React from 'react'
 import { Card } from 'antd'
 import 'antd/dist/antd.css'
-import './CodeReview.css'
+import './CodeReviewCard.css'
 import CodeReview, { CodeReviewProps } from './CodeReview'
 
 const cardBodyStyle = {
