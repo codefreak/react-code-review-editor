@@ -1,5 +1,4 @@
 import React, {
-  CSSProperties,
   useCallback,
   useEffect,
   useMemo,
@@ -13,12 +12,10 @@ import './CodeReview.css'
 import CodeLine from './CodeLine'
 import CommentViewer from './CommentViewer'
 import { CustomComment, Role } from '../types/types'
-import { Button, Dropdown, Tooltip } from 'antd'
 import { onlyUnique } from '../utils/UtilityFunctions'
 import { State, Action } from '../types/types'
-import { SettingOutlined } from '@ant-design/icons'
-import { Menu } from 'antd'
 import moment from 'moment'
+import ShortcutMenu from './ShortcutMenu'
 
 export interface CodeReviewProps {
   code: string
@@ -221,44 +218,6 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
     onCommentDeleted(comment)
   }
 
-  const menuItemStyle: CSSProperties = {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between'
-  }
-
-  const shortcutStyle: CSSProperties = {
-    background: '#ECECEC',
-    marginLeft: '1em',
-    paddingLeft: '0.5em',
-    paddingRight: '0.5em',
-    borderRadius: '5px'
-  }
-
-  // TODO refactor to own component
-  const dropMenu = (
-    <Menu>
-      <Menu.Item onClick={() => dispatch({ type: 'expand-all' })}>
-        <div style={menuItemStyle}>
-          <p>Expand all</p>
-          <p style={shortcutStyle}>alt + e</p>
-        </div>
-      </Menu.Item>
-      <Menu.Item onClick={() => dispatch({ type: 'collapse-all' })}>
-        <div style={menuItemStyle}>
-          <p>Collapse all</p>
-          <p style={shortcutStyle}>alt + c</p>
-        </div>
-      </Menu.Item>
-      <Menu.Item onClick={() => setShowComments(!showComments)}>
-        <div style={menuItemStyle}>
-          {showComments ? <p>Hide comments</p> : <p>Show comments</p>}
-          <p style={shortcutStyle}>alt + h</p>
-        </div>
-      </Menu.Item>
-    </Menu>
-  )
-
   return (
     <div className="codeReview">
       <div
@@ -269,15 +228,12 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
           marginLeft: '4.65em'
         }}
       >
-        <Dropdown
-          overlay={dropMenu}
-          placement="bottomCenter"
-          trigger={['click']}
-        >
-          <Tooltip title="shortcuts">
-            <Button icon={<SettingOutlined />} type="text" shape="circle" />
-          </Tooltip>
-        </Dropdown>
+        <ShortcutMenu
+          onCollapseClick={() => dispatch({ type: 'collapse-all' })}
+          onExpandClick={() => dispatch({ type: 'expand-all' })}
+          onShowClick={() => setShowComments(!showComments)}
+        />
+
       </div>
 
       <Highlight
@@ -322,20 +278,16 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
       </Highlight>
 
       {showResult && showComments && (
-        <div>
-          <CommentViewer
-            comments={getResults()}
-            result
-            onReplyCreated={value =>
-              onCommentCreated(createComment(value, user))
-            }
-            active={state[0]}
-            onToggle={() => dispatch({ type: 'toggle', index: 0 })}
-            user={user}
-            onCommentDeleted={onCommentDeleted}
-            onCommentEdited={handleDelete}
-          />
-        </div>
+        <CommentViewer
+          comments={getResults()}
+          result
+          onReplyCreated={value => onCommentCreated(createComment(value, user))}
+          active={state[0]}
+          onToggle={() => dispatch({ type: 'toggle', index: 0 })}
+          user={user}
+          onCommentDeleted={onCommentDeleted}
+          onCommentEdited={handleDelete}
+        />
       )}
     </div>
   )
