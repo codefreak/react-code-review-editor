@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, {CSSProperties, useEffect, useState} from 'react'
 import { Line, LineContent, LineNo } from './styles'
 import { Button } from 'antd'
 import {
@@ -19,6 +19,10 @@ import CommentViewer from './CommentViewer'
 import { CustomComment } from '../types/types'
 import ReplyEditor from './ReplyEditor'
 import BorderWrapper from './BorderWrapper'
+
+const annotationStyle: CSSProperties = {
+  paddingLeft: "0.15em"
+}
 
 export interface CodeLineProps {
   line: Token[]
@@ -83,23 +87,23 @@ export const CodeLine: React.FC<CodeLineProps> = ({
   // returns the right padding value depending on the number of annotations present
   const getPaddingLeft = () => {
     if (!showComments) {
-      return 3
+      return 2.8
     }
     if ((commentThread && !mildInfo) || (mildInfo && !commentThread)) {
-      return 1.65
+      return 1.5
     }
     if (commentThread && mildInfo) {
-      return 0.35
+      return 0.2
     }
 
-    return 3
+    return 2.8
   }
 
   // show addButton and adjust padding accordingly
   const handleMouseEnter = () => {
     if (!commentThread && !mildInfo && lineNoRef.current && showComments) {
       lineNoRef.current.style.paddingLeft =
-        getPaddingLeft() - 1.5 + getPaddingLeftOffset() + 'em'
+        getPaddingLeft() - 1.3 + getPaddingLeftOffset() + 'em'
       setIsShown(true)
     }
   }
@@ -141,12 +145,13 @@ export const CodeLine: React.FC<CodeLineProps> = ({
   }
 
   return (
-    <>
+    <div
+        onMouseEnter={() => handleMouseEnter()}
+         onMouseLeave={() => handleMouseLeave()}
+    >
       <Line
         key={lineNo}
         {...getLineProps({ line, key: lineNo })}
-        onMouseEnter={() => handleMouseEnter()}
-        onMouseLeave={() => handleMouseLeave()}
         data-testid={'line' + lineNo}
       >
         <div
@@ -154,32 +159,35 @@ export const CodeLine: React.FC<CodeLineProps> = ({
             display: 'table-row'
           }}
         >
-          {isShown && showComments && (
-            <>
-              <Button
-                icon={<PlusOutlined style={{ paddingLeft: '0.1em' }} />}
-                size="small"
-                onClick={() => setIsEditorShown(true)}
-                style={{ width: '1.5em', height: '1.5em' }}
-                data-testid="addButton"
-              />
-            </>
-          )}
+            {isShown && showComments && (
+                <>
+                  <Button
+                      icon={<PlusOutlined style={{ paddingLeft: '0.1em' }} />}
+                      size="small"
+                      onClick={() => setIsEditorShown(true)}
+                      style={{ width: '1.5em', height: '1.5em' }}
+                      data-testid="addButton"
+                  />
+                </>
+            )}
 
-          {mildInfo && showComments && (
-            <InfoCircleTwoTone
-              style={{ paddingLeft: '0.15em', paddingRight: '0.15em' }}
-              twoToneColor="#FAC302"
-              onClick={() => onToggle()}
-            />
-          )}
+          <div style={annotationStyle}>
+            {mildInfo && showComments && (
+                <InfoCircleTwoTone
+                    style={{ paddingLeft: '0.15em', paddingRight: '0.15em' }}
+                    twoToneColor="#FAC302"
+                    onClick={() => onToggle()}
+                />
+            )}
 
-          {commentThread && showComments && (
-            <MessageTwoTone
-              style={{ paddingLeft: '0.15em', paddingRight: '0.15em' }}
-              onClick={() => onToggle()}
-            />
-          )}
+            {commentThread && showComments && (
+                <MessageTwoTone
+                    style={{ paddingLeft: '0.15em', paddingRight: '0.15em' }}
+                    onClick={() => onToggle()}
+                />
+            )}
+          </div>
+
 
           <LineNo
             style={{
@@ -251,7 +259,7 @@ export const CodeLine: React.FC<CodeLineProps> = ({
           </BorderWrapper>
         </div>
       )}
-    </>
+    </div>
   )
 }
 
