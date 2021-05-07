@@ -60,8 +60,8 @@ export const CodeLine: React.FC<CodeLineProps> = ({
   onCommentDeleted,
   role
 }) => {
-  // isShown manages visibility of addButton
-  const [isShown, setIsShown] = useState(false)
+  // isAddButtonShown manages visibility of addButton
+  const [isAddButtonShown, setIsAddButtonShown] = useState(false)
   const lineNoRef = React.createRef<HTMLSpanElement>()
   const [isEditorShown, setIsEditorShown] = useState(false)
   const [commentThread, setCommentThread] = useState<boolean>()
@@ -84,6 +84,13 @@ export const CodeLine: React.FC<CodeLineProps> = ({
     }
   }, [comments])
 
+  // prevent awkward border placements when showComments gets toggled
+  useEffect(() => {
+    if(!showComments) {
+      handleMouseLeave()
+    }
+  }, [showComments])
+
   // returns the right padding value depending on the number of annotations present
   const getPaddingLeft = () => {
     if (!showComments) {
@@ -101,10 +108,16 @@ export const CodeLine: React.FC<CodeLineProps> = ({
 
   // show addButton and adjust padding accordingly
   const handleMouseEnter = () => {
-    if (!commentThread && !mildInfo && lineNoRef.current && showComments) {
+    if (
+        !commentThread &&
+        !mildInfo &&
+        lineNoRef.current &&
+        showComments &&
+        !isEditorShown
+    ) {
       lineNoRef.current.style.paddingLeft =
         getPaddingLeft() - 1.3 + getPaddingLeftOffset() + 'em'
-      setIsShown(true)
+      setIsAddButtonShown(true)
     }
   }
 
@@ -122,7 +135,7 @@ export const CodeLine: React.FC<CodeLineProps> = ({
     if (lineNoRef.current) {
       lineNoRef.current.style.paddingLeft =
         getPaddingLeft() + getPaddingLeftOffset() + 'em'
-      setIsShown(false)
+      setIsAddButtonShown(false)
     }
   }
 
@@ -159,12 +172,16 @@ export const CodeLine: React.FC<CodeLineProps> = ({
             display: 'table-row'
           }}
         >
-            {isShown && showComments && (
+            {isAddButtonShown && showComments && (
                 <>
                   <Button
                       icon={<PlusOutlined style={{ paddingLeft: '0.1em' }} />}
                       size="small"
-                      onClick={() => setIsEditorShown(true)}
+                      onClick={() => {
+                        setIsEditorShown(true)
+                        setIsAddButtonShown(false)
+                        handleMouseLeave()
+                      }}
                       style={{ width: '1.5em', height: '1.5em' }}
                       data-testid="addButton"
                   />
