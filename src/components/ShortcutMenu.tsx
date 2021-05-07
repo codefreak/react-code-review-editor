@@ -1,6 +1,6 @@
 import React, { CSSProperties, useState } from 'react'
-import {Button, Dropdown, Menu, Tooltip} from 'antd'
-import {SettingOutlined} from "@ant-design/icons";
+import { Button, Dropdown, Menu, Tooltip } from 'antd'
+import { SettingOutlined } from '@ant-design/icons'
 
 const menuItemStyle: CSSProperties = {
   display: 'flex',
@@ -20,51 +20,54 @@ interface ShortcutMenuProps {
   onExpandClick: () => void
   onCollapseClick: () => void
   onShowClick: () => void
+    isShown: boolean
 }
 
 const ShortcutMenu: React.FC<ShortcutMenuProps> = ({
   onExpandClick,
   onShowClick,
-  onCollapseClick
+  onCollapseClick, isShown
 }) => {
-  const [isShown, setIsShown] = useState<boolean>(true)
-
-  const handleShowClick = () => {
-    setIsShown(!isShown)
-    onShowClick()
-  }
   return (
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'row-reverse',
+        borderLeft: '1px solid #d9d9d9',
+        marginLeft: '4.65em'
+      }}
+    >
       <Dropdown
-          overlay={
-              <Menu>
-                  <Menu.Item onClick={onExpandClick}>
-                      <div style={menuItemStyle}>
-                          <p>Expand all</p>
-                          <p style={shortcutStyle}>alt + e</p>
-                      </div>
-                  </Menu.Item>
-                  <Menu.Item onClick={onCollapseClick}>
-                      <div style={menuItemStyle}>
-                          <p>Collapse all</p>
-                          <p style={shortcutStyle}>alt + c</p>
-                      </div>
-                  </Menu.Item>
-                  <Menu.Item onClick={handleShowClick}>
-                      <div style={menuItemStyle}>
-                          {isShown ? <p>Hide comments</p> : <p>Show comments</p>}
-                          <p style={shortcutStyle}>alt + h</p>
-                      </div>
-                  </Menu.Item>
-              </Menu>
-          }
-          placement="bottomCenter"
-          trigger={['click']}
+        overlay={
+          <Menu>
+            <Menu.Item onClick={onExpandClick}>
+              <div style={menuItemStyle}>
+                <p>Expand all</p>
+                <p style={shortcutStyle}>alt + e</p>
+              </div>
+            </Menu.Item>
+            <Menu.Item onClick={onCollapseClick}>
+              <div style={menuItemStyle}>
+                <p>Collapse all</p>
+                <p style={shortcutStyle}>alt + c</p>
+              </div>
+            </Menu.Item>
+            <Menu.Item onClick={onShowClick}>
+              <div style={menuItemStyle}>
+                {isShown ? <p>Hide comments</p> : <p>Show comments</p>}
+                <p style={shortcutStyle}>alt + h</p>
+              </div>
+            </Menu.Item>
+          </Menu>
+        }
+        placement="bottomCenter"
+        trigger={['click']}
       >
-          <Tooltip title="shortcuts">
-              <Button icon={<SettingOutlined />} type="text" shape="circle" />
-          </Tooltip>
+        <Tooltip title="shortcuts">
+          <Button icon={<SettingOutlined />} type="text" shape="circle" />
+        </Tooltip>
       </Dropdown>
-
+    </div>
   )
 }
 

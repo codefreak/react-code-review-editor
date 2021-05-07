@@ -220,22 +220,12 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
 
   return (
     <div className="codeReview">
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row-reverse',
-          borderLeft: '1px solid #d9d9d9',
-          marginLeft: '4.65em'
-        }}
-      >
-        <ShortcutMenu
-          onCollapseClick={() => dispatch({ type: 'collapse-all' })}
-          onExpandClick={() => dispatch({ type: 'expand-all' })}
-          onShowClick={() => setShowComments(!showComments)}
-        />
-
-      </div>
-
+      <ShortcutMenu
+        onCollapseClick={() => dispatch({ type: 'collapse-all' })}
+        onExpandClick={() => dispatch({ type: 'expand-all' })}
+        onShowClick={() => setShowComments(!showComments)}
+        isShown={showComments}
+      />
       <Highlight
         {...defaultProps}
         theme={theme}
