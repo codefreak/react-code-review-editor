@@ -157,7 +157,6 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
 
   const createComment = (content: string, author: string, line?: number) => {
     let newComment: CustomComment
-
     if (line !== undefined) {
       // standard comment
       newComment = {
@@ -241,11 +240,8 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
                   line={line}
                   getLineProps={getLineProps}
                   getTokenProps={getTokenProps}
-                  onSubmit={value => {
-                    onCommentCreated(createComment(value, user, i))
-                  }}
                   comments={getCommentsOfLine(i)}
-                  onReplyCreated={value =>
+                  onCommentCreated={value =>
                     onCommentCreated(createComment(value, user, i))
                   }
                   onCommentEdited={onCommentEdited}

@@ -1,4 +1,4 @@
-import React, { CSSProperties, useState } from 'react'
+import React, { CSSProperties } from 'react'
 import { Button, Dropdown, Menu, Tooltip } from 'antd'
 import { SettingOutlined } from '@ant-design/icons'
 
@@ -20,13 +20,14 @@ interface ShortcutMenuProps {
   onExpandClick: () => void
   onCollapseClick: () => void
   onShowClick: () => void
-    isShown: boolean
+  isShown: boolean
 }
 
 const ShortcutMenu: React.FC<ShortcutMenuProps> = ({
   onExpandClick,
   onShowClick,
-  onCollapseClick, isShown
+  onCollapseClick,
+  isShown
 }) => {
   return (
     <div

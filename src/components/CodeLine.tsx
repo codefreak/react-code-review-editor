@@ -1,4 +1,4 @@
-import React, {CSSProperties, useEffect, useState} from 'react'
+import React, { CSSProperties, useEffect, useState } from 'react'
 import { Line, LineContent, LineNo } from './styles'
 import { Button } from 'antd'
 import {
@@ -21,7 +21,19 @@ import ReplyEditor from './ReplyEditor'
 import BorderWrapper from './BorderWrapper'
 
 const annotationStyle: CSSProperties = {
-  paddingLeft: "0.15em"
+  paddingLeft: '0.15em'
+}
+
+const newCommentStyle: CSSProperties = {
+  display: 'flex',
+  flexDirection: 'column',
+  paddingTop: '0.5em',
+  paddingBottom: '0.5em',
+  border: '1px solid #d9d9d9',
+  borderRadius: '0 2px 15px 0',
+  paddingLeft: '1.1em',
+  paddingRight: '0.5em',
+  marginLeft: 0
 }
 
 export interface CodeLineProps {
@@ -29,9 +41,8 @@ export interface CodeLineProps {
   lineNo: number
   getLineProps: (input: LineInputProps) => LineOutputProps
   getTokenProps: (input: TokenInputProps) => TokenOutputProps
-  onSubmit: (value: string) => void
   comments: CustomComment[]
-  onReplyCreated: (value: string) => void
+  onCommentCreated: (value: string) => void
   onCommentEdited: (
     oldComment: CustomComment,
     newComment: CustomComment
@@ -49,9 +60,8 @@ export const CodeLine: React.FC<CodeLineProps> = ({
   lineNo,
   getLineProps,
   getTokenProps,
-  onSubmit,
   comments,
-  onReplyCreated,
+  onCommentCreated,
   showComments,
   active,
   onToggle,
@@ -60,14 +70,11 @@ export const CodeLine: React.FC<CodeLineProps> = ({
   onCommentDeleted,
   role
 }) => {
-  // isAddButtonShown manages visibility of addButton
   const [isAddButtonShown, setIsAddButtonShown] = useState(false)
   const lineNoRef = React.createRef<HTMLSpanElement>()
   const [isEditorShown, setIsEditorShown] = useState(false)
   const [commentThread, setCommentThread] = useState<boolean>()
-  const [mildInfo, setMildInfo] = useState<boolean>(
-    comments.map(element => element.type).includes('mildInfo')
-  )
+  const [mildInfo, setMildInfo] = useState<boolean>()
 
   // check what kind of comments are present to manage annotations
   useEffect(() => {
@@ -86,7 +93,7 @@ export const CodeLine: React.FC<CodeLineProps> = ({
 
   // prevent awkward border placements when showComments gets toggled
   useEffect(() => {
-    if(!showComments) {
+    if (!showComments) {
       handleMouseLeave()
     }
   }, [showComments])
@@ -102,18 +109,17 @@ export const CodeLine: React.FC<CodeLineProps> = ({
     if (commentThread && mildInfo) {
       return 0.2
     }
-
     return 2.8
   }
 
   // show addButton and adjust padding accordingly
   const handleMouseEnter = () => {
     if (
-        !commentThread &&
-        !mildInfo &&
-        lineNoRef.current &&
-        showComments &&
-        !isEditorShown
+      !commentThread &&
+      !mildInfo &&
+      lineNoRef.current &&
+      showComments &&
+      !isEditorShown
     ) {
       lineNoRef.current.style.paddingLeft =
         getPaddingLeft() - 1.3 + getPaddingLeftOffset() + 'em'
@@ -159,8 +165,8 @@ export const CodeLine: React.FC<CodeLineProps> = ({
 
   return (
     <div
-        onMouseEnter={() => handleMouseEnter()}
-         onMouseLeave={() => handleMouseLeave()}
+      onMouseEnter={() => handleMouseEnter()}
+      onMouseLeave={() => handleMouseLeave()}
     >
       <Line
         key={lineNo}
@@ -172,39 +178,38 @@ export const CodeLine: React.FC<CodeLineProps> = ({
             display: 'table-row'
           }}
         >
-            {isAddButtonShown && showComments && (
-                <>
-                  <Button
-                      icon={<PlusOutlined style={{ paddingLeft: '0.1em' }} />}
-                      size="small"
-                      onClick={() => {
-                        setIsEditorShown(true)
-                        setIsAddButtonShown(false)
-                        handleMouseLeave()
-                      }}
-                      style={{ width: '1.5em', height: '1.5em' }}
-                      data-testid="addButton"
-                  />
-                </>
-            )}
+          {isAddButtonShown && showComments && (
+            <>
+              <Button
+                icon={<PlusOutlined style={{ paddingLeft: '0.1em' }} />}
+                size="small"
+                onClick={() => {
+                  setIsEditorShown(true)
+                  setIsAddButtonShown(false)
+                  handleMouseLeave()
+                }}
+                style={{ width: '1.5em', height: '1.5em' }}
+                data-testid="addButton"
+              />
+            </>
+          )}
 
           <div style={annotationStyle}>
             {mildInfo && showComments && (
-                <InfoCircleTwoTone
-                    style={{ paddingLeft: '0.15em', paddingRight: '0.15em' }}
-                    twoToneColor="#FAC302"
-                    onClick={() => onToggle()}
-                />
+              <InfoCircleTwoTone
+                style={{ paddingLeft: '0.15em', paddingRight: '0.15em' }}
+                twoToneColor="#FAC302"
+                onClick={() => onToggle()}
+              />
             )}
 
             {commentThread && showComments && (
-                <MessageTwoTone
-                    style={{ paddingLeft: '0.15em', paddingRight: '0.15em' }}
-                    onClick={() => onToggle()}
-                />
+              <MessageTwoTone
+                style={{ paddingLeft: '0.15em', paddingRight: '0.15em' }}
+                onClick={() => onToggle()}
+              />
             )}
           </div>
-
 
           <LineNo
             style={{
@@ -227,7 +232,7 @@ export const CodeLine: React.FC<CodeLineProps> = ({
         <div data-testid={'commentViewer' + lineNo}>
           <CommentViewer
             comments={comments}
-            onReplyCreated={onReplyCreated}
+            onReplyCreated={onCommentCreated}
             placeholder={getPlaceholder()}
             active={active}
             onToggle={() => onToggle()}
@@ -249,24 +254,12 @@ export const CodeLine: React.FC<CodeLineProps> = ({
           }}
         >
           <BorderWrapper heightTop={0.5} heightBottom={2}>
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                paddingTop: '0.5em',
-                paddingBottom: '0.5em',
-                border: '1px solid #d9d9d9',
-                borderRadius: '0 2px 15px 0',
-                paddingLeft: '1.1em',
-                paddingRight: '0.5em',
-                marginLeft: 0
-              }}
-            >
+            <div style={newCommentStyle}>
               <ReplyEditor
                 onCancel={() => setIsEditorShown(false)}
                 line={lineNo}
                 onSubmit={value => {
-                  onSubmit(value)
+                  onCommentCreated(value)
                   setIsEditorShown(false)
                 }}
                 placeholder={getPlaceholder()}
