@@ -24,7 +24,7 @@ export type CustomComment = {
   author?: string
   content: string
   line?: number
-  type: 'comment' | 'mildInfo' | 'severeInfo'
+  type: 'comment' | 'mildInfo' | 'severeInfo' | 'success'
   timeAdded: string
 }
 

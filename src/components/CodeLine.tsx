@@ -17,7 +17,7 @@ import {
 } from '../types/types'
 import CommentViewer from './CommentViewer'
 import { CustomComment } from '../types/types'
-import ReplyEditor from './ReplyEditor'
+import CommentEditor from './CommentEditor'
 import BorderWrapper from './BorderWrapper'
 
 const annotationStyle: CSSProperties = {
@@ -255,7 +255,7 @@ export const CodeLine: React.FC<CodeLineProps> = ({
         >
           <BorderWrapper heightTop={0.5} heightBottom={2}>
             <div style={newCommentStyle}>
-              <ReplyEditor
+              <CommentEditor
                 onCancel={() => setIsEditorShown(false)}
                 line={lineNo}
                 onSubmit={value => {

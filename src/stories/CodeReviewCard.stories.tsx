@@ -122,8 +122,8 @@ const customComment4: CustomComment = {
 
 const customComment5: CustomComment = {
   author: 'Test1',
-  content: `Expected better results.. :(`,
-  type: 'severeInfo',
+  content: `All tests passed. Well done.`,
+  type: 'success',
   timeAdded: moment().format('DD-MM-YY HH:mm')
 }
 

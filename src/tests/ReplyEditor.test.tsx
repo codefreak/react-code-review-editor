@@ -1,12 +1,12 @@
 import React from 'react'
 import { cleanup, screen, render, fireEvent } from '@testing-library/react'
-import ReplyEditor from '../components/ReplyEditor'
+import CommentEditor from '../components/CommentEditor'
 
 afterEach(cleanup)
 
 test('add reply button is disabled when no text is present', () => {
   const mockFunction = jest.fn()
-  render(<ReplyEditor onSubmit={mockFunction} placeholder="Reply" />)
+  render(<CommentEditor onSubmit={mockFunction} placeholder="Reply" />)
 
   fireEvent.focus(screen.getByPlaceholderText('Add Reply ...'))
   expect(screen.getByTestId('replyButton')).toHaveAttribute('disabled')
@@ -23,7 +23,7 @@ test('add reply button is disabled when no text is present', () => {
 
 test('add reply button is enabled when text is present', () => {
   const mockFunction = jest.fn()
-  render(<ReplyEditor onSubmit={mockFunction} placeholder="Reply" />)
+  render(<CommentEditor onSubmit={mockFunction} placeholder="Reply" />)
 
   fireEvent.focus(screen.getByPlaceholderText('Add Reply ...'))
   fireEvent.change(screen.getByPlaceholderText('Add Reply ...'), {
@@ -34,7 +34,7 @@ test('add reply button is enabled when text is present', () => {
 
 test('component calls onSubmit when clicked', () => {
   const handleSubmit = jest.fn()
-  render(<ReplyEditor onSubmit={handleSubmit} placeholder="Reply" />)
+  render(<CommentEditor onSubmit={handleSubmit} placeholder="Reply" />)
 
   fireEvent.focus(screen.getByPlaceholderText('Add Reply ...'))
   fireEvent.change(screen.getByPlaceholderText('Add Reply ...'), {
@@ -46,7 +46,7 @@ test('component calls onSubmit when clicked', () => {
 
 test('clicking cancel resets component', () => {
   const mockFunction = jest.fn()
-  render(<ReplyEditor onSubmit={mockFunction} placeholder="Reply" />)
+  render(<CommentEditor onSubmit={mockFunction} placeholder="Reply" />)
 
   fireEvent.focus(screen.getByPlaceholderText('Add Reply ...'))
   fireEvent.change(screen.getByPlaceholderText('Add Reply ...'), {
@@ -66,7 +66,7 @@ test('clicking cancel resets component', () => {
 
 test('clicking add reply resets component', () => {
   const mockFunction = jest.fn()
-  render(<ReplyEditor onSubmit={mockFunction} placeholder="Reply" />)
+  render(<CommentEditor onSubmit={mockFunction} placeholder="Reply" />)
 
   fireEvent.focus(screen.getByPlaceholderText('Add Reply ...'))
   fireEvent.change(screen.getByPlaceholderText('Add Reply ...'), {

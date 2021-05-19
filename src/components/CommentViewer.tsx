@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Collapse, Comment, Dropdown, Menu, Modal } from 'antd'
 import './CommentViewer.css'
-import ReplyEditor from './ReplyEditor'
+import CommentEditor from './CommentEditor'
 import {
   ExclamationCircleTwoTone,
   InfoCircleTwoTone,
   MessageTwoTone,
-  EllipsisOutlined
+  EllipsisOutlined,
+  CheckCircleTwoTone
 } from '@ant-design/icons'
 import { CustomComment, EditorPlaceholder } from '../types/types'
 import BorderWrapper from './BorderWrapper'
@@ -42,7 +43,11 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
   const [activeKey, setActiveKey] = useState<string | string[]>('0')
   const [commentContext, setCommentContext] = useState<CustomComment>()
   const [isEditing, setIsEditing] = useState<boolean>(false)
+  const [success, setSuccess] = useState<boolean>(false)
+  const [severInfo, setSevereInfo] = useState<boolean>(false)
+  const [commentThread, setCommentThread] = useState<boolean>(false)
 
+  // set toggle state
   useEffect(() => {
     if (active) {
       setActiveKey('1')
@@ -50,6 +55,21 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
       setActiveKey('0')
     }
   }, [active])
+
+  // check present comments for result annotations
+  useEffect(() => {
+    if (result) {
+      if (comments.find(element => element.type === 'severeInfo')) {
+        setSevereInfo(true)
+      }
+      if (comments.find(element => element.type === 'success')) {
+        setSuccess(true)
+      }
+      if (comments.find(element => element.type === 'comment')) {
+        setCommentThread(true)
+      }
+    }
+  }, [comments, result])
 
   // returns amount of infos present in the component
   const countInfos = () => {
@@ -137,20 +157,25 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
   }
 
   // returns icons for extra context in the result header
+  // if one severeInfo is present only that will get displayed in the extra
   const getExtra = () => {
-    if (comments.find(element => element.type === 'severeInfo')) {
-      if (comments.find(element => element.type === 'comment')) {
-        return (
-          <>
-            <ExclamationCircleTwoTone twoToneColor="#F00E3B" />
-            <MessageTwoTone style={{ paddingLeft: '0.5em' }} />
-          </>
-        )
-      }
-      return <ExclamationCircleTwoTone twoToneColor="#F00E3B" />
-    } else {
-      return <></>
+    if (severInfo) {
+      return (
+        <>
+          <ExclamationCircleTwoTone twoToneColor="#F00E3B" />
+          {commentThread && <MessageTwoTone style={{ paddingLeft: '0.5em' }} />}
+        </>
+      )
     }
+    if (success) {
+      return (
+        <>
+          <CheckCircleTwoTone twoToneColor="#52c41a" />
+          {commentThread && <MessageTwoTone style={{ paddingLeft: '0.5em' }} />}
+        </>
+      )
+    }
+    return <MessageTwoTone />
   }
 
   const handleEdit = (value: string) => {
@@ -277,7 +302,7 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
                               key={key}
                               datetime={comment.timeAdded}
                               content={
-                                <ReplyEditor
+                                <CommentEditor
                                   onSubmit={handleEdit}
                                   placeholder="Edit"
                                   textValue={comment.content}
@@ -301,7 +326,7 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
                   })}
 
                   {!isEditing && (
-                    <ReplyEditor
+                    <CommentEditor
                       onSubmit={handleReplyCreated}
                       placeholder={getPlaceholder()}
                     />
@@ -366,7 +391,7 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
                       )
                     }
                   })}
-                  <ReplyEditor
+                  <CommentEditor
                     onSubmit={handleReplyCreated}
                     placeholder={getPlaceholder()}
                   />
@@ -374,7 +399,10 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
 
                 <div className="infoComments">
                   {comments.map((comment, key) => {
-                    if (comment.type === 'severeInfo') {
+                    if (
+                      comment.type === 'severeInfo' ||
+                      comment.type === 'success'
+                    ) {
                       return (
                         <div
                           key={key}
@@ -393,13 +421,23 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
                                   flexDirection: 'row'
                                 }}
                               >
-                                <ExclamationCircleTwoTone
-                                  twoToneColor="#F00E3B"
-                                  style={{
-                                    paddingTop: '0.25em',
-                                    paddingRight: '0.5em'
-                                  }}
-                                />
+                                {comment.type === 'severeInfo' ? (
+                                  <ExclamationCircleTwoTone
+                                    twoToneColor="#F00E3B"
+                                    style={{
+                                      paddingTop: '0.25em',
+                                      paddingRight: '0.5em'
+                                    }}
+                                  />
+                                ) : (
+                                  <CheckCircleTwoTone
+                                    twoToneColor="#52c41a"
+                                    style={{
+                                      paddingTop: '0.25em',
+                                      paddingRight: '0.5em'
+                                    }}
+                                  />
+                                )}
                                 <p>{comment.author}</p>
                               </div>
                             }

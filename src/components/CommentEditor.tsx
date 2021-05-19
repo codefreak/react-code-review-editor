@@ -5,7 +5,7 @@ import './ReplyEditor.css'
 import TextArea from 'antd/lib/input/TextArea'
 import { EditorPlaceholder } from '../types/types'
 
-export interface ReplyEditorProps {
+export interface CommentEditorProps {
   onSubmit: (value: string) => void
   placeholder: EditorPlaceholder
   textValue?: string
@@ -14,7 +14,7 @@ export interface ReplyEditorProps {
   focus?: boolean
 }
 
-const ReplyEditor: React.FC<ReplyEditorProps> = ({
+const CommentEditor: React.FC<CommentEditorProps> = ({
   onSubmit,
   placeholder,
   textValue,
@@ -124,4 +124,4 @@ const ReplyEditor: React.FC<ReplyEditorProps> = ({
   )
 }
 
-export default ReplyEditor
+export default CommentEditor

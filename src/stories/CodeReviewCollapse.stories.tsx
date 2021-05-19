@@ -6,7 +6,6 @@ import {
 import { Story, Meta } from '@storybook/react/types-6-0'
 import { CustomComment } from '../types/types'
 import { forceReRender } from '@storybook/react'
-import { CodeReviewCardProps } from '../components/CodeReviewCard'
 
 export default {
   component: CodeReviewCollapsable,
