@@ -82,7 +82,7 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
     return count
   }
 
-  const handleReplyCreated = (value: string) => {
+  const handleCommentCreated = (value: string) => {
     setActiveKey('1')
     onCommentCreated(value)
   }
@@ -327,7 +327,7 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
 
                   {!isEditing && (
                     <CommentEditor
-                      onSubmit={handleReplyCreated}
+                      onSubmit={handleCommentCreated}
                       placeholder={getPlaceholder()}
                     />
                   )}
@@ -392,7 +392,7 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
                     }
                   })}
                   <CommentEditor
-                    onSubmit={handleReplyCreated}
+                    onSubmit={handleCommentCreated}
                     placeholder={getPlaceholder()}
                   />
                 </div>
