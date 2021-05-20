@@ -39,10 +39,10 @@ const CommentEditor: React.FC<CommentEditorProps> = ({
 
   const handleSubmit = () => {
     onSubmit(value)
-    resetReplyEditor()
+    resetCommentEditor()
   }
 
-  const resetReplyEditor = () => {
+  const resetCommentEditor = () => {
     setRows(1)
     setIsFocused(false)
     setValue('')
@@ -76,7 +76,7 @@ const CommentEditor: React.FC<CommentEditorProps> = ({
         onFocus={() => handleFocus()}
         onBlur={() => {
           if (value === '') {
-            resetReplyEditor()
+            resetCommentEditor()
           }
         }}
         style={{ resize: 'none' }}
@@ -87,7 +87,7 @@ const CommentEditor: React.FC<CommentEditorProps> = ({
           <Space>
             <Button
               htmlType="reset"
-              onClick={() => resetReplyEditor()}
+              onClick={() => resetCommentEditor()}
               type="default"
               data-testid="cancelButton"
               danger
