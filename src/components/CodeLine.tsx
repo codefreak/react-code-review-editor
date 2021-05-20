@@ -122,13 +122,13 @@ export const CodeLine: React.FC<CodeLineProps> = ({
       !isEditorShown
     ) {
       lineNoRef.current.style.paddingLeft =
-        getPaddingLeft() - 1.3 + getPaddingLeftOffset() + 'em'
+        getPaddingLeft() - 1.3 + getPaddingOffsetLeft() + 'em'
       setIsAddButtonShown(true)
     }
   }
 
   // returns a higher padding offset for higher than double digit lines
-  const getPaddingLeftOffset = () => {
+  const getPaddingOffsetLeft = () => {
     if (lineNo < 9) {
       return 0.55
     } else {
@@ -140,7 +140,7 @@ export const CodeLine: React.FC<CodeLineProps> = ({
   const handleMouseLeave = () => {
     if (lineNoRef.current) {
       lineNoRef.current.style.paddingLeft =
-        getPaddingLeft() + getPaddingLeftOffset() + 'em'
+        getPaddingLeft() + getPaddingOffsetLeft() + 'em'
       setIsAddButtonShown(false)
     }
   }
@@ -213,7 +213,7 @@ export const CodeLine: React.FC<CodeLineProps> = ({
 
           <LineNo
             style={{
-              paddingLeft: getPaddingLeft() + getPaddingLeftOffset() + 'em'
+              paddingLeft: getPaddingLeft() + getPaddingOffsetLeft() + 'em'
             }}
             ref={lineNoRef}
           >
