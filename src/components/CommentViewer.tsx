@@ -16,7 +16,7 @@ const { Panel } = Collapse
 
 export interface CommentViewerProps {
   comments: CustomComment[]
-  onReplyCreated: (value: string) => void
+  onCommentCreated: (value: string) => void
   onCommentEdited: (
     oldComment: CustomComment,
     newComment: CustomComment
@@ -31,7 +31,7 @@ export interface CommentViewerProps {
 
 export const CommentViewer: React.FC<CommentViewerProps> = ({
   comments,
-  onReplyCreated,
+  onCommentCreated,
   onCommentEdited,
   onCommentDeleted,
   result,
@@ -84,7 +84,7 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
 
   const handleReplyCreated = (value: string) => {
     setActiveKey('1')
-    onReplyCreated(value)
+    onCommentCreated(value)
   }
 
   // returns amount of comments present in the component

@@ -232,7 +232,7 @@ export const CodeLine: React.FC<CodeLineProps> = ({
         <div data-testid={'commentViewer' + lineNo}>
           <CommentViewer
             comments={comments}
-            onReplyCreated={onCommentCreated}
+            onCommentCreated={onCommentCreated}
             placeholder={getPlaceholder()}
             active={active}
             onToggle={() => onToggle()}

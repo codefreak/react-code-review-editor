@@ -25,7 +25,7 @@ test('title displays comment count', () => {
   render(
     <CommentViewer
       comments={commentContainer}
-      onReplyCreated={value => mockFunction}
+      onCommentCreated={value => mockFunction}
       toggle
     />
   )
@@ -36,7 +36,7 @@ test('title displays comment count', () => {
   render(
     <CommentViewer
       comments={commentContainer}
-      onReplyCreated={value => mockFunction}
+      onCommentCreated={value => mockFunction}
       toggle
     />
   )
@@ -48,7 +48,7 @@ test('comments get displayed correctly', () => {
   render(
     <CommentViewer
       comments={commentContainer}
-      onReplyCreated={value => mockFunction}
+      onCommentCreated={value => mockFunction}
       toggle
     />
   )
