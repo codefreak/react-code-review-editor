@@ -267,7 +267,9 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
         <CommentViewer
           comments={getResults()}
           result
-          onCommentCreated={value => onCommentCreated(createComment(value, user))}
+          onCommentCreated={value =>
+            onCommentCreated(createComment(value, user))
+          }
           active={state[0]}
           onToggle={() => dispatch({ type: 'toggle', index: 0 })}
           user={user}

@@ -7,9 +7,10 @@ import {
   waitFor
 } from '@testing-library/react'
 import CodeReview from '../components/CodeReview'
-import { CustomComment } from '../components/CommentViewer'
-
+import { CustomComment } from '../types/types'
+import moment from "moment";
 afterEach(cleanup)
+const nothing = jest.fn()
 
 const jsxCode = `
 (function someDemo() {
@@ -27,8 +28,10 @@ test('code passed as a prop gets displayed', () => {
       code={jsxCode}
       language="jsx"
       onCommentCreated={() => mockFunction}
-      author="test"
-      showComments
+      onCommentDeleted={() => nothing}
+      onCommentEdited={() => nothing}
+      role="teacher"
+      user="Tester"
       showResult
       commentContainer={[]}
     />
@@ -52,8 +55,10 @@ test('line numbers get displayed correctly', () => {
       code={jsxCode}
       language="jsx"
       onCommentCreated={() => mockFunction}
-      author="test"
-      showComments
+      onCommentDeleted={() => nothing}
+      onCommentEdited={() => nothing}
+      role="teacher"
+      user="Tester"
       showResult
       commentContainer={[]}
     />
@@ -73,8 +78,10 @@ test('hover over line displays add button', async () => {
       code={jsxCode}
       language="jsx"
       onCommentCreated={() => mockFunction}
-      author="test"
-      showComments
+      onCommentDeleted={() => nothing}
+      onCommentEdited={() => nothing}
+      role="teacher"
+      user="Tester"
       showResult
       commentContainer={[]}
     />
@@ -91,23 +98,26 @@ test('klicking the add button opens the comment editor in the correct line', asy
       code={jsxCode}
       language="jsx"
       onCommentCreated={() => mockFunction}
-      author="test"
-      showComments
+      onCommentDeleted={() => nothing}
+      onCommentEdited={() => nothing}
+      role="teacher"
+      user="Tester"
       showResult={false}
       commentContainer={[]}
     />
   )
   fireEvent.mouseEnter(screen.getByTestId('line1'))
   await waitFor(() => screen.getByTestId('addButton'))
+  expect(screen.getByTestId('addButton')).toBeInTheDocument()
   fireEvent.click(screen.getByTestId('addButton'))
   expect(
-    screen.getByPlaceholderText('Add a comment to line 2 ...')
+    screen.getByPlaceholderText('Add a Comment to line 2 ...')
   ).toBeInTheDocument()
 
   // expect line 2 as line id starts at 0
   expect(screen.getByTestId('textArea')).toHaveProperty(
     'placeholder',
-    'Add a comment to line 2 ...'
+    'Add a Comment to line 2 ...'
   )
 })
 
@@ -117,6 +127,7 @@ test('comment gets properly added to the correct line', async () => {
   // setup
   commentContainer = []
   const clickCounter = jest.fn()
+
   const addComment = (value: CustomComment) => {
     commentContainer = [...commentContainer, value]
     clickCounter()
@@ -128,8 +139,10 @@ test('comment gets properly added to the correct line', async () => {
       language="jsx"
       commentContainer={commentContainer}
       onCommentCreated={addComment}
-      author="test"
-      showComments
+      onCommentDeleted={() => nothing}
+      onCommentEdited={() => nothing}
+      role="teacher"
+      user="Tester"
       showResult
     />
   )
@@ -141,10 +154,10 @@ test('comment gets properly added to the correct line', async () => {
   fireEvent.mouseLeave(screen.getByTestId('line1'))
 
   // change input of text area and add as comment
-  fireEvent.change(screen.getByPlaceholderText('Add a comment to line 2 ...'), {
+  fireEvent.change(screen.getByPlaceholderText('Add a Comment to line 2 ...'), {
     target: { value: 'an input' }
   })
-  fireEvent.click(screen.getByTestId('addCommentButton'))
+  fireEvent.click(screen.getByTestId('replyButton'))
 
   // rerender to simulate state change
   cleanup()
@@ -154,8 +167,10 @@ test('comment gets properly added to the correct line', async () => {
       language="jsx"
       commentContainer={commentContainer}
       onCommentCreated={addComment}
-      author="test"
-      showComments
+      onCommentDeleted={() => nothing}
+      onCommentEdited={() => nothing}
+      role="teacher"
+      user="Tester"
       showResult
     />
   )
@@ -165,4 +180,115 @@ test('comment gets properly added to the correct line', async () => {
   expect(screen.getByTestId('commentViewer1')).toHaveTextContent('1 comment')
   fireEvent.click(screen.getByText('1 comment'))
   expect(screen.getByTestId('commentViewer1')).toHaveTextContent('an input')
+})
+
+test('Editor placeholder changes depending on the role', async () => {
+  commentContainer = []
+
+  render(
+      <CodeReview
+          code={jsxCode}
+          language="jsx"
+          commentContainer={commentContainer}
+          onCommentCreated={() => nothing}
+          onCommentDeleted={() => nothing}
+          onCommentEdited={() => nothing}
+          role="teacher"
+          user="Tester"
+          showResult
+      />
+  )
+
+  fireEvent.mouseEnter(screen.getByTestId('line1'))
+  await waitFor(() => screen.getByTestId('addButton'))
+  expect(screen.getByTestId('addButton')).toBeInTheDocument()
+  fireEvent.click(screen.getByTestId('addButton'))
+  expect(
+      screen.getByPlaceholderText('Add a Comment to line 2 ...')
+  ).toBeInTheDocument()
+  cleanup()
+
+  render(
+      <CodeReview
+          code={jsxCode}
+          language="jsx"
+          commentContainer={commentContainer}
+          onCommentCreated={() => nothing}
+          onCommentDeleted={() => nothing}
+          onCommentEdited={() => nothing}
+          role="student"
+          user="Tester"
+          showResult
+      />
+  )
+
+
+  fireEvent.mouseEnter(screen.getByTestId('line1'))
+  await waitFor(() => screen.getByTestId('addButton'))
+  expect(screen.getByTestId('addButton')).toBeInTheDocument()
+  fireEvent.click(screen.getByTestId('addButton'))
+  expect(
+      screen.getByPlaceholderText('Add a Question to line 2 ...')
+  ).toBeInTheDocument()
+})
+
+test('Editor placeholder changes when a comment gets added', async () => {
+  const comment1: CustomComment = {
+    line: 0,
+    author: 'Code Quality',
+    content: 'Syntaktischer Zucker in Linie 4',
+    type: 'mildInfo',
+    timeAdded: moment().format('DD-MM-YY HH:mm')
+  }
+
+  commentContainer = [comment1]
+  const addComment = (value: CustomComment) => {
+    commentContainer = [...commentContainer, value]
+  }
+
+  render(
+      <CodeReview
+          code={jsxCode}
+          language="jsx"
+          commentContainer={commentContainer}
+          onCommentCreated={addComment}
+          onCommentDeleted={() => nothing}
+          onCommentEdited={() => nothing}
+          role="teacher"
+          user="Tester"
+          showResult
+      />
+  )
+
+  expect(screen.getByText('1 info')).toBeInTheDocument()
+  fireEvent.click(screen.getByText('1 info'))
+
+  expect(screen.getByTestId('textArea')).toHaveProperty('placeholder', 'Add Comment ...')
+  fireEvent.change(screen.getByTestId('textArea'), {
+    target: { value: 'an input' }
+  })
+  fireEvent.focus(screen.getByTestId('textArea'))
+  fireEvent.click((screen.getByTestId('replyButton')))
+
+  cleanup()
+
+  render(
+      <CodeReview
+          code={jsxCode}
+          language="jsx"
+          commentContainer={commentContainer}
+          onCommentCreated={addComment}
+          onCommentDeleted={() => nothing}
+          onCommentEdited={() => nothing}
+          role="teacher"
+          user="Tester"
+          showResult
+      />
+  )
+
+  await waitFor(() => screen.getByTestId('commentViewer0'))
+  expect(screen.getByText('1 comment, 1 info')).toBeInTheDocument()
+  fireEvent.click(screen.getByText('1 comment, 1 info'))
+  expect(screen.getByTestId('textArea')).toHaveProperty('placeholder', 'Add Reply ...')
+
 })

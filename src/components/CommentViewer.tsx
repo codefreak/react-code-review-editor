@@ -138,7 +138,7 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
     }
   }
 
-  // returns a custom type for the replyType prop of ReplyEditor
+  // returns a custom type for the placeholder prop of CommentEditor
   const getPlaceholder = (): EditorPlaceholder => {
     if (!placeholder) {
       let noComment = true
@@ -159,23 +159,27 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
   // returns icons for extra context in the result header
   // if one severeInfo is present only that will get displayed in the extra
   const getExtra = () => {
-    if (severInfo) {
-      return (
-        <>
-          <ExclamationCircleTwoTone twoToneColor="#F00E3B" />
-          {commentThread && <MessageTwoTone style={{ paddingLeft: '0.5em' }} />}
-        </>
-      )
+    if(result)  {
+      if (severInfo) {
+        return (
+            <>
+              <ExclamationCircleTwoTone twoToneColor="#F00E3B" />
+              {commentThread && <MessageTwoTone style={{ paddingLeft: '0.5em' }} />}
+            </>
+        )
+      }
+      if (success) {
+        return (
+            <>
+              <CheckCircleTwoTone twoToneColor="#52c41a" />
+              {commentThread && <MessageTwoTone style={{ paddingLeft: '0.5em' }} />}
+            </>
+        )
+      }
+      return <MessageTwoTone />
+    } else {
+      return <></>
     }
-    if (success) {
-      return (
-        <>
-          <CheckCircleTwoTone twoToneColor="#52c41a" />
-          {commentThread && <MessageTwoTone style={{ paddingLeft: '0.5em' }} />}
-        </>
-      )
-    }
-    return <MessageTwoTone />
   }
 
   const handleEdit = (value: string) => {
@@ -276,6 +280,7 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
                               content={<pre>{comment.content}</pre>}
                               author={comment.author}
                               datetime={comment.timeAdded}
+                              data-testid={"comment" + key}
                             />
                             <Dropdown
                               overlay={dropMenu}
@@ -308,7 +313,9 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
                                   textValue={comment.content}
                                   onCancel={() => setIsEditing(false)}
                                 />
+
                               }
+                              data-testid={"comment" + key}
                               author={comment.author}
                             />
                           )
@@ -319,6 +326,7 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
                             content={<pre>{comment.content}</pre>}
                             author={comment.author}
                             datetime={comment.timeAdded}
+                            data-testid={"comment" + key}
                           />
                         )
                       }
@@ -348,6 +356,7 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
                             <Comment
                               content={<pre>{comment.content}</pre>}
                               datetime={comment.timeAdded}
+                              data-testid={"comment" + key}
                               author={
                                 <div
                                   style={{
@@ -387,6 +396,7 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
                           datetime={comment.timeAdded}
                           content={comment.content}
                           author={comment.author}
+                          data-testid={"comment" + key}
                         />
                       )
                     }
@@ -414,6 +424,7 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
                           <Comment
                             content={<pre>{comment.content}</pre>}
                             datetime={comment.timeAdded}
+                            data-testid={"comment" + key}
                             author={
                               <div
                                 style={{
