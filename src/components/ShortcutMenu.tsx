@@ -37,24 +37,25 @@ const ShortcutMenu: React.FC<ShortcutMenuProps> = ({
         borderLeft: '1px solid #d9d9d9',
         marginLeft: '4.65em'
       }}
+      data-testid="shortcuts"
     >
       <Dropdown
         overlay={
-          <Menu>
+          <Menu data-testid="shortcutMenu">
             <Menu.Item onClick={onExpandClick}>
-              <div style={menuItemStyle}>
+              <div style={menuItemStyle} data-testid="expandButton">
                 <p>Expand all</p>
                 <p style={shortcutStyle}>alt + e</p>
               </div>
             </Menu.Item>
             <Menu.Item onClick={onCollapseClick}>
-              <div style={menuItemStyle}>
+              <div style={menuItemStyle} data-testid="collapseButton">
                 <p>Collapse all</p>
                 <p style={shortcutStyle}>alt + c</p>
               </div>
             </Menu.Item>
             <Menu.Item onClick={onShowClick}>
-              <div style={menuItemStyle}>
+              <div style={menuItemStyle} data-testid="showButton">
                 {isShown ? <p>Hide comments</p> : <p>Show comments</p>}
                 <p style={shortcutStyle}>alt + h</p>
               </div>
@@ -65,7 +66,12 @@ const ShortcutMenu: React.FC<ShortcutMenuProps> = ({
         trigger={['click']}
       >
         <Tooltip title="shortcuts">
-          <Button icon={<SettingOutlined />} type="text" shape="circle" />
+          <Button
+            icon={<SettingOutlined />}
+            type="text"
+            shape="circle"
+            data-testid="shortcutButton"
+          />
         </Tooltip>
       </Dropdown>
     </div>

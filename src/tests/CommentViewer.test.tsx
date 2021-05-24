@@ -2,7 +2,7 @@ import React from 'react'
 import { cleanup, screen, render } from '@testing-library/react'
 import { CustomComment } from '../types/types'
 import CommentViewer from '../components/CommentViewer'
-import moment from "moment";
+import moment from 'moment'
 afterEach(cleanup)
 const nothing = jest.fn()
 
@@ -31,7 +31,6 @@ const comment3: CustomComment = {
 }
 
 const commentContainer = [comment1]
-
 
 test('title displays comment count', () => {
   render(
@@ -63,7 +62,7 @@ test('title displays comment count', () => {
   expect(screen.getByTestId('commentViewer')).toHaveTextContent('2 comments')
 })
 
-test('comment\'s content gets displayed correctly', () => {
+test("comment's content gets displayed correctly", () => {
   render(
     <CommentViewer
       comments={commentContainer}
@@ -86,15 +85,15 @@ test('comment\'s content gets displayed correctly', () => {
 
 test('comments display their creation time correctly', () => {
   render(
-      <CommentViewer
-          comments={commentContainer}
-          onCommentCreated={() => nothing}
-          onCommentEdited={() => nothing}
-          onCommentDeleted={() => nothing}
-          onToggle={() => nothing}
-          active
-          user="Tester"
-      />
+    <CommentViewer
+      comments={commentContainer}
+      onCommentCreated={() => nothing}
+      onCommentEdited={() => nothing}
+      onCommentDeleted={() => nothing}
+      onToggle={() => nothing}
+      active
+      user="Tester"
+    />
   )
 
   expect(screen.getByTestId('comment0')).toHaveTextContent('23-05-21 13:26')
@@ -103,16 +102,17 @@ test('comments display their creation time correctly', () => {
 test('title displays present comment types', () => {
   commentContainer.push(comment3)
   render(
-      <CommentViewer
-          comments={commentContainer}
-          onCommentCreated={() => nothing}
-          onCommentEdited={() => nothing}
-          onCommentDeleted={() => nothing}
-          onToggle={() => nothing}
-          active={false}
-          user="Tester"
-      />
+    <CommentViewer
+      comments={commentContainer}
+      onCommentCreated={() => nothing}
+      onCommentEdited={() => nothing}
+      onCommentDeleted={() => nothing}
+      onToggle={() => nothing}
+      active={false}
+      user="Tester"
+    />
   )
-  expect(screen.getByTestId('commentViewer')).toHaveTextContent('2 comments, 1 info')
+  expect(screen.getByTestId('commentViewer')).toHaveTextContent(
+    '2 comments, 1 info'
+  )
 })
-

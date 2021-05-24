@@ -91,12 +91,21 @@ export const CodeLine: React.FC<CodeLineProps> = ({
     }
   }, [comments])
 
+  // remove addButton and adjust padding accordingly
+  const handleMouseLeave = () => {
+    if (lineNoRef.current) {
+      lineNoRef.current.style.paddingLeft =
+          getPaddingLeft() + getPaddingOffsetLeft() + 'em'
+      setIsAddButtonShown(false)
+    }
+  }
+
   // prevent awkward border placements when showComments gets toggled
   useEffect(() => {
     if (!showComments) {
       handleMouseLeave()
     }
-  }, [showComments])
+  }, [handleMouseLeave, showComments])
 
   // returns the right padding value depending on the number of annotations present
   const getPaddingLeft = () => {
@@ -136,14 +145,7 @@ export const CodeLine: React.FC<CodeLineProps> = ({
     }
   }
 
-  // remove addButton and adjust padding accordingly
-  const handleMouseLeave = () => {
-    if (lineNoRef.current) {
-      lineNoRef.current.style.paddingLeft =
-        getPaddingLeft() + getPaddingOffsetLeft() + 'em'
-      setIsAddButtonShown(false)
-    }
-  }
+
 
   const getPlaceholder = (): EditorPlaceholder => {
     if (mildInfo && !commentThread) {
@@ -200,6 +202,7 @@ export const CodeLine: React.FC<CodeLineProps> = ({
                 style={{ paddingLeft: '0.15em', paddingRight: '0.15em' }}
                 twoToneColor="#FAC302"
                 onClick={() => onToggle()}
+                data-testid="infoAnnotation"
               />
             )}
 
@@ -207,6 +210,7 @@ export const CodeLine: React.FC<CodeLineProps> = ({
               <MessageTwoTone
                 style={{ paddingLeft: '0.15em', paddingRight: '0.15em' }}
                 onClick={() => onToggle()}
+                data-testid="commentAnnotation"
               />
             )}
           </div>

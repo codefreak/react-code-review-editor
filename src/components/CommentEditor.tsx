@@ -30,7 +30,7 @@ const CommentEditor: React.FC<CommentEditorProps> = ({
     if (textValue !== undefined || focus) {
       handleFocus()
     }
-  }, [textValue])
+  }, [focus, textValue])
 
   const handleFocus = () => {
     setRows(4)

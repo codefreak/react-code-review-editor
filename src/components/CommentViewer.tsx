@@ -159,21 +159,37 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
   // returns icons for extra context in the result header
   // if one severeInfo is present only that will get displayed in the extra
   const getExtra = () => {
-    if(result)  {
+    if (result) {
       if (severInfo) {
         return (
-            <>
-              <ExclamationCircleTwoTone twoToneColor="#F00E3B" />
-              {commentThread && <MessageTwoTone style={{ paddingLeft: '0.5em' }} />}
-            </>
+          <>
+            <ExclamationCircleTwoTone
+              twoToneColor="#F00E3B"
+              data-testid="exclamationIcon"
+            />
+            {commentThread && (
+              <MessageTwoTone
+                style={{ paddingLeft: '0.5em' }}
+                data-testid="commentIcon"
+              />
+            )}
+          </>
         )
       }
       if (success) {
         return (
-            <>
-              <CheckCircleTwoTone twoToneColor="#52c41a" />
-              {commentThread && <MessageTwoTone style={{ paddingLeft: '0.5em' }} />}
-            </>
+          <>
+            <CheckCircleTwoTone
+              twoToneColor="#52c41a"
+              data-testid="checkIcon"
+            />
+            {commentThread && (
+              <MessageTwoTone
+                style={{ paddingLeft: '0.5em' }}
+                data-testid="commentIcon"
+              />
+            )}
+          </>
         )
       }
       return <MessageTwoTone />
@@ -248,6 +264,7 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
       >
         <Collapse
           className="commentViewerCollapse"
+          data-testid="collapseViewer"
           activeKey={activeKey}
           onChange={() => onToggle()}
         >
@@ -280,7 +297,7 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
                               content={<pre>{comment.content}</pre>}
                               author={comment.author}
                               datetime={comment.timeAdded}
-                              data-testid={"comment" + key}
+                              data-testid={'comment' + key}
                             />
                             <Dropdown
                               overlay={dropMenu}
@@ -313,9 +330,8 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
                                   textValue={comment.content}
                                   onCancel={() => setIsEditing(false)}
                                 />
-
                               }
-                              data-testid={"comment" + key}
+                              data-testid={'comment' + key}
                               author={comment.author}
                             />
                           )
@@ -326,11 +342,12 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
                             content={<pre>{comment.content}</pre>}
                             author={comment.author}
                             datetime={comment.timeAdded}
-                            data-testid={"comment" + key}
+                            data-testid={'comment' + key}
                           />
                         )
                       }
                     }
+                    return <></>
                   })}
 
                   {!isEditing && (
@@ -356,7 +373,7 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
                             <Comment
                               content={<pre>{comment.content}</pre>}
                               datetime={comment.timeAdded}
-                              data-testid={"comment" + key}
+                              data-testid={'comment' + key}
                               author={
                                 <div
                                   style={{
@@ -378,6 +395,7 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
                           </div>
                         )
                       }
+                      return <></>
                     })}
                   </div>
                 )}
@@ -396,10 +414,11 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
                           datetime={comment.timeAdded}
                           content={comment.content}
                           author={comment.author}
-                          data-testid={"comment" + key}
+                          data-testid={'comment' + key}
                         />
                       )
                     }
+                    return<></>
                   })}
                   <CommentEditor
                     onSubmit={handleCommentCreated}
@@ -424,7 +443,7 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
                           <Comment
                             content={<pre>{comment.content}</pre>}
                             datetime={comment.timeAdded}
-                            data-testid={"comment" + key}
+                            data-testid={'comment' + key}
                             author={
                               <div
                                 style={{
@@ -456,6 +475,7 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
                         </div>
                       )
                     }
+                    return <></>
                   })}
                 </div>
               </>

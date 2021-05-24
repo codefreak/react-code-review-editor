@@ -4,11 +4,12 @@ import {
   screen,
   render,
   fireEvent,
-  waitFor
+  waitFor,
+  within
 } from '@testing-library/react'
 import CodeReview from '../components/CodeReview'
 import { CustomComment } from '../types/types'
-import moment from "moment";
+import moment from 'moment'
 afterEach(cleanup)
 const nothing = jest.fn()
 
@@ -186,17 +187,17 @@ test('Editor placeholder changes depending on the role', async () => {
   commentContainer = []
 
   render(
-      <CodeReview
-          code={jsxCode}
-          language="jsx"
-          commentContainer={commentContainer}
-          onCommentCreated={() => nothing}
-          onCommentDeleted={() => nothing}
-          onCommentEdited={() => nothing}
-          role="teacher"
-          user="Tester"
-          showResult
-      />
+    <CodeReview
+      code={jsxCode}
+      language="jsx"
+      commentContainer={commentContainer}
+      onCommentCreated={() => nothing}
+      onCommentDeleted={() => nothing}
+      onCommentEdited={() => nothing}
+      role="teacher"
+      user="Tester"
+      showResult
+    />
   )
 
   fireEvent.mouseEnter(screen.getByTestId('line1'))
@@ -204,31 +205,30 @@ test('Editor placeholder changes depending on the role', async () => {
   expect(screen.getByTestId('addButton')).toBeInTheDocument()
   fireEvent.click(screen.getByTestId('addButton'))
   expect(
-      screen.getByPlaceholderText('Add a Comment to line 2 ...')
+    screen.getByPlaceholderText('Add a Comment to line 2 ...')
   ).toBeInTheDocument()
   cleanup()
 
   render(
-      <CodeReview
-          code={jsxCode}
-          language="jsx"
-          commentContainer={commentContainer}
-          onCommentCreated={() => nothing}
-          onCommentDeleted={() => nothing}
-          onCommentEdited={() => nothing}
-          role="student"
-          user="Tester"
-          showResult
-      />
+    <CodeReview
+      code={jsxCode}
+      language="jsx"
+      commentContainer={commentContainer}
+      onCommentCreated={() => nothing}
+      onCommentDeleted={() => nothing}
+      onCommentEdited={() => nothing}
+      role="student"
+      user="Tester"
+      showResult
+    />
   )
-
 
   fireEvent.mouseEnter(screen.getByTestId('line1'))
   await waitFor(() => screen.getByTestId('addButton'))
   expect(screen.getByTestId('addButton')).toBeInTheDocument()
   fireEvent.click(screen.getByTestId('addButton'))
   expect(
-      screen.getByPlaceholderText('Add a Question to line 2 ...')
+    screen.getByPlaceholderText('Add a Question to line 2 ...')
   ).toBeInTheDocument()
 })
 
@@ -247,48 +247,487 @@ test('Editor placeholder changes when a comment gets added', async () => {
   }
 
   render(
-      <CodeReview
-          code={jsxCode}
-          language="jsx"
-          commentContainer={commentContainer}
-          onCommentCreated={addComment}
-          onCommentDeleted={() => nothing}
-          onCommentEdited={() => nothing}
-          role="teacher"
-          user="Tester"
-          showResult
-      />
+    <CodeReview
+      code={jsxCode}
+      language="jsx"
+      commentContainer={commentContainer}
+      onCommentCreated={addComment}
+      onCommentDeleted={() => nothing}
+      onCommentEdited={() => nothing}
+      role="teacher"
+      user="Tester"
+      showResult
+    />
   )
 
   expect(screen.getByText('1 info')).toBeInTheDocument()
   fireEvent.click(screen.getByText('1 info'))
 
-  expect(screen.getByTestId('textArea')).toHaveProperty('placeholder', 'Add Comment ...')
+  expect(screen.getByTestId('textArea')).toHaveProperty(
+    'placeholder',
+    'Add Comment ...'
+  )
   fireEvent.change(screen.getByTestId('textArea'), {
     target: { value: 'an input' }
   })
   fireEvent.focus(screen.getByTestId('textArea'))
-  fireEvent.click((screen.getByTestId('replyButton')))
+  fireEvent.click(screen.getByTestId('replyButton'))
 
   cleanup()
 
   render(
-      <CodeReview
-          code={jsxCode}
-          language="jsx"
-          commentContainer={commentContainer}
-          onCommentCreated={addComment}
-          onCommentDeleted={() => nothing}
-          onCommentEdited={() => nothing}
-          role="teacher"
-          user="Tester"
-          showResult
-      />
+    <CodeReview
+      code={jsxCode}
+      language="jsx"
+      commentContainer={commentContainer}
+      onCommentCreated={addComment}
+      onCommentDeleted={() => nothing}
+      onCommentEdited={() => nothing}
+      role="teacher"
+      user="Tester"
+      showResult
+    />
   )
 
   await waitFor(() => screen.getByTestId('commentViewer0'))
   expect(screen.getByText('1 comment, 1 info')).toBeInTheDocument()
   fireEvent.click(screen.getByText('1 comment, 1 info'))
-  expect(screen.getByTestId('textArea')).toHaveProperty('placeholder', 'Add Reply ...')
+  expect(screen.getByTestId('textArea')).toHaveProperty(
+    'placeholder',
+    'Add Reply ...'
+  )
+})
 
+test('a line shows the correct annotation symbols', () => {
+  // test data for the two annotation symbols
+  const comment1: CustomComment = {
+    line: 0,
+    author: 'Code Quality',
+    content: 'Syntaktischer Zucker in Linie 4',
+    type: 'mildInfo',
+    timeAdded: moment().format('DD-MM-YY HH:mm')
+  }
+
+  const comment2: CustomComment = {
+    line: 0,
+    author: 'Tester',
+    content: 'wow',
+    type: 'comment',
+    timeAdded: moment().format('DD-MM-YY HH:mm')
+  }
+
+  commentContainer = [comment1]
+
+  render(
+    <CodeReview
+      code={jsxCode}
+      language="jsx"
+      commentContainer={commentContainer}
+      onCommentCreated={() => nothing}
+      onCommentDeleted={() => nothing}
+      onCommentEdited={() => nothing}
+      role="teacher"
+      user="Tester"
+      showResult
+    />
+  )
+
+  // check for mildInfo annotation
+  expect(screen.getByTestId('line0')).toBeInTheDocument()
+  expect(screen.getByTestId('infoAnnotation')).toBeInTheDocument()
+  cleanup()
+
+  // adjust data for next test
+  commentContainer.slice(0, 1)
+  commentContainer.push(comment2)
+
+  render(
+    <CodeReview
+      code={jsxCode}
+      language="jsx"
+      commentContainer={commentContainer}
+      onCommentCreated={() => nothing}
+      onCommentDeleted={() => nothing}
+      onCommentEdited={() => nothing}
+      role="teacher"
+      user="Tester"
+      showResult
+    />
+  )
+
+  // check for comment annotation
+  expect(screen.getByTestId('line0')).toBeInTheDocument()
+  expect(screen.getByTestId('commentAnnotation')).toBeInTheDocument()
+  cleanup()
+
+  // adjust data
+  commentContainer.push(comment1)
+
+  render(
+    <CodeReview
+      code={jsxCode}
+      language="jsx"
+      commentContainer={commentContainer}
+      onCommentCreated={() => nothing}
+      onCommentDeleted={() => nothing}
+      onCommentEdited={() => nothing}
+      role="teacher"
+      user="Tester"
+      showResult
+    />
+  )
+
+  // check for both annotation icons at once
+  expect(screen.getByTestId('line0')).toBeInTheDocument()
+  expect(screen.getByTestId('commentAnnotation')).toBeInTheDocument()
+  expect(screen.getByTestId('infoAnnotation')).toBeInTheDocument()
+})
+
+test('result prop shows result', () => {
+  render(
+    <CodeReview
+      code={jsxCode}
+      language="jsx"
+      commentContainer={commentContainer}
+      onCommentCreated={() => nothing}
+      onCommentDeleted={() => nothing}
+      onCommentEdited={() => nothing}
+      role="teacher"
+      user="Tester"
+      showResult
+    />
+  )
+
+  expect(screen.getByText('Result')).toBeInTheDocument()
+})
+
+test('comments without line get displayed in the result section', () => {
+  // test data for the result
+  const comment1: CustomComment = {
+    author: 'Tester',
+    content: 'a result',
+    type: 'comment',
+    timeAdded: moment().format('DD-MM-YY HH:mm')
+  }
+  const commentContainer = [comment1]
+
+  render(
+    <CodeReview
+      code={jsxCode}
+      language="jsx"
+      commentContainer={commentContainer}
+      onCommentCreated={() => nothing}
+      onCommentDeleted={() => nothing}
+      onCommentEdited={() => nothing}
+      role="teacher"
+      user="Tester"
+      showResult
+    />
+  )
+
+  expect(screen.getByText('Result')).toBeInTheDocument()
+  fireEvent.click(screen.getByText('Result'))
+  expect(screen.getByTestId('resultViewer')).toHaveTextContent('Tester')
+  expect(screen.getByTestId('resultViewer')).toHaveTextContent('a result')
+})
+
+test('severeInfo gets displayed in the result section', () => {
+  // test data for the result
+  const comment1: CustomComment = {
+    author: 'Tester',
+    content: 'a severeInfo',
+    type: 'severeInfo',
+    timeAdded: moment().format('DD-MM-YY HH:mm')
+  }
+  const commentContainer = [comment1]
+
+  render(
+    <CodeReview
+      code={jsxCode}
+      language="jsx"
+      commentContainer={commentContainer}
+      onCommentCreated={() => nothing}
+      onCommentDeleted={() => nothing}
+      onCommentEdited={() => nothing}
+      role="teacher"
+      user="Tester"
+      showResult
+    />
+  )
+
+  expect(screen.getByText('Result')).toBeInTheDocument()
+  fireEvent.click(screen.getByText('Result'))
+  expect(screen.getByTestId('resultViewer')).toHaveTextContent('Tester')
+  expect(screen.getByTestId('resultViewer')).toHaveTextContent('a severeInfo')
+})
+
+test('success gets displayed in the result section', () => {
+  // test data for the result
+  const comment1: CustomComment = {
+    author: 'Tester',
+    content: 'a success',
+    type: 'success',
+    timeAdded: moment().format('DD-MM-YY HH:mm')
+  }
+  const commentContainer = [comment1]
+
+  render(
+    <CodeReview
+      code={jsxCode}
+      language="jsx"
+      commentContainer={commentContainer}
+      onCommentCreated={() => nothing}
+      onCommentDeleted={() => nothing}
+      onCommentEdited={() => nothing}
+      role="teacher"
+      user="Tester"
+      showResult
+    />
+  )
+
+  expect(screen.getByText('Result')).toBeInTheDocument()
+  fireEvent.click(screen.getByText('Result'))
+  expect(screen.getByTestId('resultViewer')).toHaveTextContent('Tester')
+  expect(screen.getByTestId('resultViewer')).toHaveTextContent('a success')
+})
+
+test('present result comments get displayed correctly in the panel extras', () => {
+  // test data for the result
+  const comment1: CustomComment = {
+    author: 'Tester',
+    content: 'a success',
+    type: 'success',
+    timeAdded: moment().format('DD-MM-YY HH:mm')
+  }
+
+  const comment2: CustomComment = {
+    author: 'Tester',
+    content: 'a comment',
+    type: 'comment',
+    timeAdded: moment().format('DD-MM-YY HH:mm')
+  }
+
+  const comment3: CustomComment = {
+    author: 'Tester',
+    content: 'a severInfo',
+    type: 'severeInfo',
+    timeAdded: moment().format('DD-MM-YY HH:mm')
+  }
+  const commentContainer = [comment1]
+
+  render(
+    <CodeReview
+      code={jsxCode}
+      language="jsx"
+      commentContainer={commentContainer}
+      onCommentCreated={() => nothing}
+      onCommentDeleted={() => nothing}
+      onCommentEdited={() => nothing}
+      role="teacher"
+      user="Tester"
+      showResult
+    />
+  )
+
+  // check for success icon
+  expect(screen.getByText('Result')).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('resultViewer')).getByTestId('checkIcon')
+  ).toBeTruthy()
+
+  cleanup()
+  commentContainer.push(comment2)
+  render(
+    <CodeReview
+      code={jsxCode}
+      language="jsx"
+      commentContainer={commentContainer}
+      onCommentCreated={() => nothing}
+      onCommentDeleted={() => nothing}
+      onCommentEdited={() => nothing}
+      role="teacher"
+      user="Tester"
+      showResult
+    />
+  )
+
+  //check for success and comment icons
+  expect(screen.getByText('Result')).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('resultViewer')).getByTestId('checkIcon')
+  ).toBeTruthy()
+  expect(
+    within(screen.getByTestId('resultViewer')).getByTestId('commentIcon')
+  ).toBeTruthy()
+
+  cleanup()
+  commentContainer.push(comment3)
+  render(
+    <CodeReview
+      code={jsxCode}
+      language="jsx"
+      commentContainer={commentContainer}
+      onCommentCreated={() => nothing}
+      onCommentDeleted={() => nothing}
+      onCommentEdited={() => nothing}
+      role="teacher"
+      user="Tester"
+      showResult
+    />
+  )
+
+  //check for severInfo icon instead of success icon
+  expect(screen.getByText('Result')).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('resultViewer')).queryByTestId('checkIcon')
+  ).toBeFalsy()
+  expect(
+    within(screen.getByTestId('resultViewer')).getByTestId('exclamationIcon')
+  ).toBeTruthy()
+  expect(
+    within(screen.getByTestId('resultViewer')).getByTestId('commentIcon')
+  ).toBeTruthy()
+})
+
+test('shortcut menu opens on click', async () => {
+  render(
+    <CodeReview
+      code={jsxCode}
+      language="jsx"
+      commentContainer={commentContainer}
+      onCommentCreated={() => nothing}
+      onCommentDeleted={() => nothing}
+      onCommentEdited={() => nothing}
+      role="teacher"
+      user="Tester"
+      showResult
+    />
+  )
+
+  expect(screen.getByTestId('shortcuts')).toBeInTheDocument()
+  expect(screen.getByTestId('shortcutButton')).toBeInTheDocument()
+  fireEvent.click(screen.getByTestId('shortcutButton'))
+  await waitFor(() => screen.getByTestId('shortcutMenu'))
+  expect(screen.getByTestId('shortcutMenu')).toBeInTheDocument()
+})
+
+test('expand-all shortcut expands all present comments', async () => {
+  const comment1: CustomComment = {
+    line: 1,
+    author: 'Tester',
+    content: 'a comment',
+    type: 'comment',
+    timeAdded: moment().format('DD-MM-YY HH:mm')
+  }
+  const comment2: CustomComment = {
+    line: 2,
+    author: 'Tester',
+    content: 'a comment',
+    type: 'comment',
+    timeAdded: moment().format('DD-MM-YY HH:mm')
+  }
+  const comment3: CustomComment = {
+    author: 'Tester',
+    content: 'a comment',
+    type: 'comment',
+    timeAdded: moment().format('DD-MM-YY HH:mm')
+  }
+
+  commentContainer = [comment1, comment2, comment3]
+
+  render(
+    <CodeReview
+      code={jsxCode}
+      language="jsx"
+      commentContainer={commentContainer}
+      onCommentCreated={() => nothing}
+      onCommentDeleted={() => nothing}
+      onCommentEdited={() => nothing}
+      role="teacher"
+      user="Tester"
+      showResult
+    />
+  )
+
+  expect(screen.getByTestId('shortcutButton')).toBeInTheDocument()
+
+  //check if content isnt present to check if test starts closed
+  expect(screen.getByTestId('commentViewer1')).not.toHaveTextContent(
+    'a comment'
+  )
+  expect(screen.getByTestId('commentViewer2')).not.toHaveTextContent(
+    'a comment'
+  )
+  expect(screen.getByTestId('resultViewer')).not.toHaveTextContent('a comment')
+
+  fireEvent.click(screen.getByTestId('shortcutButton'))
+  await waitFor(() => screen.getByTestId('shortcutMenu'))
+  fireEvent.click(screen.getByTestId('expandButton'))
+
+  // if content is present the commentviewers are open
+  expect(screen.getByTestId('commentViewer1')).toHaveTextContent('a comment')
+  expect(screen.getByTestId('commentViewer2')).toHaveTextContent('a comment')
+  expect(screen.getByTestId('resultViewer')).toHaveTextContent('a comment')
+})
+
+test('show/hide functionality works as expected', async () => {
+  const comment1: CustomComment = {
+    line: 1,
+    author: 'Tester',
+    content: 'a comment',
+    type: 'comment',
+    timeAdded: moment().format('DD-MM-YY HH:mm')
+  }
+  const comment2: CustomComment = {
+    line: 2,
+    author: 'Tester',
+    content: 'a comment',
+    type: 'comment',
+    timeAdded: moment().format('DD-MM-YY HH:mm')
+  }
+  const comment3: CustomComment = {
+    author: 'Tester',
+    content: 'a comment',
+    type: 'comment',
+    timeAdded: moment().format('DD-MM-YY HH:mm')
+  }
+
+  commentContainer = [comment1, comment2, comment3]
+
+  render(
+    <CodeReview
+      code={jsxCode}
+      language="jsx"
+      commentContainer={commentContainer}
+      onCommentCreated={() => nothing}
+      onCommentDeleted={() => nothing}
+      onCommentEdited={() => nothing}
+      role="teacher"
+      user="Tester"
+      showResult
+    />
+  )
+
+  //check if content is present
+  expect(screen.getByTestId('commentViewer1')).toBeInTheDocument()
+  expect(screen.getByTestId('commentViewer2')).toBeInTheDocument()
+  expect(screen.getByTestId('resultViewer')).toBeInTheDocument()
+
+  expect(screen.getByTestId('shortcutButton')).toBeInTheDocument()
+  fireEvent.click(screen.getByTestId('shortcutButton'))
+  await waitFor(() => screen.getByTestId('shortcutMenu'))
+  fireEvent.click(screen.getByTestId('showButton'))
+
+  //check if content is present
+  expect(screen.queryByTestId('commentViewer1')).not.toBeInTheDocument()
+  expect(screen.queryByTestId('commentViewer2')).not.toBeInTheDocument()
+  expect(screen.queryByTestId('resultViewer')).not.toBeInTheDocument()
+
+  fireEvent.click(screen.getByTestId('shortcutButton'))
+  await waitFor(() => screen.getByTestId('shortcutMenu'))
+  fireEvent.click(screen.getByTestId('showButton'))
+
+  expect(screen.getByTestId('commentViewer1')).toBeInTheDocument()
+  expect(screen.getByTestId('commentViewer2')).toBeInTheDocument()
+  expect(screen.getByTestId('resultViewer')).toBeInTheDocument()
 })
