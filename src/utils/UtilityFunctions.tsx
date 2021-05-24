@@ -8,5 +8,6 @@ export function onlyUnique(
 }
 
 export function extractTargetValue<V, T>(fn: (value: V) => T) {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   return (e: { target: { value: V } }) => fn(e.target.value)
 }

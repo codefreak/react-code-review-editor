@@ -1,4 +1,4 @@
-import React, { CSSProperties, useEffect, useState } from 'react'
+import React, { CSSProperties, useCallback, useEffect, useState } from 'react'
 import { Line, LineContent, LineNo } from './styles'
 import { Button } from 'antd'
 import {
@@ -91,24 +91,8 @@ export const CodeLine: React.FC<CodeLineProps> = ({
     }
   }, [comments])
 
-  // remove addButton and adjust padding accordingly
-  const handleMouseLeave = () => {
-    if (lineNoRef.current) {
-      lineNoRef.current.style.paddingLeft =
-          getPaddingLeft() + getPaddingOffsetLeft() + 'em'
-      setIsAddButtonShown(false)
-    }
-  }
-
-  // prevent awkward border placements when showComments gets toggled
-  useEffect(() => {
-    if (!showComments) {
-      handleMouseLeave()
-    }
-  }, [handleMouseLeave, showComments])
-
   // returns the right padding value depending on the number of annotations present
-  const getPaddingLeft = () => {
+  const getPaddingLeft = useCallback(() => {
     if (!showComments) {
       return 2.8
     }
@@ -119,7 +103,32 @@ export const CodeLine: React.FC<CodeLineProps> = ({
       return 0.2
     }
     return 2.8
-  }
+  }, [commentThread, mildInfo, showComments])
+
+  // returns a higher padding offset for higher than double digit lines
+  const getPaddingOffsetLeft = useCallback(() => {
+    if (lineNo < 9) {
+      return 0.55
+    } else {
+      return 0
+    }
+  }, [lineNo])
+
+  // remove addButton and adjust padding accordingly
+  const handleMouseLeave = useCallback(() => {
+    if (lineNoRef.current) {
+      lineNoRef.current.style.paddingLeft =
+        getPaddingLeft() + getPaddingOffsetLeft() + 'em'
+      setIsAddButtonShown(false)
+    }
+  }, [getPaddingLeft, getPaddingOffsetLeft, lineNoRef])
+
+  // prevent awkward border placements when showComments gets toggled
+  useEffect(() => {
+    if (!showComments) {
+      handleMouseLeave()
+    }
+  }, [handleMouseLeave, showComments])
 
   // show addButton and adjust padding accordingly
   const handleMouseEnter = () => {
@@ -135,17 +144,6 @@ export const CodeLine: React.FC<CodeLineProps> = ({
       setIsAddButtonShown(true)
     }
   }
-
-  // returns a higher padding offset for higher than double digit lines
-  const getPaddingOffsetLeft = () => {
-    if (lineNo < 9) {
-      return 0.55
-    } else {
-      return 0
-    }
-  }
-
-
 
   const getPlaceholder = (): EditorPlaceholder => {
     if (mildInfo && !commentThread) {

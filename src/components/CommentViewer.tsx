@@ -418,7 +418,7 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
                         />
                       )
                     }
-                    return<></>
+                    return <></>
                   })}
                   <CommentEditor
                     onSubmit={handleCommentCreated}
