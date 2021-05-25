@@ -83,6 +83,7 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
   }
 
   const handleCommentCreated = (value: string) => {
+    // make sure comment viewer is open after comment creation
     setActiveKey('1')
     onCommentCreated(value)
   }
@@ -98,6 +99,7 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
     return count
   }
 
+  // adjust wording for singular and plural
   const getCommentWording = () => {
     if (countComments() === 1) {
       return ' comment'
@@ -106,6 +108,7 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
     }
   }
 
+  // adjust wording for singular and plural
   const getInfoWording = () => {
     if (countInfos() === 1) {
       return ' info'
@@ -217,6 +220,7 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
     }
   }
 
+  // modal for deletion confirmation
   const confirm = () => {
     Modal.confirm({
       title: 'Are you sure you want to delete your comment?',
@@ -240,6 +244,7 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
     </Menu>
   )
 
+  // returns value for the top side of the border wrapper
   const getWrapperTop = () => {
     if (result) {
       return 2
@@ -248,6 +253,7 @@ export const CommentViewer: React.FC<CommentViewerProps> = ({
     }
   }
 
+  // return value for the bottom side of the border wrapper
   const getWrapperBottom = () => {
     if (result) {
       return 0

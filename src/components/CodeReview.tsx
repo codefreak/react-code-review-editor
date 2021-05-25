@@ -32,6 +32,7 @@ export interface CodeReviewProps {
   role: Role
 }
 
+// setup for a list that contains all lines with comments
 const setupMemo = (comments: CustomComment[]) => {
   const memo: number[] = []
   comments.forEach(comment => {
@@ -42,6 +43,7 @@ const setupMemo = (comments: CustomComment[]) => {
   return memo.filter(onlyUnique).sort((a, b) => a - b)
 }
 
+// setup for the comment viewer collapse state reducer
 const setupState = (state: State, linesWithCommentViewer: number[]): State => {
   let newState: State = []
   const dif = linesWithCommentViewer.length + 1 - state.length
@@ -69,6 +71,7 @@ const setupState = (state: State, linesWithCommentViewer: number[]): State => {
   return state
 }
 
+// handles manipulation of comment viewer collapse states
 const reducer = (state: State, action: Action) => {
   const newState = state
 
@@ -122,6 +125,7 @@ export const CodeReview: React.FC<CodeReviewProps> = ({
   const [state, dispatch] = useReducer(reducer, [])
   const [showComments, setShowComments] = useState<boolean>(true)
 
+  // keyboard shortcuts event handling
   const handleShortcuts = useCallback(
     (e: KeyboardEvent) => {
       if (e.altKey && e.code === 'KeyE') {

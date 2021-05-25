@@ -145,6 +145,7 @@ export const CodeLine: React.FC<CodeLineProps> = ({
     }
   }
 
+  // returns a placeholder for the editor
   const getPlaceholder = (): EditorPlaceholder => {
     if (mildInfo && !commentThread) {
       if (role === 'teacher') {

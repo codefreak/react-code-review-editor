@@ -5,6 +5,7 @@ interface BorderWrapperProps {
   heightBottom: number
 }
 
+// creates an upright border above and below the left hand side of its children
 const BorderWrapper: React.FC<BorderWrapperProps> = ({
   heightTop,
   heightBottom,

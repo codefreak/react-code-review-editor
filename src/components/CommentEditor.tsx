@@ -26,6 +26,7 @@ const CommentEditor: React.FC<CommentEditorProps> = ({
   const [isFocused, setIsFocused] = useState<boolean>(false)
   const [rows, setRows] = useState<number>(1)
 
+  // focus editor if text value is present, necessary for editing
   useEffect(() => {
     if (textValue !== undefined || focus) {
       handleFocus()
@@ -51,6 +52,7 @@ const CommentEditor: React.FC<CommentEditorProps> = ({
     }
   }
 
+  // returns the appropriate button text for the submit button
   const getSubmitButtonText = () => {
     if (placeholder === 'Edit') return 'Edit'
     else {
@@ -58,6 +60,7 @@ const CommentEditor: React.FC<CommentEditorProps> = ({
     }
   }
 
+  // returns the right editor placeholder
   const getPlaceholder = () => {
     if (line !== undefined) {
       return 'Add a ' + placeholder + ' to line ' + (line + 1) + ' ...'
