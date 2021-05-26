@@ -731,3 +731,66 @@ test('show/hide functionality works as expected', async () => {
   expect(screen.getByTestId('commentViewer2')).toBeInTheDocument()
   expect(screen.getByTestId('resultViewer')).toBeInTheDocument()
 })
+
+test('possible to reply to comments', () => {
+  const comment1: CustomComment = {
+    line: 1,
+    author: 'Tester',
+    content: 'a comment',
+    type: 'comment',
+    timeAdded: moment().format('DD-MM-YY HH:mm')
+  }
+
+  commentContainer = [comment1]
+
+  const addComment = (value: CustomComment) => {
+    commentContainer = [...commentContainer, value]
+  }
+
+  render(
+      <CodeReview
+          code={jsxCode}
+          language="jsx"
+          commentContainer={commentContainer}
+          onCommentCreated={addComment}
+          onCommentDeleted={() => nothing}
+          onCommentEdited={() => nothing}
+          role="teacher"
+          user="Tester"
+          showResult
+      />
+  )
+
+  expect(screen.getByText('1 comment')).toBeInTheDocument()
+  fireEvent.click(screen.getByText('1 comment'))
+  expect(screen.getByTestId('textArea')).toBeInTheDocument()
+  expect(screen.getByPlaceholderText('Add Reply ...')).toBeInTheDocument()
+
+
+  fireEvent.focus(screen.getByTestId('textArea'))
+  // change input of text area and add as comment
+  fireEvent.change(screen.getByTestId('textArea'), {
+    target: { value: 'an input' }
+  })
+  fireEvent.click(screen.getByTestId('replyButton'))
+
+  cleanup()
+
+  render(
+      <CodeReview
+          code={jsxCode}
+          language="jsx"
+          commentContainer={commentContainer}
+          onCommentCreated={addComment}
+          onCommentDeleted={() => nothing}
+          onCommentEdited={() => nothing}
+          role="teacher"
+          user="Tester"
+          showResult
+      />
+  )
+
+  expect(screen.getByText('2 comments')).toBeInTheDocument()
+  fireEvent.click(screen.getByText('2 comments'))
+  expect(screen.getByText('an input')).toBeInTheDocument()
+})
