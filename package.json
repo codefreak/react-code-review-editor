@@ -1,6 +1,6 @@
 {
   "name": "react-code-review-editor",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "main": "lib/index.js",
   "module": "lib/index.esm.js",
   "types": "lib/index.d.ts",
@@ -11,7 +11,7 @@
     "lib/index.esm.js",
     "lib/index.js"
   ],
-  "private": true,
+  "private": false,
   "peerDependencies": {
     "react": "^17.0.2",
     "react-dom": "^17.0.2"

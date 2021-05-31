@@ -12,19 +12,19 @@ It supports a variety of languages.
 - [x] keyboard shortcuts 
 
 ##Development
-For using and getting to know the component through storybook examples:
+For developing and getting to know the components through storybook examples:
 ```shell script
 git clone https://github.com/codefreak/react-code-review-editor.git
 yarn install
 yarn storybook
 ```
 
-## How to import to your own project (while not published on npm)
-* clone this repo
-* run `yarn build`
-* this builds and packages the `./lib`
-* in your repo that you want to use the library in type `npm i local/path/to/the/package.tgz`
-* the library has been added to your `package.json` and `node_modules` folder and can now be used
+## Installation
+For using the components:
+```shell script
+yarn add react-code-review-editor
+yarn install
+```
 
 ## License
 The source code for all packages in ./src is licensed under the MIT license, which you can find in the LICENSE 
