@@ -94,15 +94,15 @@ export const CodeLine: React.FC<CodeLineProps> = ({
   // returns the right padding value depending on the number of annotations present
   const getPaddingLeft = useCallback(() => {
     if (!showComments) {
-      return 2.8
+      return 2.9
     }
     if ((commentThread && !mildInfo) || (mildInfo && !commentThread)) {
-      return 1.5
+      return 1.6
     }
     if (commentThread && mildInfo) {
       return 0.2
     }
-    return 2.8
+    return 2.9
   }, [commentThread, mildInfo, showComments])
 
   // returns a higher padding offset for higher than double digit lines
@@ -140,7 +140,7 @@ export const CodeLine: React.FC<CodeLineProps> = ({
       !isEditorShown
     ) {
       lineNoRef.current.style.paddingLeft =
-        getPaddingLeft() - 1.3 + getPaddingOffsetLeft() + 'em'
+        getPaddingLeft() - 1.35 + getPaddingOffsetLeft() + 'em'
       setIsAddButtonShown(true)
     }
   }
