@@ -20,15 +20,15 @@ export const CodeReviewCollapsable: React.FC<CodeReviewCollapsableProps> = ({
     <Collapse style={{ width: width }} defaultActiveKey={1}>
       <Panel key={1} header={title}>
         <CodeReview
-            code={reviewProps.code}
-            language={reviewProps.language}
-            commentContainer={reviewProps.commentContainer}
-            onCommentCreated={reviewProps.onCommentCreated}
-            showResult={reviewProps.showResult}
-            user={reviewProps.user}
-            onCommentEdited={reviewProps.onCommentEdited}
-            onCommentDeleted={reviewProps.onCommentDeleted}
-            role={reviewProps.role}
+          code={reviewProps.code}
+          language={reviewProps.language}
+          commentContainer={reviewProps.commentContainer}
+          onCommentCreated={reviewProps.onCommentCreated}
+          showResult={reviewProps.showResult}
+          user={reviewProps.user}
+          onCommentEdited={reviewProps.onCommentEdited}
+          onCommentDeleted={reviewProps.onCommentDeleted}
+          role={reviewProps.role}
         />
       </Panel>
     </Collapse>
