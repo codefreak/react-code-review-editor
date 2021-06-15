@@ -99,8 +99,8 @@ const customComment1: CustomComment = {
 
 const customComment2: CustomComment = {
   line: 3,
-  author: 'Spock',
-  content: 'Live long and prosper.',
+  author: 'Lehrpersonal',
+  content: 'Dieser Teil ist ausbaufähig.',
   type: 'comment',
   timeAdded: moment().format('DD-MM-YY HH:mm')
 }
@@ -108,7 +108,7 @@ const customComment2: CustomComment = {
 const customComment3: CustomComment = {
   line: 1,
   author: 'Code Quality',
-  content: 'Syntaktischer Zucker in Linie 4',
+  content: 'Use const for readonly values.',
   type: 'mildInfo',
   timeAdded: moment().format('DD-MM-YY HH:mm')
 }
@@ -121,8 +121,8 @@ const customComment4: CustomComment = {
 }
 
 const customComment5: CustomComment = {
-  author: 'Test1',
-  content: `All tests passed. Well done.`,
+  author: 'Test2',
+  content: `Test2 passed without error.`,
   type: 'success',
   timeAdded: moment().format('DD-MM-YY HH:mm')
 }
@@ -190,17 +190,37 @@ const handleCommentDeleted = (
   }
 }
 
-export const jsx = Template.bind({})
-jsx.args = {
+export const jsxWithResult = Template.bind({})
+jsxWithResult.args = {
   reviewProps: {
     code: jsxCode,
     language: 'jsx',
     showResult: true,
     commentContainer: customCommentContainer,
-    onCommentCreated: comment => handleCommentCreated(comment, jsx),
-    onCommentDeleted: comment => handleCommentDeleted(comment, jsx),
+    onCommentCreated: comment => handleCommentCreated(comment, jsxWithResult),
+    onCommentDeleted: comment => handleCommentDeleted(comment, jsxWithResult),
     onCommentEdited: (oldComment, newComment) =>
-      handleCommentEdited(oldComment, newComment, jsx),
+      handleCommentEdited(oldComment, newComment, jsxWithResult),
+    user: 'Storybook Tester',
+    role: 'student'
+  },
+  width: 700,
+  title: 'testReview.jsx'
+}
+
+export const jsxWithoutResult = Template.bind({})
+jsxWithoutResult.args = {
+  reviewProps: {
+    code: jsxCode,
+    language: 'jsx',
+    showResult: false,
+    commentContainer: customCommentContainer,
+    onCommentCreated: comment =>
+      handleCommentCreated(comment, jsxWithoutResult),
+    onCommentDeleted: comment =>
+      handleCommentDeleted(comment, jsxWithoutResult),
+    onCommentEdited: (oldComment, newComment) =>
+      handleCommentEdited(oldComment, newComment, jsxWithoutResult),
     user: 'Storybook Tester',
     role: 'student'
   },
@@ -226,19 +246,37 @@ css.args = {
   title: 'layout.css'
 }
 
-export const cpp = Template.bind({})
-cpp.args = {
+export const cppStudent = Template.bind({})
+cppStudent.args = {
   reviewProps: {
     code: cppCode,
     language: 'cpp',
     showResult: false,
     commentContainer: customCommentContainer,
-    onCommentCreated: comment => handleCommentCreated(comment, cpp),
-    onCommentDeleted: comment => handleCommentDeleted(comment, cpp),
+    onCommentCreated: comment => handleCommentCreated(comment, cppStudent),
+    onCommentDeleted: comment => handleCommentDeleted(comment, cppStudent),
     onCommentEdited: (oldComment, newComment) =>
-      handleCommentEdited(oldComment, newComment, cpp),
+      handleCommentEdited(oldComment, newComment, cppStudent),
     user: 'Storybook Tester',
     role: 'student'
+  },
+  width: 700,
+  title: 'matrix.cpp'
+}
+
+export const cppTeacher = Template.bind({})
+cppTeacher.args = {
+  reviewProps: {
+    code: cppCode,
+    language: 'cpp',
+    showResult: false,
+    commentContainer: customCommentContainer,
+    onCommentCreated: comment => handleCommentCreated(comment, cppTeacher),
+    onCommentDeleted: comment => handleCommentDeleted(comment, cppTeacher),
+    onCommentEdited: (oldComment, newComment) =>
+      handleCommentEdited(oldComment, newComment, cppTeacher),
+    user: 'Storybook Tester',
+    role: 'teacher'
   },
   width: 700,
   title: 'matrix.cpp'
