@@ -7,8 +7,8 @@ export const Pre = styled.pre`
   overflow: hidden;
 
   & .token-line {
-    line-height: 1.5em;
-    height: 1.5em;
+    line-height: 1.6em;
+    height: 1.6em;
   }
 `
 
