@@ -35,7 +35,7 @@ const ShortcutMenu: React.FC<ShortcutMenuProps> = ({
         display: 'flex',
         flexDirection: 'row-reverse',
         borderLeft: '1px solid #d9d9d9',
-        marginLeft: '4.65em'
+        marginLeft: '4.7em'
       }}
       data-testid="shortcuts"
     >
