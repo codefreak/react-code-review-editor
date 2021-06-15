@@ -6,6 +6,7 @@ import {
 import { Story, Meta } from '@storybook/react/types-6-0'
 import { CustomComment } from '../types/types'
 import { forceReRender } from '@storybook/react'
+import moment from "moment";
 
 export default {
   component: CodeReviewCollapsable,
@@ -29,14 +30,16 @@ const customComment1: CustomComment = {
   line: 0,
   author: 'Captain Falcon',
   content: 'Falcoooon PUNCH!!',
-  type: 'comment'
+  type: 'comment',
+  timeAdded: moment().format('DD-MM-YY HH:mm')
 }
 
 const customComment2: CustomComment = {
   line: 3,
   author: 'Spock',
   content: 'Live long and prosper.',
-  type: 'comment'
+  type: 'comment',
+  timeAdded: moment().format('DD-MM-YY HH:mm')
 }
 
 let customCommentContainer = [customComment1, customComment2]
@@ -107,7 +110,8 @@ jsx.args = {
     onCommentDeleted: comment => handleCommentDeleted(comment, jsx),
     onCommentEdited: (oldComment, newComment) =>
       handleCommentEdited(oldComment, newComment, jsx),
-    user: 'Storybook Tester'
+    user: 'Storybook Tester',
+    role: "student"
   },
   width: 500,
   title: 'testReview.jsx'
