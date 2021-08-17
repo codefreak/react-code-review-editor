@@ -94,21 +94,21 @@ export const CodeLine: React.FC<CodeLineProps> = ({
   // returns the right padding value depending on the number of annotations present
   const getPaddingLeft = useCallback(() => {
     if (!showComments) {
-      return 2.8
+      return 2.9
     }
     if ((commentThread && !mildInfo) || (mildInfo && !commentThread)) {
-      return 1.5
+      return 1.6
     }
     if (commentThread && mildInfo) {
       return 0.2
     }
-    return 2.8
+    return 2.9
   }, [commentThread, mildInfo, showComments])
 
   // returns a higher padding offset for higher than double digit lines
   const getPaddingOffsetLeft = useCallback(() => {
     if (lineNo < 9) {
-      return 0.55
+      return 0.6
     } else {
       return 0
     }
@@ -139,8 +139,9 @@ export const CodeLine: React.FC<CodeLineProps> = ({
       showComments &&
       !isEditorShown
     ) {
+
       lineNoRef.current.style.paddingLeft =
-        getPaddingLeft() - 1.3 + getPaddingOffsetLeft() + 'em'
+        getPaddingLeft() - 1.35 + getPaddingOffsetLeft() + 'em'
       setIsAddButtonShown(true)
     }
   }
@@ -176,11 +177,11 @@ export const CodeLine: React.FC<CodeLineProps> = ({
       >
         <div
           style={{
-            display: 'table-row'
+            display: 'table-row', zIndex: 0
           }}
         >
           {isAddButtonShown && showComments && (
-            <>
+            <div style={{position: "relative", zIndex: 10}}>
               <Button
                 icon={<PlusOutlined style={{ paddingLeft: '0.1em' }} />}
                 size="small"
@@ -189,10 +190,10 @@ export const CodeLine: React.FC<CodeLineProps> = ({
                   setIsAddButtonShown(false)
                   handleMouseLeave()
                 }}
-                style={{ width: '1.5em', height: '1.5em' }}
+                style={{ width: '1.5em', height: '1.5em'}}
                 data-testid="addButton"
               />
-            </>
+            </div>
           )}
 
           <div style={annotationStyle}>

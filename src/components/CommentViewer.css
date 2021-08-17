@@ -12,6 +12,21 @@
     border-top: 1px solid #d9d9d9;
 }
 
+.ant-collapse > .ant-collapse-item > .ant-collapse-header::before {
+    display: none;
+    content: '';
+}
+
+.ant-collapse > .ant-collapse-item > .ant-collapse-header::after {
+    display: none;
+    content: '';
+}
+
+.ant-collapse > .ant-collapse-item > .ant-collapse-header::after {
+    display: none;
+    clear: both;
+}
+
 pre {
     margin-bottom: 0;
 }
@@ -51,7 +66,7 @@ pre {
 
 .commentViewer {
     padding-top: 0;
-    padding-left: 4.65em;
+    padding-left: 4.7em;
 }
 
 .ant-comment-content-author {
