@@ -2,19 +2,19 @@
 The react-code-review-editor is a React component providing an environment for educational code review purposes.
 It supports a variety of languages.
 
-![review-editor-screenshot](./screenshot.png)
+![review-editor-screenshot](screenshot.png)
 
 This project was developed as part of a thesis at FH Kiel to be integrated into the CodeFREAK project. The development
 process included a usability test with students and teachers at said institution to deliver a component with good usability.
 
-##Features
+## Features
 - [x] display syntax highlighted code 
 - [x] create and display comments inside the code 
 - [x] create and display results
 - [x] different comment types with their own annotation symbols for better usability
 - [x] keyboard shortcuts 
 
-##Development
+## Development
 For developing and getting to know the components through storybook examples:
 ```shell script
 git clone https://github.com/codefreak/react-code-review-editor.git
