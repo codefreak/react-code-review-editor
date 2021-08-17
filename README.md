@@ -1,8 +1,11 @@
 # react-code-review-editor
-The react-code-review-editor is a React component aiming to provide functionality for code review purposes.
+The react-code-review-editor is a React component providing an environment for educational code review purposes.
 It supports a variety of languages.
 
-![review-editor-screenshot](./review-editor-screenshot.png)
+![review-editor-screenshot](./screenshot.png)
+
+This project was developed as part of a thesis at FH Kiel to be integrated into the CodeFREAK project. The development
+process included a usability test with students and teachers at said institution to deliver a component with good usability.
 
 ##Features
 - [x] display syntax highlighted code 

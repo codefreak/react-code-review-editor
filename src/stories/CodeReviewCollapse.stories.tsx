@@ -6,7 +6,7 @@ import {
 import { Story, Meta } from '@storybook/react/types-6-0'
 import { CustomComment } from '../types/types'
 import { forceReRender } from '@storybook/react'
-import moment from "moment";
+import moment from 'moment'
 
 export default {
   component: CodeReviewCollapsable,
@@ -111,7 +111,7 @@ jsx.args = {
     onCommentEdited: (oldComment, newComment) =>
       handleCommentEdited(oldComment, newComment, jsx),
     user: 'Storybook Tester',
-    role: "student"
+    role: 'student'
   },
   width: 500,
   title: 'testReview.jsx'

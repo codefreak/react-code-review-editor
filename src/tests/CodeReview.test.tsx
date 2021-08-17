@@ -748,24 +748,23 @@ test('possible to reply to comments', () => {
   }
 
   render(
-      <CodeReview
-          code={jsxCode}
-          language="jsx"
-          commentContainer={commentContainer}
-          onCommentCreated={addComment}
-          onCommentDeleted={() => nothing}
-          onCommentEdited={() => nothing}
-          role="teacher"
-          user="Tester"
-          showResult
-      />
+    <CodeReview
+      code={jsxCode}
+      language="jsx"
+      commentContainer={commentContainer}
+      onCommentCreated={addComment}
+      onCommentDeleted={() => nothing}
+      onCommentEdited={() => nothing}
+      role="teacher"
+      user="Tester"
+      showResult
+    />
   )
 
   expect(screen.getByText('1 comment')).toBeInTheDocument()
   fireEvent.click(screen.getByText('1 comment'))
   expect(screen.getByTestId('textArea')).toBeInTheDocument()
   expect(screen.getByPlaceholderText('Add Reply ...')).toBeInTheDocument()
-
 
   fireEvent.focus(screen.getByTestId('textArea'))
   // change input of text area and add as comment
@@ -777,17 +776,17 @@ test('possible to reply to comments', () => {
   cleanup()
 
   render(
-      <CodeReview
-          code={jsxCode}
-          language="jsx"
-          commentContainer={commentContainer}
-          onCommentCreated={addComment}
-          onCommentDeleted={() => nothing}
-          onCommentEdited={() => nothing}
-          role="teacher"
-          user="Tester"
-          showResult
-      />
+    <CodeReview
+      code={jsxCode}
+      language="jsx"
+      commentContainer={commentContainer}
+      onCommentCreated={addComment}
+      onCommentDeleted={() => nothing}
+      onCommentEdited={() => nothing}
+      role="teacher"
+      user="Tester"
+      showResult
+    />
   )
 
   expect(screen.getByText('2 comments')).toBeInTheDocument()
